@@ -39,7 +39,16 @@ static class Any
     {
       Matched = String(),
       Remainder = String(),
-      Captured = [String(), String()]
+      Captured = [..ArrayOf(Capture)]
+    };
+  }
+
+  public static Match.Capture Capture()
+  {
+    return new()
+    {
+      At = Source.Next(100),
+      Value = String()
     };
   }
 

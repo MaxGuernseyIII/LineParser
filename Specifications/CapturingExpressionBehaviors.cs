@@ -57,7 +57,14 @@ public class CapturingExpressionBehaviors
     Actual.ShouldBe(UnderlyingOutput.Select(M =>
       M with
       {
-        Captured = [M.Matched]
+        Captured =
+        [
+          new()
+          {
+            At = 0,
+            Value = M.Matched
+          }
+        ]
       }));
   }
 }
@@ -83,8 +90,16 @@ public class RegexAdapterBehaviors
         Remainder = Remainder,
         Captured =
         [
-          "some",
-          "house"
+          new()
+          {
+            At = 0,
+            Value = "some"
+          },
+          new()
+          {
+            At = 0,
+            Value = "house"
+          }
         ]
       }
     ]);

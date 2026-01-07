@@ -27,11 +27,17 @@ namespace LineParser;
 
 public readonly record struct Match
 {
+  public readonly record struct Capture
+  {
+    public required int At { get; init; }
+    public required string Value { get; init; }
+  }
+
   public Match() {}
 
   public required string Matched { get; init; }
   public required string Remainder { get; init; }
-  public ImmutableArray<string> Captured { get; init; } = ImmutableArray<string>.Empty;
+  public ImmutableArray<Capture> Captured { get; init; } = ImmutableArray<Capture>.Empty;
 
   public static Match operator +(Match Left, Match Right) => new()
   {
@@ -51,7 +57,7 @@ public readonly record struct Match
   bool PrintMembers(StringBuilder Builder)
   {
     Builder.Append(
-      $"Matched = \"{Matched}\", Remainder = \"{Remainder}\", Captured = [{string.Join(", ", Captured.Select(C => $"\"{C}\""))}]");
+      $"Matched = \"{Matched}\", Remainder = \"{Remainder}\", Captured = [{string.Join(", ", Captured)}]");
 
     return true;
   }

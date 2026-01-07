@@ -5,6 +5,10 @@ sealed class CapturingExpression<T>(Expression<T> ToCaptureExpression) : Express
   public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<T> Reentry, MatchExecutionContext Context)
   {
     return ToCaptureExpression.GetMatchesAtBeginningOf(ToMatch, Reentry, Context)
-      .Select(M => M with {Captured = [M.Matched]});
+      .Select(M => M with {Captured = [new()
+      {
+        At = 0,
+        Value = M.Matched
+      }]});
   }
 }
