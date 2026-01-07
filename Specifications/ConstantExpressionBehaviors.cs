@@ -26,10 +26,40 @@ using Shouldly;
 namespace Specifications;
 
 [TestClass]
-public sealed class ParsingBehaviors
+public sealed class ConstantExpressionBehaviors
 {
   [TestMethod]
-  public void ConstantMatchesBeginningOfString()
+  public void ExactMatchRequiresWholeString()
+  {
+    var ToMatch = Any.String()();
+
+    var Expression = new ConstantExpression(ToMatch);
+    var Matcher = new Matcher([Expression]);
+
+    var Matches = Matcher.ExactMatch(ToMatch);
+    Matches.ShouldBe([
+      new()
+      {
+        Matched = ToMatch,
+        Remainder = "",
+        Captured = []
+      }
+    ]);
+  }
+  [TestMethod]
+  public void ExactMatchFailsWithAnyDifferences()
+  {
+    var ToMatch = Any.String()();
+
+    var Expression = new ConstantExpression(ToMatch);
+    var Matcher = new Matcher([Expression]);
+
+    var Matches = Matcher.ExactMatch(ToMatch + Any.String());
+    Matches.ShouldBe([]);
+  }
+
+  [TestMethod]
+  public void MatchesBeginningOfStringWithRemainder()
   {
     var ToMatch = Any.String()();
     var Remainder = Any.String()();
@@ -49,7 +79,7 @@ public sealed class ParsingBehaviors
   }
 
   [TestMethod]
-  public void ConstantDoesNotMatchDifferentString()
+  public void DoesNotMatchIfFragmentNotPresent()
   {
     var ToMatch = Any.String()();
     var Remainder = Any.String()();
@@ -62,7 +92,7 @@ public sealed class ParsingBehaviors
   }
 
   [TestMethod]
-  public void ConstantDoesNotMatchInMiddleOfString()
+  public void DoesNotMatchFragmentsAfterBeginning()
   {
     var ToMatch = Any.String()();
     var Remainder = Any.String()();

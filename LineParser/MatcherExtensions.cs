@@ -28,4 +28,9 @@ public static class MatcherExtensions
   {
     return This.Match(ToParse, new());
   }
+
+  public static IEnumerable<Match> ExactMatch(this Matcher This, string ToParse)
+  {
+    return This.Match(ToParse).Where(M => M.Remainder == "");
+  }
 }
