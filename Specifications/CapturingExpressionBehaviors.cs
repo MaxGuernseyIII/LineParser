@@ -92,12 +92,12 @@ public class RegexAdapterBehaviors
         [
           new()
           {
-            At = 0,
+            At = 9,
             Value = "some"
           },
           new()
           {
-            At = 0,
+            At = 28,
             Value = "house"
           }
         ]

@@ -35,7 +35,7 @@ sealed class RegexExpression<T>(Regex Pattern) : Expression<T> where T : MatchSc
       Remainder = ToMatch[M.Value.Length..],
       Captured = [..M.Groups.Values.Skip(1).Select(C => new Match.Capture
       {
-        At = 0,
+        At = C.Index,
         Value = C.Value
       })]
     };
