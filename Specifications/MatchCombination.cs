@@ -20,55 +20,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using LineParser;
+using Shouldly;
 
 namespace Specifications;
 
 [TestClass]
-public sealed class CompositeExpressionBehaviors
+public class MatchCombination
 {
   [TestMethod]
-  public void ChainsExpressions()
+  public void AppendMatches()
   {
-    var OverallString = Any.String();
+    var Match1 = Any.Match();
+    var Match2 = Any.Match();
 
-    Match[] FirstMatches =
-    [
-      Any.Match(),
-      Any.Match()
-    ];
-    var MatchesForRemainder1 = Any.ArrayOf(Any.Match);
-    var MatchesForRemainder2 = Any.ArrayOf(Any.Match);
-    var FinalMatches = Any.ArrayOf(Any.Match);
+    var Actual = Match1 + Match2;
 
-    var Expression = new CompositeExpression([
-      new MockExpression
-      {
-        Results =
-        {
-          {OverallString, FinalMatches}
-        }
-      },
-      new MockExpression
-      {
-        Results =
-        {
-          {FirstMatches[0].Remainder, MatchesForRemainder1},
-          {FirstMatches[1].Remainder, MatchesForRemainder2}
-        }
-      },
-      new MockExpression
-      {
-        Results = MatchesForRemainder1.Concat(MatchesForRemainder2).Select(R => R.Remainder).Distinct()
-          .ToDictionary(Key => Key, IEnumerable<Match> (_) => FinalMatches)
-      }
-    ]);
-    var Matcher = new Matcher([Expression]);
-
-    var Actual = Matcher.Match(OverallString);
-
-    //MatchesForRemainder1.SelectMany(M => )
-
-    //Actual.ShouldBe();
+    Actual.Matched.ShouldBe(Match1.Matched + Match2.Matched);
+    Actual.Remainder.ShouldBe(Match2.Remainder);
+    Actual.Captured.ShouldBe([.. Match1.Captured, .. Match2.Captured]);
   }
 }
