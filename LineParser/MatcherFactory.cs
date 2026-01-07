@@ -20,14 +20,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Collections.Immutable;
-
 namespace LineParser;
 
 public static class MatcherFactory
 {
-  public static Matcher<T> CreateFromExpressions<T>(ImmutableArray<Expression<T>> Expressions) where T : MatchScope<T>
+  public static Matcher<T> CreateFromExpressions<T>(IEnumerable<Expression<T>> Expressions) where T : MatchScope<T>
   {
-    return new([..Expressions.Select(E => (T.All, E))]);
+    return CreateFromRegistry([..Expressions.Select(E => (All: T.Unspecified, E))]);
+  }
+
+  public static Matcher<T> CreateFromRegistry<T>(IEnumerable<(T Scope, Expression<T> Expression)> Registry)
+    where T : MatchScope<T>
+  {
+    return new MatcherImplementation<T>([..Registry]);
   }
 }

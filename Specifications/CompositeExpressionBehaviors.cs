@@ -44,7 +44,7 @@ public sealed class CompositeExpressionBehaviors
 
     var FirstMatch0 = FirstMatches[0];
     var FirstMatch1 = FirstMatches[1];
-    var Expression = new CompositeExpression<NullScope>([
+    IEnumerable<Expression<NullScope>> Expressions = [
       new MockExpression<NullScope>
       {
         Results =
@@ -65,7 +65,8 @@ public sealed class CompositeExpressionBehaviors
         Results = MatchesForRemainder0.Concat(MatchesForRemainder1).Select(R => R.Remainder).Distinct()
           .ToDictionary(Key => Key, IEnumerable<Match> (_) => FinalMatches)
       }
-    ]);
+    ];
+    var Expression = new ExpressionFactory<NullScope>().CreateComposite(Expressions);
     var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
 
     var Actual = Matcher.Match(OverallString);
@@ -75,9 +76,4 @@ public sealed class CompositeExpressionBehaviors
 
     Actual.ShouldBe(Expected, true);
   }
-}
-
-[TestClass]
-public class RecursiveMatcherBehaviors
-{
 }

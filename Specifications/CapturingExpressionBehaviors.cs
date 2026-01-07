@@ -33,13 +33,14 @@ public class CapturingExpressionBehaviors
   {
     var Input = Any.String();
     var UnderlyingOutput = Any.ArrayOf(Any.Match);
-    var Expression = new CapturingExpression<NullScope>(new MockExpression<NullScope>()
+    Expression<NullScope> ToCaptureExpression = new MockExpression<NullScope>()
     {
       Results =
       {
         {Input, UnderlyingOutput}
       }
-    });
+    };
+    var Expression = new ExpressionFactory<NullScope>().CreateCapturing(ToCaptureExpression);
     var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
 
     var Actual = Matcher.Match(Input);

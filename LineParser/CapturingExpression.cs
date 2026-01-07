@@ -1,6 +1,6 @@
 ﻿namespace LineParser;
 
-public class CapturingExpression<T>(Expression<T> ToCaptureExpression) : Expression<T> where T : MatchScope<T>
+class CapturingExpression<T>(Expression<T> ToCaptureExpression) : Expression<T> where T : MatchScope<T>
 {
   public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<T> Reentry, MatchExecutionContext Context)
   {

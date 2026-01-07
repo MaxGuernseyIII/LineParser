@@ -20,28 +20,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-namespace LineParser;
+using LineParser;
+using Shouldly;
 
-public class NullScope : MatchScope<NullScope>
+namespace Specifications;
+
+[TestClass]
+public class RecursiveMatcherBehaviors
 {
-  NullScope() {}
-
-  public static NullScope Any { get; } = new();
-
-  public static NullScope Unspecified => Any;
-
-  public bool Includes(NullScope Other)
+  [TestMethod]
+  public void InvokesInScopeExpressions()
   {
-    return true;
-  }
+    var ScopeString = Any.String();
+    var Before = Any.String();
+    var MatchedStub = Any.String();
+    var ToParse = Before + MatchedStub + Any.String();
+    var Recursive = new ExpressionFactory<StringScope>().CreateRecursive(StringScope.Demand(ScopeString));
+    var Constant = new ConstantExpression<StringScope>(MatchedStub);
+    var Matcher = MatcherFactory.CreateFromRegistry<StringScope>([
+      (StringScope.Supply(ScopeString), Constant),
+      (StringScope.Unspecified,  Recursive)
+    ]);
 
-  public static NullScope operator |(NullScope L, NullScope R)
-  {
-    return L;
-  }
+    var Actual = Matcher.Match(ToParse);
 
-  public static NullScope operator &(NullScope L, NullScope R)
-  {
-    return R;
+    Actual.ShouldBe(Constant.GetMatchesAtBeginningOf(ToParse, Matcher, new()));
   }
 }

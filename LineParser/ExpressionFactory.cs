@@ -22,26 +22,21 @@
 
 namespace LineParser;
 
-public class NullScope : MatchScope<NullScope>
+public class ExpressionFactory<T>
+  where T : MatchScope<T>
 {
-  NullScope() {}
-
-  public static NullScope Any { get; } = new();
-
-  public static NullScope Unspecified => Any;
-
-  public bool Includes(NullScope Other)
+  public Expression<T> CreateRecursive(T Demand)
   {
-    return true;
+    return new RecursiveExpression<T>(Demand);
   }
 
-  public static NullScope operator |(NullScope L, NullScope R)
+  public Expression<T> CreateCapturing(Expression<T> ToCaptureExpression)
   {
-    return L;
+    return new CapturingExpression<T>(ToCaptureExpression);
   }
 
-  public static NullScope operator &(NullScope L, NullScope R)
+  public Expression<T> CreateComposite(IEnumerable<Expression<T>> Expressions)
   {
-    return R;
+    return new CompositeExpression<T>(Expressions);
   }
 }

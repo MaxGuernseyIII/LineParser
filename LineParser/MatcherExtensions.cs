@@ -26,7 +26,7 @@ public static class MatcherExtensions
 {
   public static IEnumerable<Match> Match<T>(this Matcher<T> This, string ToParse) where T : MatchScope<T>
   {
-    return This.Match(ToParse, new());
+    return This.Match(ToParse, new(), T.Any);
   }
 
   public static IEnumerable<Match> ExactMatch<T>(this Matcher<T> This, string ToParse) where T : MatchScope<T>
