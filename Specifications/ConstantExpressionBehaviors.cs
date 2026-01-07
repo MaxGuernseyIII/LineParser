@@ -33,8 +33,8 @@ public sealed class ConstantExpressionBehaviors
   {
     var ToMatch = Any.String();
 
-    var Expression = new ConstantExpression(ToMatch);
-    var Matcher = new Matcher([Expression]);
+    var Expression = new ConstantExpression<NullScope>(ToMatch);
+    var Matcher = new Matcher<NullScope>([Expression]);
 
     var Matches = Matcher.ExactMatch(ToMatch);
     Matches.ShouldBe([
@@ -52,8 +52,8 @@ public sealed class ConstantExpressionBehaviors
   {
     var ToMatch = Any.String();
 
-    var Expression = new ConstantExpression(ToMatch);
-    var Matcher = new Matcher([Expression]);
+    var Expression = new ConstantExpression<NullScope>(ToMatch);
+    var Matcher = new Matcher<NullScope>([Expression]);
 
     var Matches = Matcher.ExactMatch(ToMatch + Any.String());
     Matches.ShouldBe([]);
@@ -65,8 +65,8 @@ public sealed class ConstantExpressionBehaviors
     var ToMatch = Any.String();
     var Remainder = Any.String();
 
-    var Expression = new ConstantExpression(ToMatch);
-    var Matcher = new Matcher([Expression]);
+    var Expression = new ConstantExpression<NullScope>(ToMatch);
+    var Matcher = new Matcher<NullScope>([Expression]);
 
     var Matches = Matcher.Match(ToMatch + Remainder);
     Matches.ShouldBe([
@@ -85,8 +85,8 @@ public sealed class ConstantExpressionBehaviors
     var ToMatch = Any.String();
     var Remainder = Any.String();
 
-    var Expression = new ConstantExpression(ToMatch);
-    var Matcher = new Matcher([Expression]);
+    var Expression = new ConstantExpression<NullScope>(ToMatch);
+    var Matcher = new Matcher<NullScope>([Expression]);
 
     var Matches = Matcher.Match(Any.String() + Remainder);
     Matches.ShouldBe([]);
@@ -98,8 +98,8 @@ public sealed class ConstantExpressionBehaviors
     var ToMatch = Any.String();
     var Remainder = Any.String();
 
-    var Expression = new ConstantExpression(ToMatch);
-    var Matcher = new Matcher([Expression]);
+    var Expression = new ConstantExpression<NullScope>(ToMatch);
+    var Matcher = new Matcher<NullScope>([Expression]);
 
     var Matches = Matcher.Match(Any.String() + ToMatch + Remainder);
     Matches.ShouldBe([]);

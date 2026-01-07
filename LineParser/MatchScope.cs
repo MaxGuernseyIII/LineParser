@@ -22,15 +22,7 @@
 
 namespace LineParser;
 
-public class ConstantExpression<T>(string Value) : Expression<T> where T : MatchScope<T>
+public interface MatchScope<T>
+  where T : MatchScope<T>
 {
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<T> Reentry, MatchExecutionContext Context)
-  {
-    if (ToMatch.StartsWith(Value))
-      yield return new()
-      {
-        Matched = Value,
-        Remainder = ToMatch[Value.Length..]
-      };
-  }
 }

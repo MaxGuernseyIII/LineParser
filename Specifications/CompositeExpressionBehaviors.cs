@@ -44,15 +44,15 @@ public sealed class CompositeExpressionBehaviors
 
     var FirstMatch0 = FirstMatches[0];
     var FirstMatch1 = FirstMatches[1];
-    var Expression = new CompositeExpression([
-      new MockExpression
+    var Expression = new CompositeExpression<NullScope>([
+      new MockExpression<NullScope>
       {
         Results =
         {
           {OverallString, FirstMatches}
         }
       },
-      new MockExpression
+      new MockExpression<NullScope>
       {
         Results =
         {
@@ -60,13 +60,13 @@ public sealed class CompositeExpressionBehaviors
           {FirstMatch1.Remainder, MatchesForRemainder1}
         }
       },
-      new MockExpression
+      new MockExpression<NullScope>
       {
         Results = MatchesForRemainder0.Concat(MatchesForRemainder1).Select(R => R.Remainder).Distinct()
           .ToDictionary(Key => Key, IEnumerable<Match> (_) => FinalMatches)
       }
     ]);
-    var Matcher = new Matcher([Expression]);
+    var Matcher = new Matcher<NullScope>([Expression]);
 
     var Actual = Matcher.Match(OverallString);
 

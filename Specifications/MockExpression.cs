@@ -24,11 +24,11 @@ using LineParser;
 
 namespace Specifications;
 
-class MockExpression : Expression
+class MockExpression<T> : Expression<T> where T : MatchScope<T>
 {
   public Dictionary<string, IEnumerable<Match>> Results = [];
 
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher Reentry, MatchExecutionContext Context)
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<T> Reentry, MatchExecutionContext Context)
   {
     return !Results.TryGetValue(ToMatch, out var Result) ? [] : Result;
   }

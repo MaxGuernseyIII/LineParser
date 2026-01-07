@@ -1,8 +1,8 @@
 ﻿namespace LineParser;
 
-public class CompositeExpression(IEnumerable<Expression> Expressions) : Expression
+public class CompositeExpression<T>(IEnumerable<Expression<T>> Expressions) : Expression<T> where T : MatchScope<T>
 {
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher Reentry, MatchExecutionContext Context)
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<T> Reentry, MatchExecutionContext Context)
   {
     IEnumerable<Match> Result= [
       new()

@@ -24,12 +24,12 @@ namespace LineParser;
 
 public static class MatcherExtensions
 {
-  public static IEnumerable<Match> Match(this Matcher This, string ToParse)
+  public static IEnumerable<Match> Match<T>(this Matcher<T> This, string ToParse) where T : MatchScope<T>
   {
     return This.Match(ToParse, new());
   }
 
-  public static IEnumerable<Match> ExactMatch(this Matcher This, string ToParse)
+  public static IEnumerable<Match> ExactMatch<T>(this Matcher<T> This, string ToParse) where T : MatchScope<T>
   {
     return This.Match(ToParse).Where(M => M.Remainder == "");
   }
