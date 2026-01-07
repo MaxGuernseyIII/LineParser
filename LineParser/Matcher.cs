@@ -6,10 +6,10 @@ public class Matcher(ImmutableArray<ConstantExpression> Expressions)
 {
   public IEnumerable<Match> Match(string ToParse)
   {
-    yield return new()
+    foreach (var Expression in Expressions)
+    foreach (var Match in Expression.GetMatchesAtBeginningOf(ToParse))
     {
-      Matched = ToParse,
-      Remainder = ""
-    };
+      yield return Match;
+    }
   }
 }

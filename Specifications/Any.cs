@@ -20,31 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using LineParser;
-using Shouldly;
-
 namespace Specifications;
 
-[TestClass]
-public sealed class ParsingBehaviors
+static class Any
 {
-  [TestMethod]
-  public void ConstantMatchesBeginningOfString()
+  public static Func<string> String()
   {
-    var ToMatch = Any.String()();
-    var Remainder = Any.String()();
-
-    var Expression = new ConstantExpression(ToMatch);
-    var Matcher = new Matcher([Expression]);
-
-    var Matches = Matcher.Match(ToMatch + Remainder);
-    Matches.ShouldBe([
-      new()
-      {
-        Matched = ToMatch,
-        Remainder = Remainder,
-        Captured = []
-      }
-    ]);
+    return () => Guid.NewGuid().ToString("N");
   }
 }
