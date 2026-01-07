@@ -28,6 +28,14 @@ namespace Specifications;
 [TestClass]
 public class RecursiveMatcherBehaviors
 {
+  ExpressionFactory<StringScope> ExpressionFactory = null!;
+
+  [TestInitialize]
+  public void Setup()
+  {
+    ExpressionFactory = new();
+  }
+
   [TestMethod]
   public void InvokesInScopeExpressions()
   {
@@ -35,8 +43,8 @@ public class RecursiveMatcherBehaviors
     var Before = Any.String();
     var MatchedStub = Any.String();
     var ToParse = Before + MatchedStub + Any.String();
-    var Recursive = new ExpressionFactory<StringScope>().CreateRecursive(StringScope.Demand(ScopeString));
-    var Constant = new ExpressionFactory<StringScope>().CreateConstant(MatchedStub);
+    var Recursive = ExpressionFactory.CreateRecursive(StringScope.Demand(ScopeString));
+    var Constant = ExpressionFactory.CreateConstant(MatchedStub);
     var Matcher = MatcherFactory.CreateFromRegistry<StringScope>([
       (StringScope.Supply(ScopeString), Constant),
       (StringScope.Unspecified,  Recursive)

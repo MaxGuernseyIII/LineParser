@@ -28,6 +28,14 @@ namespace Specifications;
 [TestClass]
 public class CapturingExpressionBehaviors
 {
+  ExpressionFactory<NullScope> ExpressionFactory = null!;
+
+  [TestInitialize]
+  public void Setup()
+  {
+    ExpressionFactory = new();
+  }
+
   [TestMethod]
   public void CapturesMatchedValues()
   {
@@ -40,7 +48,7 @@ public class CapturingExpressionBehaviors
         {Input, UnderlyingOutput}
       }
     };
-    var Expression = new ExpressionFactory<NullScope>().CreateCapturing(ToCaptureExpression);
+    var Expression = ExpressionFactory.CreateCapturing(ToCaptureExpression);
     var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
 
     var Actual = Matcher.Match(Input);
