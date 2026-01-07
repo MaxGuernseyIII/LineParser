@@ -39,4 +39,9 @@ public class ExpressionFactory<T>
   {
     return new CompositeExpression<T>(Expressions);
   }
+
+  public Expression<T> CreateConstant(string Value)
+  {
+    return new ConstantExpression<T>(Value);
+  }
 }

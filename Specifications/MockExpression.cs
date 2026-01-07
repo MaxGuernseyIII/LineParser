@@ -24,7 +24,7 @@ using LineParser;
 
 namespace Specifications;
 
-class MockExpression<T> : Expression<T> where T : MatchScope<T>
+sealed class MockExpression<T> : Expression<T> where T : MatchScope<T>
 {
   public Dictionary<string, IEnumerable<Match>> Results = [];
 

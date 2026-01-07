@@ -36,7 +36,7 @@ public class RecursiveMatcherBehaviors
     var MatchedStub = Any.String();
     var ToParse = Before + MatchedStub + Any.String();
     var Recursive = new ExpressionFactory<StringScope>().CreateRecursive(StringScope.Demand(ScopeString));
-    var Constant = new ConstantExpression<StringScope>(MatchedStub);
+    var Constant = new ExpressionFactory<StringScope>().CreateConstant(MatchedStub);
     var Matcher = MatcherFactory.CreateFromRegistry<StringScope>([
       (StringScope.Supply(ScopeString), Constant),
       (StringScope.Unspecified,  Recursive)

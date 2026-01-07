@@ -22,7 +22,7 @@
 
 namespace LineParser;
 
-class CompositeExpression<T>(IEnumerable<Expression<T>> Expressions) : Expression<T> where T : MatchScope<T>
+sealed class CompositeExpression<T>(IEnumerable<Expression<T>> Expressions) : Expression<T> where T : MatchScope<T>
 {
   public IEnumerable<Match> GetMatchesAtBeginningOf(
     string ToMatch, Matcher<T> Reentry, MatchExecutionContext Context)

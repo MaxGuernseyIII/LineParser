@@ -33,7 +33,7 @@ public sealed class ConstantExpressionBehaviors
   {
     var ToMatch = Any.String();
 
-    var Expression = new ConstantExpression<NullScope>(ToMatch);
+    var Expression = new ExpressionFactory<NullScope>().CreateConstant(ToMatch);
     var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
 
     var Matches = Matcher.ExactMatch(ToMatch);
@@ -52,7 +52,7 @@ public sealed class ConstantExpressionBehaviors
   {
     var ToMatch = Any.String();
 
-    var Expression = new ConstantExpression<NullScope>(ToMatch);
+    var Expression = new ExpressionFactory<NullScope>().CreateConstant(ToMatch);
     var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
 
     var Matches = Matcher.ExactMatch(ToMatch + Any.String());
@@ -65,7 +65,7 @@ public sealed class ConstantExpressionBehaviors
     var ToMatch = Any.String();
     var Remainder = Any.String();
 
-    var Expression = new ConstantExpression<NullScope>(ToMatch);
+    var Expression = new ExpressionFactory<NullScope>().CreateConstant(ToMatch);
     var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
 
     var Matches = Matcher.Match(ToMatch + Remainder);
@@ -85,7 +85,7 @@ public sealed class ConstantExpressionBehaviors
     var ToMatch = Any.String();
     var Remainder = Any.String();
 
-    var Expression = new ConstantExpression<NullScope>(ToMatch);
+    var Expression = new ExpressionFactory<NullScope>().CreateConstant(ToMatch);
     var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
 
     var Matches = Matcher.Match(Any.String() + Remainder);
@@ -98,7 +98,7 @@ public sealed class ConstantExpressionBehaviors
     var ToMatch = Any.String();
     var Remainder = Any.String();
 
-    var Expression = new ConstantExpression<NullScope>(ToMatch);
+    var Expression = new ExpressionFactory<NullScope>().CreateConstant(ToMatch);
     var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
 
     var Matches = Matcher.Match(Any.String() + ToMatch + Remainder);
