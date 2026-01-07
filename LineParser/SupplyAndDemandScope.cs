@@ -53,12 +53,24 @@ public sealed record SupplyAndDemandScope<T> : MatchScope<SupplyAndDemandScope<T
 
   public static SupplyAndDemandScope<T> operator |(SupplyAndDemandScope<T> L, SupplyAndDemandScope<T> R)
   {
-    throw new NotImplementedException();
+    var LSupportsToken = L.SupportsToken;
+    var RSupportsToken = R.SupportsToken;
+    return new()
+    {
+      CheckForSupport = Never,
+      SupportsToken = Token => LSupportsToken(Token) || RSupportsToken(Token)
+    };
   }
 
   public static SupplyAndDemandScope<T> operator &(SupplyAndDemandScope<T> L, SupplyAndDemandScope<T> R)
   {
-    throw new NotImplementedException();
+    var LCheckForSupport = L.CheckForSupport;
+    var RCheckForSupport = R.CheckForSupport;
+    return new()
+    {
+      CheckForSupport = Support => LCheckForSupport(Support) && RCheckForSupport(Support),
+      SupportsToken = Never
+    };
   }
 
   public static SupplyAndDemandScope<T> For(T Token)

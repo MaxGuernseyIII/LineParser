@@ -47,6 +47,7 @@ public class SupplyAndDemandScopeBehaviors
   {
     TestedScope.Any.Includes(TestedScope.Unspecified).ShouldBeTrue();
   }
+
   [TestMethod]
   public void RequireIncludesAny()
   {
@@ -127,8 +128,37 @@ public class SupplyAndDemandScopeBehaviors
   {
     TestedScope.For(new()).Includes(TestedScope.Unspecified).ShouldBeFalse();
   }
-}
 
+  [TestMethod]
+  public void AndWhenBothDemandsAreSupplied()
+  {
+    MockToken Token1 = new();
+    MockToken Token2 = new();
+
+    (TestedScope.Demand(Token1) & TestedScope.Demand(Token2))
+      .Includes(TestedScope.Supply(Token1) | TestedScope.Supply(Token2)).ShouldBeTrue();
+  }
+
+  [TestMethod]
+  public void AndWhenLeftDemandsAreSupplied()
+  {
+    MockToken Token1 = new();
+    MockToken Token2 = new();
+
+    (TestedScope.Demand(Token1) & TestedScope.Demand(Token2))
+      .Includes(TestedScope.Supply(Token1)).ShouldBeFalse();
+  }
+
+  [TestMethod]
+  public void AndWhenRightDemandsAreSupplied()
+  {
+    MockToken Token1 = new();
+    MockToken Token2 = new();
+
+    (TestedScope.Demand(Token1) & TestedScope.Demand(Token2))
+      .Includes(TestedScope.Supply(Token2)).ShouldBeFalse();
+  }
+}
 
 class MockToken
 {
