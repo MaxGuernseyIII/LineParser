@@ -21,6 +21,7 @@
 // SOFTWARE.
 
 using LineParser;
+using Microsoft.Testing.Platform.Extensions;
 using Shouldly;
 
 namespace Specifications;
@@ -92,5 +93,21 @@ public class CompositeScopeBehaviors
     );
 
     Composed.Includes(new(Left, Right)).ShouldBeFalse();
+  }
+
+  [TestMethod]
+  public void Or()
+  {
+    var NewLeft = new MockScope1([], [], []);
+    var NewRight = new MockScope2([], [], []);
+    var RightLeft = new MockScope1([], [], []);
+    var RightRight = new MockScope2([], [], []);
+    var LeftLeft = new MockScope1([], [(RightLeft, NewLeft)], []);
+    var LeftRight = new MockScope2([], [(RightRight, NewRight)], []);
+
+    var Actual = new CompositeScope<MockScope1, MockScope2>(LeftLeft, LeftRight) |
+                 new CompositeScope<MockScope1, MockScope2>(RightLeft, RightRight);
+
+    Actual.ShouldBeEquivalentTo(new CompositeScope<MockScope1, MockScope2>(NewLeft, NewRight));
   }
 }

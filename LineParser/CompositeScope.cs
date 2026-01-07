@@ -38,13 +38,15 @@ public sealed class CompositeScope<TLeft, TRight>(TLeft Left, TRight Right) : Ma
     return Left.Includes(Other.Left) && Right.Includes(Other.Right);
   }
 
-  public static CompositeScope<TLeft, TRight> operator |(CompositeScope<TLeft, TRight> L,
+  public static CompositeScope<TLeft, TRight> operator |(
+    CompositeScope<TLeft, TRight> L,
     CompositeScope<TLeft, TRight> R)
   {
-    throw new NotImplementedException();
+    return new(L.Left | R.Left, L.Right | R.Right);
   }
 
-  public static CompositeScope<TLeft, TRight> operator &(CompositeScope<TLeft, TRight> L,
+  public static CompositeScope<TLeft, TRight> operator &(
+    CompositeScope<TLeft, TRight> L,
     CompositeScope<TLeft, TRight> R)
   {
     throw new NotImplementedException();
