@@ -24,22 +24,14 @@ using System.Collections.Immutable;
 
 namespace LineParser;
 
-public class Matcher<T>(ImmutableArray<Expression<T>> Expressions)
+public class Matcher<T>(ImmutableArray<(T Scope, Expression<T> Expression)> Registry)
   where T : MatchScope<T>
 {
 
   public IEnumerable<Match> Match(string ToParse, MatchExecutionContext Context)
   {
-    foreach (var Expression in Expressions)
-    foreach (var Match in Expression.GetMatchesAtBeginningOf(ToParse, this, Context))
+    foreach (var Registered in Registry)
+    foreach (var Match in Registered.Expression.GetMatchesAtBeginningOf(ToParse, this, Context))
       yield return Match;
-  }
-}
-
-public static class MatcherFactory
-{
-  public static Matcher<T> CreateFromExpressions<T>(ImmutableArray<Expression<T>> Expressions) where T : MatchScope<T>
-  {
-    return new(Expressions);
   }
 }

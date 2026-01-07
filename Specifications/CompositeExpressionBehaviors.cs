@@ -66,7 +66,7 @@ public sealed class CompositeExpressionBehaviors
           .ToDictionary(Key => Key, IEnumerable<Match> (_) => FinalMatches)
       }
     ]);
-    var Matcher = new Matcher<NullScope>([Expression]);
+    var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
 
     var Actual = Matcher.Match(OverallString);
 
@@ -75,4 +75,9 @@ public sealed class CompositeExpressionBehaviors
 
     Actual.ShouldBe(Expected, true);
   }
+}
+
+[TestClass]
+public class RecursiveMatcherBehaviors
+{
 }

@@ -25,4 +25,8 @@ namespace LineParser;
 public interface MatchScope<T>
   where T : MatchScope<T>
 {
+  public static abstract T All { get; }
+
+  public T Intersect(T Other);
+  public bool Any { get; }
 }

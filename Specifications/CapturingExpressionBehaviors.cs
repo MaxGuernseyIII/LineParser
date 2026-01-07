@@ -40,7 +40,7 @@ public class CapturingExpressionBehaviors
         {Input, UnderlyingOutput}
       }
     });
-    var Matcher = new Matcher<NullScope>([Expression]);
+    var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
 
     var Actual = Matcher.Match(Input);
 

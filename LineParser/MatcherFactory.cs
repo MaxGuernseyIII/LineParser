@@ -20,18 +20,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Collections.Immutable;
+
 namespace LineParser;
 
-public class NullScope : MatchScope<NullScope>
+public static class MatcherFactory
 {
-  NullScope() { }
-
-  public static NullScope All => new();
-
-  public NullScope Intersect(NullScope Other)
+  public static Matcher<T> CreateFromExpressions<T>(ImmutableArray<Expression<T>> Expressions) where T : MatchScope<T>
   {
-    return All;
+    return new([..Expressions.Select(E => (T.All, E))]);
   }
-
-  public bool Any => true;
 }
