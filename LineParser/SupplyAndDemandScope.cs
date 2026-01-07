@@ -24,24 +24,31 @@ namespace LineParser;
 
 public sealed record SupplyAndDemandScope<T> : MatchScope<SupplyAndDemandScope<T>>
 {
-  public required Predicate<Predicate<T>> Demand { get; init; }
-  public required Predicate<T> Supply { get; init; }
+  static bool Always(T _) => true;
+  static bool Never(T _) => false;
+  static bool Always(Predicate<T> _) => true;
+  static bool Never(Predicate<T> _) => false;
+  static Predicate<T> SupplyToken(T Required) => Checked => Equals(Required, Checked);
+  static Predicate<Predicate<T>> DemandToken(T Required) => Supplied => Supplied(Required);
+
+  public required Predicate<Predicate<T>> CheckForSupport { get; init; }
+  public required Predicate<T> SupportsToken { get; init; }
 
   public static SupplyAndDemandScope<T> Any { get; } = new()
   {
-    Demand = _ => true,
-    Supply = _ => true
+    CheckForSupport = Always,
+    SupportsToken = Always
   };
 
   public static SupplyAndDemandScope<T> Unspecified { get; } = new()
   {
-    Demand = _ => true,
-    Supply = _ => false
+    CheckForSupport = Always,
+    SupportsToken = Never
   };
 
   public bool Includes(SupplyAndDemandScope<T> Other)
   {
-    return Demand(Other.Supply);
+    return CheckForSupport(Other.SupportsToken);
   }
 
   public static SupplyAndDemandScope<T> operator |(SupplyAndDemandScope<T> L, SupplyAndDemandScope<T> R)
@@ -58,8 +65,26 @@ public sealed record SupplyAndDemandScope<T> : MatchScope<SupplyAndDemandScope<T
   {
     return new()
     {
-      Demand = Other => Other(Token),
-      Supply = OtherToken => Equals(Token, OtherToken)
+      CheckForSupport = DemandToken(Token),
+      SupportsToken = SupplyToken(Token)
+    };
+  }
+
+  public static SupplyAndDemandScope<T> Demand(T Token)
+  {
+    return new()
+    {
+      SupportsToken = Never,
+      CheckForSupport = DemandToken(Token)
+    };
+  }
+
+  public static SupplyAndDemandScope<T> Supply(T Token)
+  {
+    return new()
+    {
+      SupportsToken = SupplyToken(Token),
+      CheckForSupport = Never
     };
   }
 }

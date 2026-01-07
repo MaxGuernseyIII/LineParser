@@ -47,6 +47,43 @@ public class SupplyAndDemandScopeBehaviors
   {
     TestedScope.Any.Includes(TestedScope.Unspecified).ShouldBeTrue();
   }
+  [TestMethod]
+  public void RequireIncludesAny()
+  {
+    TestedScope.Demand(new()).Includes(TestedScope.Any).ShouldBeTrue();
+  }
+
+  [TestMethod]
+  public void RequireIncludesToken()
+  {
+    var Token = new MockToken();
+    TestedScope.Demand(Token).Includes(TestedScope.For(Token)).ShouldBeTrue();
+  }
+
+  [TestMethod]
+  public void RequireIncludesSameSupply()
+  {
+    var Token = new MockToken();
+    TestedScope.Demand(Token).Includes(TestedScope.Supply(Token)).ShouldBeTrue();
+  }
+
+  [TestMethod]
+  public void RequireDoesNotIncludeOtherToken()
+  {
+    TestedScope.Demand(new()).Includes(TestedScope.For(new())).ShouldBeFalse();
+  }
+
+  [TestMethod]
+  public void RequireDoesNotIncludeOtherSupply()
+  {
+    TestedScope.Demand(new()).Includes(TestedScope.Supply(new())).ShouldBeFalse();
+  }
+
+  [TestMethod]
+  public void RequireDoesNotIncludeUnspecified()
+  {
+    TestedScope.Demand(new()).Includes(TestedScope.Unspecified).ShouldBeFalse();
+  }
 
   [TestMethod]
   public void UnspecifiedIncludesItself()
