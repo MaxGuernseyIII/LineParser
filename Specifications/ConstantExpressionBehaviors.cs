@@ -46,6 +46,7 @@ public sealed class ConstantExpressionBehaviors
       }
     ]);
   }
+
   [TestMethod]
   public void ExactMatchFailsWithAnyDifferences()
   {
