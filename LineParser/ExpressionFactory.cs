@@ -20,6 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+
 namespace LineParser;
 
 public class ExpressionFactory<T>
@@ -43,5 +46,10 @@ public class ExpressionFactory<T>
   public Expression<T> CreateConstant(string Value)
   {
     return new ConstantExpression<T>(Value);
+  }
+
+  public Expression<T> CreateForRegex(Regex Pattern)
+  {
+    return new RegexExpression<T>(Pattern);
   }
 }

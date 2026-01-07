@@ -20,39 +20,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Collections.Immutable;
-using System.Text;
+using System.Text.RegularExpressions;
 
 namespace LineParser;
 
-public readonly record struct Match
+sealed class RegexExpression<T>(Regex Pattern) : Expression<T> where T : MatchScope<T>
 {
-  public Match() {}
-
-  public required string Matched { get; init; }
-  public required string Remainder { get; init; }
-  public ImmutableArray<string> Captured { get; init; } = ImmutableArray<string>.Empty;
-
-  public static Match operator +(Match Left, Match Right) => new()
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<T> Reentry, MatchExecutionContext Context)
   {
-    Matched = Left.Matched + Right.Matched, Remainder = Right.Remainder, Captured = [..Left.Captured, ..Right.Captured]
-  };
-
-  public bool Equals(Match Other)
-  {
-    return Matched == Other.Matched && Remainder == Other.Remainder && Captured.SequenceEqual(Other.Captured);
-  }
-
-  public override int GetHashCode()
-  {
-    return HashCode.Combine(Matched, Remainder, Captured);
-  }
-
-  bool PrintMembers(StringBuilder Builder)
-  {
-    Builder.Append(
-      $"Matched = \"{Matched}\", Remainder = \"{Remainder}\", Captured = [{string.Join(", ", Captured.Select(C => $"\"{C}\""))}]");
-
-    return true;
+    var M = Pattern.Match(ToMatch);
+    yield return new()
+    {
+      Matched = M.Value,
+      Remainder = ToMatch[M.Value.Length..],
+      Captured = [..M.Groups.Values.Skip(1).Select(C => C.Value)]
+    };
   }
 }

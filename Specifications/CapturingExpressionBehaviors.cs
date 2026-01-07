@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Text.RegularExpressions;
 using LineParser;
 using Shouldly;
 
@@ -41,7 +42,7 @@ public class CapturingExpressionBehaviors
   {
     var Input = Any.String();
     var UnderlyingOutput = Any.ArrayOf(Any.Match);
-    Expression<NullScope> ToCaptureExpression = new MockExpression<NullScope>()
+    Expression<NullScope> ToCaptureExpression = new MockExpression<NullScope>
     {
       Results =
       {
@@ -53,10 +54,39 @@ public class CapturingExpressionBehaviors
 
     var Actual = Matcher.Match(Input);
 
-    Actual.ShouldBe(UnderlyingOutput.Select(M => 
+    Actual.ShouldBe(UnderlyingOutput.Select(M =>
       M with
       {
         Captured = [M.Matched]
       }));
+  }
+}
+
+[TestClass]
+public class RegexAdapterBehaviors
+{
+  [TestMethod]
+  public void UsesRegexToParse()
+  {
+    var Remainder = Any.String();
+    var ToMatch = "there is some cheese in the house ";
+    var ToParse = ToMatch + Remainder;
+    var Pattern = new Regex("there is (some|no) cheese in the (house|refrigerator) ", RegexOptions.Compiled);
+    var Expression = new ExpressionFactory<NullScope>().CreateForRegex(Pattern);
+
+    var Matches = MatcherFactory.CreateFromExpressions([Expression]).Match(ToParse);
+
+    Matches.ShouldBe([
+      new()
+      {
+        Matched = ToMatch,
+        Remainder = Remainder,
+        Captured =
+        [
+          "some",
+          "house"
+        ]
+      }
+    ]);
   }
 }
