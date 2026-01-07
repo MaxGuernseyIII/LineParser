@@ -20,16 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Collections.Immutable;
-
 namespace LineParser;
 
-public class Matcher(ImmutableArray<Expression> Expressions)
+public static class MatcherExtensions
 {
-  public IEnumerable<Match> Match(string ToParse, MatchExecutionContext Context)
+  public static IEnumerable<Match> Match(this Matcher This, string ToParse)
   {
-    foreach (var Expression in Expressions)
-    foreach (var Match in Expression.GetMatchesAtBeginningOf(ToParse, this, Context))
-      yield return Match;
+    return This.Match(ToParse, new());
   }
 }

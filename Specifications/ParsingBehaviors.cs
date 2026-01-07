@@ -47,4 +47,30 @@ public sealed class ParsingBehaviors
       }
     ]);
   }
+
+  [TestMethod]
+  public void ConstantDoesNotMatchDifferentString()
+  {
+    var ToMatch = Any.String()();
+    var Remainder = Any.String()();
+
+    var Expression = new ConstantExpression(ToMatch);
+    var Matcher = new Matcher([Expression]);
+
+    var Matches = Matcher.Match(Any.String() + Remainder);
+    Matches.ShouldBe([]);
+  }
+
+  [TestMethod]
+  public void ConstantDoesNotMatchInMiddleOfString()
+  {
+    var ToMatch = Any.String()();
+    var Remainder = Any.String()();
+
+    var Expression = new ConstantExpression(ToMatch);
+    var Matcher = new Matcher([Expression]);
+
+    var Matches = Matcher.Match(Any.String() + ToMatch + Remainder);
+    Matches.ShouldBe([]);
+  }
 }
