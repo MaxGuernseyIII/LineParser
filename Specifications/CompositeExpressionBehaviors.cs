@@ -28,6 +28,14 @@ namespace Specifications;
 [TestClass]
 public sealed class CompositeExpressionBehaviors
 {
+  ExpressionFactory<NullScope> ExpressionFactory = null!;
+
+  [TestInitialize]
+  public void Setup()
+  {
+    ExpressionFactory = new();
+  }
+
   [TestMethod]
   public void ChainsExpressions()
   {
@@ -66,7 +74,7 @@ public sealed class CompositeExpressionBehaviors
           .ToDictionary(Key => Key, IEnumerable<Match> (_) => FinalMatches)
       }
     ];
-    var Expression = new ExpressionFactory<NullScope>().CreateComposite(Expressions);
+    var Expression = ExpressionFactory.CreateComposite(Expressions);
     var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
 
     var Actual = Matcher.Match(OverallString);

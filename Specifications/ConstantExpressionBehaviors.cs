@@ -28,12 +28,20 @@ namespace Specifications;
 [TestClass]
 public sealed class ConstantExpressionBehaviors
 {
+  ExpressionFactory<NullScope> ExpressionFactory = null!;
+
+  [TestInitialize]
+  public void SetUp()
+  {
+    ExpressionFactory = new();
+  }
+
   [TestMethod]
   public void ExactMatchRequiresWholeString()
   {
     var ToMatch = Any.String();
 
-    var Expression = new ExpressionFactory<NullScope>().CreateConstant(ToMatch);
+    var Expression = ExpressionFactory.CreateConstant(ToMatch);
     var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
 
     var Matches = Matcher.ExactMatch(ToMatch);
@@ -52,7 +60,7 @@ public sealed class ConstantExpressionBehaviors
   {
     var ToMatch = Any.String();
 
-    var Expression = new ExpressionFactory<NullScope>().CreateConstant(ToMatch);
+    var Expression = ExpressionFactory.CreateConstant(ToMatch);
     var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
 
     var Matches = Matcher.ExactMatch(ToMatch + Any.String());
@@ -65,7 +73,7 @@ public sealed class ConstantExpressionBehaviors
     var ToMatch = Any.String();
     var Remainder = Any.String();
 
-    var Expression = new ExpressionFactory<NullScope>().CreateConstant(ToMatch);
+    var Expression = ExpressionFactory.CreateConstant(ToMatch);
     var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
 
     var Matches = Matcher.Match(ToMatch + Remainder);
@@ -85,7 +93,7 @@ public sealed class ConstantExpressionBehaviors
     var ToMatch = Any.String();
     var Remainder = Any.String();
 
-    var Expression = new ExpressionFactory<NullScope>().CreateConstant(ToMatch);
+    var Expression = ExpressionFactory.CreateConstant(ToMatch);
     var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
 
     var Matches = Matcher.Match(Any.String() + Remainder);
@@ -98,7 +106,7 @@ public sealed class ConstantExpressionBehaviors
     var ToMatch = Any.String();
     var Remainder = Any.String();
 
-    var Expression = new ExpressionFactory<NullScope>().CreateConstant(ToMatch);
+    var Expression = ExpressionFactory.CreateConstant(ToMatch);
     var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
 
     var Matches = Matcher.Match(Any.String() + ToMatch + Remainder);
