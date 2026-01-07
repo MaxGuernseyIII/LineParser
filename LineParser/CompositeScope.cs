@@ -31,11 +31,11 @@ public sealed class CompositeScope<TLeft, TRight>(TLeft Left, TRight Right) : Ma
 
   public static CompositeScope<TLeft, TRight> Any { get; } = new(TLeft.Any, TRight.Any);
 
-  public static CompositeScope<TLeft, TRight> Unspecified => throw new NotImplementedException();
+  public static CompositeScope<TLeft, TRight> Unspecified { get; } = new(TLeft.Unspecified, TRight.Unspecified);
 
   public bool Includes(CompositeScope<TLeft, TRight> Other)
   {
-    throw new NotImplementedException();
+    return Left.Includes(Other.Left) && Right.Includes(Other.Right);
   }
 
   public static CompositeScope<TLeft, TRight> operator |(CompositeScope<TLeft, TRight> L,

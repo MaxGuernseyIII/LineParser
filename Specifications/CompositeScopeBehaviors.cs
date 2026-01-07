@@ -34,4 +34,63 @@ public class CompositeScopeBehaviors
     CompositeScope<MockScope1, MockScope2>.Any.ShouldBeEquivalentTo(
       new CompositeScope<MockScope1, MockScope2>(MockScope1.Any, MockScope2.Any));
   }
+
+  [TestMethod]
+  public void UnspecifiedIsComposed()
+  {
+    CompositeScope<MockScope1, MockScope2>.Unspecified.ShouldBeEquivalentTo(
+      new CompositeScope<MockScope1, MockScope2>(MockScope1.Unspecified, MockScope2.Unspecified));
+  }
+
+  [TestMethod]
+  public void IncludesWhenBothLeftAndRightInclude()
+  {
+    var Left = new MockScope1([], [], []);
+    var Right = new MockScope2([], [], []);
+    var Composed = new CompositeScope<MockScope1, MockScope2>(
+      new([Left], [], []),
+      new([Right], [], [])
+    );
+
+    Composed.Includes(new(Left, Right)).ShouldBeTrue();
+  }
+
+  [TestMethod]
+  public void IncludesWhenLeftAIncludes()
+  {
+    var Left = new MockScope1([], [], []);
+    var Right = new MockScope2([], [], []);
+    var Composed = new CompositeScope<MockScope1, MockScope2>(
+      new([Left], [], []),
+      new([], [], [])
+    );
+
+    Composed.Includes(new(Left, Right)).ShouldBeFalse();
+  }
+
+  [TestMethod]
+  public void IncludesWhenRightIncludes()
+  {
+    var Left = new MockScope1([], [], []);
+    var Right = new MockScope2([], [], []);
+    var Composed = new CompositeScope<MockScope1, MockScope2>(
+      new([], [], []),
+      new([Right], [], [])
+    );
+
+    Composed.Includes(new(Left, Right)).ShouldBeFalse();
+  }
+
+  [TestMethod]
+  public void IncludesWhenNeitherIncludes()
+  {
+    var Left = new MockScope1([], [], []);
+    var Right = new MockScope2([], [], []);
+    var Composed = new CompositeScope<MockScope1, MockScope2>(
+      new([], [], []),
+      new([], [], [])
+    );
+
+    Composed.Includes(new(Left, Right)).ShouldBeFalse();
+  }
 }
