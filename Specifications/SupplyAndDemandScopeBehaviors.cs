@@ -168,6 +168,63 @@ public class SupplyAndDemandScopeBehaviors
     (TestedScope.Demand(Token1) & TestedScope.Demand(Token2))
       .Includes(TestedScope.Unspecified).ShouldBeFalse();
   }
+
+  [TestMethod]
+  public void AndWhenSuppliesOverlap()
+  {
+    var Scope1 = TestedScope.For(new());
+    var Scope2 = TestedScope.For(new());
+    var Scope3 = TestedScope.For(new());
+
+    var Intersection = (Scope1 | Scope2) & (Scope2 | Scope3);
+
+    Scope1.Includes(Intersection).ShouldBeFalse();
+    Intersection.Includes(Scope1).ShouldBeFalse();
+    Scope2.Includes(Intersection).ShouldBeTrue();
+    Intersection.Includes(Scope2).ShouldBeTrue();
+    Scope3.Includes(Intersection).ShouldBeFalse();
+    Intersection.Includes(Scope3).ShouldBeFalse();
+  }
+
+  [TestMethod]
+  public void OrWhenBothDemandsAreSupplied()
+  {
+    MockToken Token1 = new();
+    MockToken Token2 = new();
+
+    (TestedScope.Demand(Token1) | TestedScope.Demand(Token2))
+      .Includes(TestedScope.Supply(Token1) | TestedScope.Supply(Token2)).ShouldBeTrue();
+  }
+
+  [TestMethod]
+  public void OrWhenLeftDemandSupplied()
+  {
+    MockToken Token1 = new();
+    MockToken Token2 = new();
+
+    (TestedScope.Demand(Token1) | TestedScope.Demand(Token2))
+      .Includes(TestedScope.Supply(Token1)).ShouldBeTrue();
+  }
+
+  [TestMethod]
+  public void OrWhenRightDemandSupplied()
+  {
+    MockToken Token1 = new();
+    MockToken Token2 = new();
+
+    (TestedScope.Demand(Token1) | TestedScope.Demand(Token2))
+      .Includes(TestedScope.Supply(Token2)).ShouldBeTrue();
+  }
+
+  [TestMethod]
+  public void OrWhenNoDemandsAreSupplied()
+  {
+    MockToken Token1 = new();
+    MockToken Token2 = new();
+
+    (TestedScope.Demand(Token1) | TestedScope.Demand(Token2))
+      .Includes(TestedScope.Unspecified).ShouldBeFalse();
+  }
 }
 
 class MockToken

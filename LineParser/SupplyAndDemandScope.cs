@@ -55,21 +55,25 @@ public sealed record SupplyAndDemandScope<T> : MatchScope<SupplyAndDemandScope<T
   {
     var LSupportsToken = L.SupportsToken;
     var RSupportsToken = R.SupportsToken;
+    var LCheckForSupport = L.CheckForSupport;
+    var RCheckForSupport = R.CheckForSupport;
     return new()
     {
-      CheckForSupport = Never,
+      CheckForSupport = Support => LCheckForSupport(Support) || RCheckForSupport(Support),
       SupportsToken = Token => LSupportsToken(Token) || RSupportsToken(Token)
     };
   }
 
   public static SupplyAndDemandScope<T> operator &(SupplyAndDemandScope<T> L, SupplyAndDemandScope<T> R)
   {
+    var LSupportsToken = L.SupportsToken;
+    var RSupportsToken = R.SupportsToken;
     var LCheckForSupport = L.CheckForSupport;
     var RCheckForSupport = R.CheckForSupport;
     return new()
     {
       CheckForSupport = Support => LCheckForSupport(Support) && RCheckForSupport(Support),
-      SupportsToken = Never
+      SupportsToken = Token => LSupportsToken(Token) && RSupportsToken(Token)
     };
   }
 
