@@ -31,7 +31,7 @@ public sealed class ConstantExpressionBehaviors
   [TestMethod]
   public void ExactMatchRequiresWholeString()
   {
-    var ToMatch = Any.String()();
+    var ToMatch = Any.String();
 
     var Expression = new ConstantExpression(ToMatch);
     var Matcher = new Matcher([Expression]);
@@ -50,7 +50,7 @@ public sealed class ConstantExpressionBehaviors
   [TestMethod]
   public void ExactMatchFailsWithAnyDifferences()
   {
-    var ToMatch = Any.String()();
+    var ToMatch = Any.String();
 
     var Expression = new ConstantExpression(ToMatch);
     var Matcher = new Matcher([Expression]);
@@ -62,8 +62,8 @@ public sealed class ConstantExpressionBehaviors
   [TestMethod]
   public void MatchesBeginningOfStringWithRemainder()
   {
-    var ToMatch = Any.String()();
-    var Remainder = Any.String()();
+    var ToMatch = Any.String();
+    var Remainder = Any.String();
 
     var Expression = new ConstantExpression(ToMatch);
     var Matcher = new Matcher([Expression]);
@@ -82,8 +82,8 @@ public sealed class ConstantExpressionBehaviors
   [TestMethod]
   public void DoesNotMatchIfFragmentNotPresent()
   {
-    var ToMatch = Any.String()();
-    var Remainder = Any.String()();
+    var ToMatch = Any.String();
+    var Remainder = Any.String();
 
     var Expression = new ConstantExpression(ToMatch);
     var Matcher = new Matcher([Expression]);
@@ -95,8 +95,8 @@ public sealed class ConstantExpressionBehaviors
   [TestMethod]
   public void DoesNotMatchFragmentsAfterBeginning()
   {
-    var ToMatch = Any.String()();
-    var Remainder = Any.String()();
+    var ToMatch = Any.String();
+    var Remainder = Any.String();
 
     var Expression = new ConstantExpression(ToMatch);
     var Matcher = new Matcher([Expression]);

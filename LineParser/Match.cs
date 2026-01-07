@@ -31,4 +31,9 @@ public readonly record struct Match
   public required string Matched { get; init; }
   public required string Remainder { get; init; }
   public ImmutableArray<string> Captured { get; init; } = ImmutableArray<string>.Empty;
+
+  public static Match operator +(Match Left, Match Right) => new()
+  {
+    Matched = Left.Matched + Right.Matched, Remainder = Right.Remainder, Captured = [..Left.Captured, ..Right.Captured]
+  };
 }

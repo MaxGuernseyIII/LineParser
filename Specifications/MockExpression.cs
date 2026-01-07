@@ -24,27 +24,12 @@ using LineParser;
 
 namespace Specifications;
 
-static class Any
+class MockExpression : Expression
 {
-  static readonly Random Source = new();
+  public Dictionary<string, IEnumerable<Match>> Results = [];
 
-  public static string String()
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher Reentry, MatchExecutionContext Context)
   {
-    return Guid.NewGuid().ToString("N");
-  }
-
-  public static Match Match()
-  {
-    return new()
-    {
-      Matched = String(),
-      Remainder = String(),
-      Captured = [String(), String()]
-    };
-  }
-
-  public static T[] ArrayOf<T>(Func<T> Make)
-  {
-    return Enumerable.Range(0, Source.Next(4)).Select(_ => Make()).ToArray();
+    return !Results.TryGetValue(ToMatch, out var Result) ? [] : Result;
   }
 }
