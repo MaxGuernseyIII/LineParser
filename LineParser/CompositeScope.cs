@@ -49,6 +49,6 @@ public sealed class CompositeScope<TLeft, TRight>(TLeft Left, TRight Right) : Ma
     CompositeScope<TLeft, TRight> L,
     CompositeScope<TLeft, TRight> R)
   {
-    throw new NotImplementedException();
+    return new(L.Left & R.Left, L.Right & R.Right);
   }
 }
