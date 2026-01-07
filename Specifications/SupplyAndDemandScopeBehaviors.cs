@@ -140,7 +140,7 @@ public class SupplyAndDemandScopeBehaviors
   }
 
   [TestMethod]
-  public void AndWhenLeftDemandsAreSupplied()
+  public void AndWhenLeftDemandSupplied()
   {
     MockToken Token1 = new();
     MockToken Token2 = new();
@@ -150,13 +150,23 @@ public class SupplyAndDemandScopeBehaviors
   }
 
   [TestMethod]
-  public void AndWhenRightDemandsAreSupplied()
+  public void AndWhenRightDemandSupplied()
   {
     MockToken Token1 = new();
     MockToken Token2 = new();
 
     (TestedScope.Demand(Token1) & TestedScope.Demand(Token2))
       .Includes(TestedScope.Supply(Token2)).ShouldBeFalse();
+  }
+
+  [TestMethod]
+  public void AndWhenNoDemandsAreSupplied()
+  {
+    MockToken Token1 = new();
+    MockToken Token2 = new();
+
+    (TestedScope.Demand(Token1) & TestedScope.Demand(Token2))
+      .Includes(TestedScope.Unspecified).ShouldBeFalse();
   }
 }
 
