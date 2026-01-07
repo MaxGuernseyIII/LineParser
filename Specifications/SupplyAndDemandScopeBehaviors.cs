@@ -226,7 +226,3 @@ public class SupplyAndDemandScopeBehaviors
       .Includes(TestedScope.Unspecified).ShouldBeFalse();
   }
 }
-
-class MockToken
-{
-}
