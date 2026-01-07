@@ -36,4 +36,14 @@ public readonly record struct Match
   {
     Matched = Left.Matched + Right.Matched, Remainder = Right.Remainder, Captured = [..Left.Captured, ..Right.Captured]
   };
+
+  public bool Equals(Match Other)
+  {
+    return Matched == Other.Matched && Remainder == Other.Remainder && Captured.SequenceEqual(Other.Captured);
+  }
+
+  public override int GetHashCode()
+  {
+    return HashCode.Combine(Matched, Remainder, Captured);
+  }
 }

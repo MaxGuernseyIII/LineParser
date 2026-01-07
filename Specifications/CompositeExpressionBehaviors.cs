@@ -21,6 +21,7 @@
 // SOFTWARE.
 
 using LineParser;
+using Shouldly;
 
 namespace Specifications;
 
@@ -37,29 +38,31 @@ public sealed class CompositeExpressionBehaviors
       Any.Match(),
       Any.Match()
     ];
+    var MatchesForRemainder0 = Any.ArrayOf(Any.Match);
     var MatchesForRemainder1 = Any.ArrayOf(Any.Match);
-    var MatchesForRemainder2 = Any.ArrayOf(Any.Match);
     var FinalMatches = Any.ArrayOf(Any.Match);
 
+    var FirstMatch0 = FirstMatches[0];
+    var FirstMatch1 = FirstMatches[1];
     var Expression = new CompositeExpression([
       new MockExpression
       {
         Results =
         {
-          {OverallString, FinalMatches}
+          {OverallString, FirstMatches}
         }
       },
       new MockExpression
       {
         Results =
         {
-          {FirstMatches[0].Remainder, MatchesForRemainder1},
-          {FirstMatches[1].Remainder, MatchesForRemainder2}
+          {FirstMatch0.Remainder, MatchesForRemainder0},
+          {FirstMatch1.Remainder, MatchesForRemainder1}
         }
       },
       new MockExpression
       {
-        Results = MatchesForRemainder1.Concat(MatchesForRemainder2).Select(R => R.Remainder).Distinct()
+        Results = MatchesForRemainder0.Concat(MatchesForRemainder1).Select(R => R.Remainder).Distinct()
           .ToDictionary(Key => Key, IEnumerable<Match> (_) => FinalMatches)
       }
     ]);
@@ -67,8 +70,9 @@ public sealed class CompositeExpressionBehaviors
 
     var Actual = Matcher.Match(OverallString);
 
-    //MatchesForRemainder1.SelectMany(M => )
+    var Expected = MatchesForRemainder0.SelectMany(Level2 => FinalMatches.Select(Level3 => FirstMatch0 + Level2 + Level3))
+      .Concat(MatchesForRemainder1.SelectMany(Level2 => FinalMatches.Select(Level3 => FirstMatch1 + Level2 + Level3)));
 
-    //Actual.ShouldBe();
+    Actual.ShouldBe(Expected, true);
   }
 }

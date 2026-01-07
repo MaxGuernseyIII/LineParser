@@ -20,12 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using LineParser;
 using Shouldly;
 
 namespace Specifications;
 
 [TestClass]
-public class MatchCombination
+public class MatchBehaviors
 {
   [TestMethod]
   public void AppendMatches()
@@ -38,5 +39,20 @@ public class MatchCombination
     Actual.Matched.ShouldBe(Match1.Matched + Match2.Matched);
     Actual.Remainder.ShouldBe(Match2.Remainder);
     Actual.Captured.ShouldBe([.. Match1.Captured, .. Match2.Captured]);
+  }
+
+  [TestMethod]
+  public void MatchEquivalence()
+  {
+    var Match = Any.Match();
+
+    var OtherMatch = new Match
+    {
+      Matched = Match.Matched,
+      Remainder = Match.Remainder,
+      Captured = [..Match.Captured]
+    };
+
+    OtherMatch.ShouldBe(Match);
   }
 }
