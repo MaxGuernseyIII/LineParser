@@ -25,6 +25,8 @@ using Shouldly;
 
 namespace Specifications;
 
+using StringScope = SupplyAndDemandScope<string>;
+
 [TestClass]
 public class RecursiveMatcherBehaviors
 {
