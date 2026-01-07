@@ -13,12 +13,3 @@ public class Matcher(ImmutableArray<ConstantExpression> Expressions)
     };
   }
 }
-
-public readonly record struct Match
-{
-  public Match() {}
-
-  public required string Matched { get; init; }
-  public required string Remainder { get; init; }
-  public ImmutableArray<string> Captured { get; init; } = ImmutableArray<string>.Empty;
-}
