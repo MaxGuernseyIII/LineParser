@@ -25,31 +25,31 @@ using System.Text.RegularExpressions;
 
 namespace LineParser;
 
-public class ExpressionFactory<T>
-  where T : MatchScope<T>
+public class ExpressionFactory<Scope, Meaning>
+  where Scope : MatchScope<Scope>
 {
-  public Expression<T> CreateRecursive(T Demand)
+  public Expression<Scope, Meaning> CreateRecursive(Scope Demand)
   {
-    return new RecursiveExpression<T>(Demand);
+    return new RecursiveExpression<Scope, Meaning>(Demand);
   }
 
-  public Expression<T> CreateCapturing(Expression<T> ToCaptureExpression)
+  public Expression<Scope, Meaning> CreateCapturing(Expression<Scope, Meaning> ToCaptureExpression)
   {
-    return new CapturingExpression<T>(ToCaptureExpression);
+    return new CapturingExpression<Scope, Meaning>(ToCaptureExpression);
   }
 
-  public Expression<T> CreateComposite(IEnumerable<Expression<T>> Expressions)
+  public Expression<Scope, Meaning> CreateComposite(IEnumerable<Expression<Scope, Meaning>> Expressions)
   {
-    return new CompositeExpression<T>(Expressions);
+    return new CompositeExpression<Scope, Meaning>(Expressions);
   }
 
-  public Expression<T> CreateConstant(string Value)
+  public Expression<Scope, Meaning> CreateConstant(string Value)
   {
-    return new ConstantExpression<T>(Value);
+    return new ConstantExpression<Scope, Meaning>(Value);
   }
 
-  public Expression<T> CreateForRegex(Regex Pattern)
+  public Expression<Scope, Meaning> CreateForRegex(Regex Pattern)
   {
-    return new RegexExpression<T>(Pattern);
+    return new RegexExpression<Scope, Meaning>(Pattern);
   }
 }

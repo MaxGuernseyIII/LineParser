@@ -30,7 +30,7 @@ using StringScope = SupplyAndDemandScope<string>;
 [TestClass]
 public class RecursiveMatcherBehaviors
 {
-  ExpressionFactory<StringScope> ExpressionFactory = null!;
+  ExpressionFactory<StringScope, object> ExpressionFactory = null!;
 
   [TestInitialize]
   public void Setup()
@@ -47,7 +47,7 @@ public class RecursiveMatcherBehaviors
     var ToParse = Before + MatchedStub + Any.String();
     var Recursive = ExpressionFactory.CreateRecursive(StringScope.Demand(ScopeString));
     var Constant = ExpressionFactory.CreateConstant(MatchedStub);
-    var Matcher = MatcherFactory.CreateFromRegistry<StringScope>([
+    var Matcher = MatcherFactory.CreateFromRegistry<StringScope, object>([
       (StringScope.Supply(ScopeString), Constant),
       (StringScope.Unspecified,  Recursive)
     ]);

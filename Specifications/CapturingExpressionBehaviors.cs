@@ -29,7 +29,7 @@ namespace Specifications;
 [TestClass]
 public class CapturingExpressionBehaviors
 {
-  ExpressionFactory<NullScope> ExpressionFactory = null!;
+  ExpressionFactory<NullScope, object> ExpressionFactory = null!;
 
   [TestInitialize]
   public void Setup()
@@ -42,7 +42,7 @@ public class CapturingExpressionBehaviors
   {
     var Input = Any.String();
     var UnderlyingOutput = Any.ArrayOf(Any.Match);
-    Expression<NullScope> ToCaptureExpression = new MockExpression<NullScope>
+    Expression<NullScope, object> ToCaptureExpression = new MockExpression<NullScope, object>
     {
       Results =
       {
@@ -79,7 +79,7 @@ public class RegexAdapterBehaviors
     var ToMatch = "there is some cheese in the house ";
     var ToParse = ToMatch + Remainder;
     var Pattern = new Regex("there is (some|no) cheese in the (house|refrigerator) ", RegexOptions.Compiled);
-    var Expression = new ExpressionFactory<NullScope>().CreateForRegex(Pattern);
+    var Expression = new ExpressionFactory<NullScope, object>().CreateForRegex(Pattern);
 
     var Matches = MatcherFactory.CreateFromExpressions([Expression]).Match(ToParse);
 

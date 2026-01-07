@@ -28,7 +28,7 @@ namespace Specifications;
 [TestClass]
 public sealed class CompositeExpressionBehaviors
 {
-  ExpressionFactory<NullScope> ExpressionFactory = null!;
+  ExpressionFactory<NullScope, object> ExpressionFactory = null!;
 
   [TestInitialize]
   public void Setup()
@@ -52,15 +52,15 @@ public sealed class CompositeExpressionBehaviors
 
     var FirstMatch0 = FirstMatches[0];
     var FirstMatch1 = FirstMatches[1];
-    IEnumerable<Expression<NullScope>> Expressions = [
-      new MockExpression<NullScope>
+    IEnumerable<Expression<NullScope, object>> Expressions = [
+      new MockExpression<NullScope, object>
       {
         Results =
         {
           {OverallString, FirstMatches}
         }
       },
-      new MockExpression<NullScope>
+      new MockExpression<NullScope, object>
       {
         Results =
         {
@@ -68,7 +68,7 @@ public sealed class CompositeExpressionBehaviors
           {FirstMatch1.Remainder, MatchesForRemainder1}
         }
       },
-      new MockExpression<NullScope>
+      new MockExpression<NullScope, object>
       {
         Results = MatchesForRemainder0.Concat(MatchesForRemainder1).Select(R => R.Remainder).Distinct()
           .ToDictionary(Key => Key, IEnumerable<Match> (_) => FinalMatches)

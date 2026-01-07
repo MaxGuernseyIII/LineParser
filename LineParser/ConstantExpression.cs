@@ -22,9 +22,9 @@
 
 namespace LineParser;
 
-sealed class ConstantExpression<T>(string Value) : Expression<T> where T : MatchScope<T>
+sealed class ConstantExpression<Scope, Meaning>(string Value) : Expression<Scope, Meaning> where Scope : MatchScope<Scope>
 {
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<T> Reentry, MatchExecutionContext Context)
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry, MatchExecutionContext Context)
   {
     if (ToMatch.StartsWith(Value))
       yield return new()

@@ -24,9 +24,9 @@ using System.Text.RegularExpressions;
 
 namespace LineParser;
 
-sealed class RegexExpression<T>(Regex Pattern) : Expression<T> where T : MatchScope<T>
+sealed class RegexExpression<Scope, Meaning>(Regex Pattern) : Expression<Scope, Meaning> where Scope : MatchScope<Scope>
 {
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<T> Reentry, MatchExecutionContext Context)
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry, MatchExecutionContext Context)
   {
     var M = Pattern.Match(ToMatch);
     yield return new()

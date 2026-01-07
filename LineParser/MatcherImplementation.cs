@@ -20,28 +20,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Collections.Immutable;
+
 namespace LineParser;
 
-sealed class CompositeExpression<Scope, Meaning>(IEnumerable<Expression<Scope, Meaning>> Expressions) : Expression<Scope, Meaning> where Scope : MatchScope<Scope>
+class MatcherImplementation<Scope, Meaning>(ImmutableArray<(Scope Scope, Expression<Scope, Meaning> Expression)> Registry)
+  : Matcher<Scope, Meaning>
+  where Scope : MatchScope<Scope>
 {
-  public IEnumerable<Match> GetMatchesAtBeginningOf(
-    string ToMatch, Matcher<Scope, Meaning> Reentry, MatchExecutionContext Context)
+  public IEnumerable<Match> Match(string ToParse, MatchExecutionContext Context, Scope Scope)
   {
-    IEnumerable<Match> Result =
-    [
-      new()
-      {
-        Matched = "",
-        Remainder = ToMatch,
-        Captured = []
-      }
-    ];
-
-    foreach (var Expression in Expressions)
-      Result = Result.SelectMany(Left =>
-        Expression.GetMatchesAtBeginningOf(Left.Remainder, Reentry, Context)
-          .Select(Right => Left + Right));
-
-    return Result;
+    foreach (var Registered in Registry)
+    foreach (var Match in Registered.Expression.GetMatchesAtBeginningOf(ToParse, this, Context))
+      yield return Match;
   }
 }

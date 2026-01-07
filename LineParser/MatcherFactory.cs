@@ -24,14 +24,14 @@ namespace LineParser;
 
 public static class MatcherFactory
 {
-  public static Matcher<T> CreateFromExpressions<T>(IEnumerable<Expression<T>> Expressions) where T : MatchScope<T>
+  public static Matcher<Scope, Meaning> CreateFromExpressions<Scope, Meaning>(IEnumerable<Expression<Scope, Meaning>> Expressions) where Scope : MatchScope<Scope>
   {
-    return CreateFromRegistry([..Expressions.Select(E => (All: T.Unspecified, E))]);
+    return CreateFromRegistry([..Expressions.Select(E => (All: Scope.Unspecified, E))]);
   }
 
-  public static Matcher<T> CreateFromRegistry<T>(IEnumerable<(T Scope, Expression<T> Expression)> Registry)
-    where T : MatchScope<T>
+  public static Matcher<Scope, Meaning> CreateFromRegistry<Scope, Meaning>(IEnumerable<(Scope Scope, Expression<Scope, Meaning> Expression)> Registry)
+    where Scope : MatchScope<Scope>
   {
-    return new MatcherImplementation<T>([..Registry]);
+    return new MatcherImplementation<Scope, Meaning>([..Registry]);
   }
 }

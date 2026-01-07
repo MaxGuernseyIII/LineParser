@@ -28,7 +28,7 @@ namespace Specifications;
 [TestClass]
 public sealed class ConstantExpressionBehaviors
 {
-  ExpressionFactory<NullScope> ExpressionFactory = null!;
+  ExpressionFactory<NullScope, object> ExpressionFactory = null!;
 
   [TestInitialize]
   public void SetUp()

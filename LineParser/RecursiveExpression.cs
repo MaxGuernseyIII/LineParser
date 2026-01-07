@@ -1,9 +1,9 @@
 ﻿namespace LineParser;
 
-sealed class RecursiveExpression<T>(T Demand) : Expression<T>
-  where T : MatchScope<T>
+sealed class RecursiveExpression<Scope, Meaning>(Scope Demand) : Expression<Scope, Meaning>
+  where Scope : MatchScope<Scope>
 {
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<T> Reentry, MatchExecutionContext Context)
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry, MatchExecutionContext Context)
   {
     yield break;
   }
