@@ -40,6 +40,8 @@ public sealed class ParsingBehaviors
     Matches.ShouldBe([
       new()
       {
+        Matched = ToMatch,
+        Captured = [],
         Remainder = ""
       }
     ]);
