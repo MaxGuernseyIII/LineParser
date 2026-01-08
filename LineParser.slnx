@@ -3,6 +3,9 @@
     <File Path=".github/workflows/cicd.yml" />
     <File Path="README.md" />
   </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+  </Folder>
   <Project Path="LineParser.CucumberExpressions/LineParser.CucumberExpressions.csproj" Id="78455b89-9bf2-4ddb-99d9-2730e08e06f9" />
   <Project Path="LineParser/LineParser.csproj" Id="881be25d-3a4d-4fea-b5ee-60d90c7c9a7b" />
   <Project Path="ScopeSelection/ScopeSelection.csproj" Id="26923be4-bfd9-4234-986f-35ff108f1ffb" />

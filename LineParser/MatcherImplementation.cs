@@ -21,6 +21,7 @@
 // SOFTWARE.
 
 using System.Collections.Immutable;
+using System.Net.Http.Headers;
 
 namespace LineParser;
 
@@ -32,6 +33,8 @@ class MatcherImplementation<Scope, Meaning>(
 {
   public ScopeSpace<Scope> ScopeSpace { get; } = ScopeSpace;
 
+  public IEnumerable<Pattern<Scope>> Patterns { get; } = Registry.Select(R => R.Pattern);
+
   public IEnumerable<AnnotatedMatch<Scope, Meaning>> Match(string ToParse, MatchExecutionContext Context, Scope Scope)
   {
     foreach (var Registered in Registry.Where(R => Scope.IsSatisfiedBy(R.Scope)))
@@ -42,6 +45,11 @@ class MatcherImplementation<Scope, Meaning>(
         Meaning = Registered.Meaning,
         Pattern = Registered.Pattern
       };
+  }
+
+  public TResult Query<TResult>(GraphQuery<Scope, TResult> Query)
+  {
+    return Query.QueryAlternativePatterns(Patterns);
   }
 
   IEnumerable<Match> MatchWithoutMeaning(string ToParse, MatchExecutionContext Context, Scope Scope)

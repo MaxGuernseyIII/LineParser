@@ -50,4 +50,12 @@ public interface Matcher<
   /// <param name="Scope">The definition of the set of <see cref="Pattern{ScopeImplementation}"/>s to use.</param>
   /// <returns>All the possible <see cref="LineParser.Match"/>es with their associated meanings.</returns>
   IEnumerable<AnnotatedMatch<ScopeImplementation, Meaning>> Match(string ToParse, MatchExecutionContext Context, ScopeImplementation Scope);
+
+  /// <summary>
+  /// Visit the matcher.
+  /// </summary>
+  /// <typeparam name="TResult">The type of the result of the query.</typeparam>
+  /// <param name="Query">The query to run.</param>
+  /// <returns>The result of the query.</returns>
+  TResult Query<TResult>(GraphQuery<ScopeImplementation, TResult> Query);
 }
