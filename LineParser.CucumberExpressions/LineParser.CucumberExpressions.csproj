@@ -10,4 +10,8 @@
     <PackageReference Include="Cucumber.CucumberExpressions" Version="18.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LineParser\LineParser.csproj" />
+  </ItemGroup>
+
 </Project>

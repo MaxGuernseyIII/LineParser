@@ -20,16 +20,55 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using LineParser;
+using LineParser.CucumberExpressions;
+using Shouldly;
+
 namespace Specifications;
+
+using StringScope = SupplyAndDemandScope<string>;
 
 [Ignore]
 [TestClass]
 public class CucumberExpressionsAdapterBehaviors
 {
   [TestMethod]
-  public void IntegrationTest1()
+  public void TopLevelExpression()
   {
-    var Parser = new CucumberExpressions.Parsing.CucumberExpressionParser();
-    var AST = Parser.Parse("something {Special} goes here and then {Here}");
+    var Factory = new ExpressionFactory<StringScope, object>();
+    var Mapper = new CucumberExpressionToExpressionMapper<StringScope, object>();
+    var StepMeaning = new object();
+    var Expression = Mapper.Map(
+      "this/these is/are my/our cucumber expression(s), which we use for {Purpose} and other things.",
+      Name => StringScope.Demand($"parameter:{Name}"));
+
+    var Matcher = MatcherFactory.CreateFromRegistry([
+      (StringScope.Supply("type:step"), Expression, StepMeaning),
+      (StringScope.Supply("parameter:Purpose"), Factory.CreateConstant("testing"), null!),
+      (StringScope.Supply("parameter:Purpose"), Factory.CreateConstant("important work"), null!)
+    ]);
+
+    var CucumberExpression = "this is my cucumber expression, which we use for testing and other things.";
+    var Actual = Matcher.ExactMatch(CucumberExpression, StringScope.Demand("type:step"));
+
+    Actual.ShouldBe([
+      new()
+      {
+        Meaning = StepMeaning,
+        Match = new()
+        {
+          Matched = CucumberExpression,
+          Remainder = "",
+          Captured =
+          [
+            new()
+            {
+              At = 49,
+              Value = "testing"
+            }
+          ]
+        }
+      }
+    ]);
   }
 }

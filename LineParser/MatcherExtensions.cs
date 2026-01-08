@@ -26,11 +26,22 @@ public static class MatcherExtensions
 {
   public static IEnumerable<MatchWithMeaning<Meaning>> Match<Scope, Meaning>(this Matcher<Scope, Meaning> This, string ToParse) where Scope : MatchScope<Scope>
   {
-    return This.Match(ToParse, new(), Scope.Any);
+    return This.Match(ToParse, Scope.Any);
+  }
+
+  public static IEnumerable<MatchWithMeaning<Meaning>> Match<Scope, Meaning>(this Matcher<Scope, Meaning> This, string ToParse, Scope MatchScope) where Scope : MatchScope<Scope>
+  {
+    return This.Match(ToParse, new(), MatchScope);
   }
 
   public static IEnumerable<MatchWithMeaning<Meaning>> ExactMatch<Scope, Meaning>(this Matcher<Scope, Meaning> This, string ToParse) where Scope : MatchScope<Scope>
   {
-    return This.Match(ToParse).Where(M => M.Match.Remainder == "");
+    return This.ExactMatch(ToParse, Scope.Any);
+  }
+
+  public static IEnumerable<MatchWithMeaning<Meaning>> ExactMatch<Scope, Meaning>(this Matcher<Scope, Meaning> This, string ToParse, Scope MatchScope)
+    where Scope : MatchScope<Scope>
+  {
+    return This.Match(ToParse, MatchScope).Where(M => M.Match.Remainder == "");
   }
 }
