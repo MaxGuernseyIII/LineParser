@@ -65,7 +65,8 @@ public class CucumberExpressionsAdapterBehaviors
               Value = "testing"
             }
           ]
-        }
+        },
+        Pattern = Pattern
       }
     ]);
   }

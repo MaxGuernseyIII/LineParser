@@ -45,5 +45,5 @@ public interface Matcher<
   /// <param name="Context">A mutable state object that use used during parsing.</param>
   /// <param name="Scope">The definition of the set of <see cref="Pattern{ScopeImplementation}"/>s to use.</param>
   /// <returns>All the possible <see cref="LineParser.Match"/>es with their associated meanings.</returns>
-  IEnumerable<AnnotatedMatch<Meaning>> Match(string ToParse, MatchExecutionContext Context, ScopeImplementation Scope);
+  IEnumerable<AnnotatedMatch<ScopeImplementation, Meaning>> Match(string ToParse, MatchExecutionContext Context, ScopeImplementation Scope);
 }

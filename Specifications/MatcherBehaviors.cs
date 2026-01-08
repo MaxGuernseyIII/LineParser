@@ -73,4 +73,18 @@ public class MatcherBehaviors
       Meaning
     ]);
   }
+
+  [TestMethod]
+  public void AnnotatesWithPattern()
+  {
+    var ToMatch = Any.String();
+    var Pattern = Factory.Constant(ToMatch);
+    var Matcher = Factory.Matcher([Pattern]);
+
+    var Match = Matcher.Match(ToMatch).Select(M => M.Pattern);
+
+    Match.ShouldBe([
+      Pattern
+      ]);
+  }
 }

@@ -67,15 +67,15 @@ public class Samples
   public void MatchWithConditionals()
   {
     var ExpressionFactory = ScopeSpaces.Null.GetFactory();
+    var Pattern = ExpressionFactory.Sequence([
+      ExpressionFactory.Constant("user \""),
+      ExpressionFactory.Capturing(
+        ExpressionFactory.Regex(new("(?:[^\"]|\"\")*"))),
+      ExpressionFactory.Constant("\"")
+    ]);
     var Matcher = ExpressionFactory.Matcher(
     [
-      (ExpressionFactory.Sequence([
-          ExpressionFactory.Constant("user \""),
-          ExpressionFactory.Capturing(
-            ExpressionFactory.Regex(new("(?:[^\"]|\"\")*"))),
-          ExpressionFactory.Constant("\"")
-        ]),
-        "username")
+      (Pattern, "username")
     ]);
 
     var Matches = Matcher.ExactMatch("user \"jumper9\"");
@@ -96,7 +96,8 @@ public class Samples
             }
           ]
         },
-        Meaning = "username"
+        Meaning = "username",
+        Pattern = Pattern
       }
     ]);
   }

@@ -28,7 +28,7 @@ namespace Specifications;
 using StringScope = SupplyAndDemandScope<string>;
 
 [TestClass]
-public class SubPatternBehaviors
+public class SubpatternBehaviors
 {
   Factory<StringScope> Factory = null!;
   StringScope.Space ScopeSpace = null!;
@@ -75,3 +75,4 @@ public class SubPatternBehaviors
     Actual.ShouldBe([]);
   }
 }
+

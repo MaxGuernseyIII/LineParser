@@ -26,7 +26,9 @@ namespace LineParser;
 /// A <see cref="LineParser.Match"/> with additional details.
 /// </summary>
 /// <typeparam name="TMeaning">The type of object used to convey meaning.</typeparam>
-public readonly record struct AnnotatedMatch<TMeaning>
+/// <typeparam name="ScopeImplementation">The type of scope used to govern the match.</typeparam>
+public readonly record struct AnnotatedMatch<ScopeImplementation, TMeaning>
+  where ScopeImplementation : Scope<ScopeImplementation>
 {
   /// <summary>
   /// The annotated <see cref="Match"/>.
@@ -37,4 +39,9 @@ public readonly record struct AnnotatedMatch<TMeaning>
   /// The associated meaning.
   /// </summary>
   public required TMeaning Meaning { get; init; }
+
+  /// <summary>
+  /// The pattern that generated the match.
+  /// </summary>
+  public required Pattern<ScopeImplementation> Pattern { get; init; }
 }
