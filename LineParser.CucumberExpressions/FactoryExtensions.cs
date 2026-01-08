@@ -25,16 +25,21 @@ using ScopeSelection;
 namespace LineParser.CucumberExpressions;
 
 /// <summary>
-/// 
+/// Extensions for <see cref="Factory{ScopeImplementation}"/>.
 /// </summary>
 public static class FactoryExtensions
 {
   extension<Scope>(Factory<Scope> This) where Scope : Scope<Scope>
   {
+    /// <summary>
+    /// Parse a Cucumber expression and convert it into a <see cref="Pattern{ScopeImplementation}"/>.
+    /// </summary>
+    /// <param name="Template">The expression template.</param>
+    /// <param name="GetScopeForParameterName">A way to find scopes for Cucumber expression parameter names.</param>
+    /// <returns>The requested <see cref="Pattern{ScopeImplementation}"/>.</returns>
     public Pattern<Scope> CucumberExpression(string Template, Func<string, Scope> GetScopeForParameterName)
     {
-      var Mapper = new CucumberExpressionToExpressionMapper<Scope>(This);
-      return Mapper.Map(Template, GetScopeForParameterName);
+      return new CucumberExpressionToExpressionMapper<Scope>(This).Map(Template, GetScopeForParameterName);
     }
   }
 }
