@@ -138,9 +138,6 @@ public class CompositeScopeBehaviors
     Actual.ShouldBeEquivalentTo(new CompositeScope<MockScope1, MockScope2>(NewLeft, NewRight));
   }
 
-  class Statement {}
-  class Parameter {}
-
   [TestMethod]
   public void Example()
   {
@@ -156,5 +153,13 @@ public class CompositeScopeBehaviors
     );
 
     Demanded.IsSatisfiedBy(Supplied).ShouldBe(true);
+  }
+
+  class Statement
+  {
+  }
+
+  class Parameter
+  {
   }
 }
