@@ -22,11 +22,11 @@
 
 namespace LineParser;
 
-sealed class CompositePattern<Scope, Meaning>(IEnumerable<Pattern<Scope, Meaning>> Expressions)
-  : Pattern<Scope, Meaning> where Scope : MatchScope<Scope>
+sealed class CompositePattern<Scope>(IEnumerable<Pattern<Scope>> Expressions)
+  : Pattern<Scope> where Scope : MatchScope<Scope>
 {
   public IEnumerable<Match> GetMatchesAtBeginningOf(
-    string ToMatch, Matcher<Scope, Meaning> Reentry, MatchExecutionContext Context)
+    string ToMatch, SubPatternMatcher<Scope> Reentry, MatchExecutionContext Context)
   {
     IEnumerable<Match> Result =
     [

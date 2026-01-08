@@ -22,10 +22,10 @@
 
 namespace LineParser;
 
-sealed class CapturingPattern<Scope, Meaning>(Pattern<Scope, Meaning> ToCapturePattern)
-  : Pattern<Scope, Meaning> where Scope : MatchScope<Scope>
+sealed class CapturingPattern<Scope>(Pattern<Scope> ToCapturePattern)
+  : Pattern<Scope> where Scope : MatchScope<Scope>
 {
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry,
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubPatternMatcher<Scope> Reentry,
     MatchExecutionContext Context)
   {
     return ToCapturePattern.GetMatchesAtBeginningOf(ToMatch, Reentry, Context)

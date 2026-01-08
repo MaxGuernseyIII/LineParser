@@ -28,10 +28,10 @@ namespace LineParser.CucumberExpressions;
 public class CucumberExpressionToExpressionMapper<Scope, Meaning>(MatchScopeSpace<Scope> ScopeSpace)
   where Scope : MatchScope<Scope>
 {
-  readonly PatternFactory<Scope, Meaning> PatternFactory = ScopeSpace.Get().PatternFactory<Meaning>();
+  readonly PatternFactory<Scope> PatternFactory = ScopeSpace.Get().PatternFactory();
   readonly CucumberExpressionParser Parser = new();
 
-  public Pattern<Scope, Meaning> Map(
+  public Pattern<Scope> Map(
     string Expression,
     Func<string, Scope> GetScopeForString)
   {
@@ -40,9 +40,9 @@ public class CucumberExpressionToExpressionMapper<Scope, Meaning>(MatchScopeSpac
     return ConvertNodesToExpression(Tree.Nodes, GetScopeForString);
   }
 
-  Pattern<Scope, Meaning> ConvertNodesToExpression(IEnumerable<Node> Nodes, Func<string, Scope> ScopeForString)
+  Pattern<Scope> ConvertNodesToExpression(IEnumerable<Node> Nodes, Func<string, Scope> ScopeForString)
   {
-    var Parts = new List<Pattern<Scope, Meaning>>();
+    var Parts = new List<Pattern<Scope>>();
 
     foreach (var Node in Nodes)
       Parts.Add(Node.Type switch

@@ -50,14 +50,9 @@ public static class MatchScopeSpaces
 
   public readonly ref struct Related<Scope>(MatchScopeSpace<Scope> ScopeSpace) where Scope : MatchScope<Scope>
   {
-    public PatternFactory<Scope, Meaning> PatternFactory<Meaning>()
+    public PatternFactory<Scope> PatternFactory()
     {
       return new(ScopeSpace);
-    }
-
-    public PatternFactory<Scope, object> PatternFactory()
-    {
-      return PatternFactory<object>();
     }
   }
 }

@@ -30,7 +30,7 @@ using StringScope = SupplyAndDemandScope<string>;
 [TestClass]
 public class RecursiveExpressionBehaviors
 {
-  PatternFactory<StringScope, object> PatternFactory = null!;
+  PatternFactory<StringScope> PatternFactory = null!;
   StringScope.Space ScopeSpace = null!;
 
   [TestInitialize]
@@ -56,7 +56,7 @@ public class RecursiveExpressionBehaviors
 
     var Actual = Matcher.Match(ToParse, new(), ScopeSpace.Demand(OuterScope)).Select(M => M.Match);
 
-    Actual.ShouldBe(Constant.GetMatchesAtBeginningOf(ToParse, Matcher, new()));
+    Actual.ShouldBe(Constant.GetMatchesAtBeginningOf(ToParse, (Match, Context, Scope) =>  Matcher.Match(Match, Context, Scope).Select(M => M.Match), new()));
   }
 
   [TestMethod]

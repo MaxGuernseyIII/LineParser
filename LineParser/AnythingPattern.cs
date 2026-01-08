@@ -22,9 +22,9 @@
 
 namespace LineParser;
 
-public class AnythingPattern<Scope, Meaning> : Pattern<Scope, Meaning> where Scope : MatchScope<Scope>
+public class AnythingPattern<Scope> : Pattern<Scope> where Scope : MatchScope<Scope>
 {
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry,
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubPatternMatcher<Scope> Reentry,
     MatchExecutionContext Context)
   {
     return Enumerable.Range(0, ToMatch.Length + 1).Reverse().Select(Split => new Match

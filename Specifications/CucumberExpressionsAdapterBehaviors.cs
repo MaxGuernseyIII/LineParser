@@ -35,7 +35,7 @@ public class CucumberExpressionsAdapterBehaviors
   public void TopLevelExpression()
   {
     var ScopeSpace = MatchScopeSpaces.SupplyAndDemand<string>();
-    var Factory = ScopeSpace.Get().PatternFactory<object>();
+    var Factory = ScopeSpace.Get().PatternFactory();
 
     var Mapper = new CucumberExpressionToExpressionMapper<StringScope, object>(ScopeSpace);
     var StepMeaning = new object();

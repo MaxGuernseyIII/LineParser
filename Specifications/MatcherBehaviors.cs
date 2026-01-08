@@ -30,14 +30,14 @@ using StringScope = SupplyAndDemandScope<string>;
 [TestClass]
 public class MatcherBehaviors
 {
-  PatternFactory<StringScope, object> PatternFactory = null!;
+  PatternFactory<StringScope> PatternFactory = null!;
   StringScope.Space ScopeSpace = null!;
 
   [TestInitialize]
   public void Setup()
   {
     ScopeSpace = MatchScopeSpaces.SupplyAndDemand<string>();
-    PatternFactory = ScopeSpace.Get().PatternFactory<object>();
+    PatternFactory = ScopeSpace.Get().PatternFactory();
   }
 
   [TestMethod]

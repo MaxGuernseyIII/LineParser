@@ -24,40 +24,40 @@ using System.Text.RegularExpressions;
 
 namespace LineParser;
 
-public class PatternFactory<Scope, Meaning>(MatchScopeSpace<Scope> ScopeSpace) where Scope : MatchScope<Scope>
+public class PatternFactory<Scope>(MatchScopeSpace<Scope> ScopeSpace) where Scope : MatchScope<Scope>
 {
-  public Pattern<Scope, Meaning> Anything()
+  public Pattern<Scope> Anything()
   {
-    return new AnythingPattern<Scope, Meaning>();
+    return new AnythingPattern<Scope>();
   }
 
-  public Pattern<Scope, Meaning> Constant(string Value)
+  public Pattern<Scope> Constant(string Value)
   {
-    return new ConstantPattern<Scope, Meaning>(Value);
+    return new ConstantPattern<Scope>(Value);
   }
 
-  public Pattern<Scope, Meaning> Composite(IEnumerable<Pattern<Scope, Meaning>> Expressions)
+  public Pattern<Scope> Composite(IEnumerable<Pattern<Scope>> Expressions)
   {
-    return new CompositePattern<Scope, Meaning>(Expressions);
+    return new CompositePattern<Scope>(Expressions);
   }
 
-  public Pattern<Scope, Meaning> Alternatives(IEnumerable<Pattern<Scope, Meaning>> Expressions)
+  public Pattern<Scope> Alternatives(IEnumerable<Pattern<Scope>> Expressions)
   {
-    return new Alternatives<Scope, Meaning>(Expressions);
+    return new Alternatives<Scope>(Expressions);
   }
 
-  public Pattern<Scope, Meaning> Capturing(Pattern<Scope, Meaning> ToCapturePattern)
+  public Pattern<Scope> Capturing(Pattern<Scope> ToCapturePattern)
   {
-    return new CapturingPattern<Scope, Meaning>(ToCapturePattern);
+    return new CapturingPattern<Scope>(ToCapturePattern);
   }
 
-  public Pattern<Scope, Meaning> Recursive(Scope Demand)
+  public Pattern<Scope> Recursive(Scope Demand)
   {
-    return new RecursivePattern<Scope, Meaning>(Demand);
+    return new RecursivePattern<Scope>(Demand);
   }
 
-  public Pattern<Scope, Meaning> Regex(Regex Pattern)
+  public Pattern<Scope> Regex(Regex Pattern)
   {
-    return new RegexPattern<Scope, Meaning>(Pattern);
+    return new RegexPattern<Scope>(Pattern);
   }
 }

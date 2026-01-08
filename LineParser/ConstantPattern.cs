@@ -22,10 +22,10 @@
 
 namespace LineParser;
 
-sealed class ConstantPattern<Scope, Meaning>(string Value)
-  : Pattern<Scope, Meaning> where Scope : MatchScope<Scope>
+sealed class ConstantPattern<Scope>(string Value)
+  : Pattern<Scope> where Scope : MatchScope<Scope>
 {
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry,
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubPatternMatcher<Scope> Reentry,
     MatchExecutionContext Context)
   {
     if (ToMatch.StartsWith(Value))

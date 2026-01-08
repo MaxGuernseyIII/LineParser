@@ -26,14 +26,14 @@ public static class MatcherFactory
 {
   public static Matcher<Scope, object> CreateFromPatterns<Scope>(
     MatchScopeSpace<Scope> ScopeSpace,
-     IEnumerable<Pattern<Scope, object>> Patterns) where Scope : MatchScope<Scope>
+     IEnumerable<Pattern<Scope>> Patterns) where Scope : MatchScope<Scope>
   {
     return CreateFromPatterns(ScopeSpace, Patterns.Select(P => (P, new object())));
   }
 
   public static Matcher<Scope, Meaning> CreateFromPatterns<Scope, Meaning>(
     MatchScopeSpace<Scope> ScopeSpace,
-    IEnumerable<(Pattern<Scope, Meaning> Expression, Meaning Meaning)> Expressions) where Scope : MatchScope<Scope>
+    IEnumerable<(Pattern<Scope> Expression, Meaning Meaning)> Expressions) where Scope : MatchScope<Scope>
   {
     return CreateFromRegistry(ScopeSpace,
       [..Expressions.Select(E => (Scope: ScopeSpace.Unspecified, E.Expression, E.Meaning))]);
@@ -41,7 +41,7 @@ public static class MatcherFactory
 
   public static Matcher<Scope, Meaning> CreateFromRegistry<Scope, Meaning>(
     MatchScopeSpace<Scope> ScopeSpace,
-    IEnumerable<(Scope Scope, Pattern<Scope, Meaning> Expression, Meaning Meaning)> Registry)
+    IEnumerable<(Scope Scope, Pattern<Scope> Expression, Meaning Meaning)> Registry)
     where Scope : MatchScope<Scope>
   {
     return new MatcherImplementation<Scope, Meaning>(ScopeSpace, [..Registry]);

@@ -40,7 +40,7 @@ public class Samples
   public void MatchWithConditionals()
   {
     var ScopeSpace = MatchScopeSpaces.Null;
-    var ExpressionFactory = ScopeSpace.Get().PatternFactory<object>();
+    var ExpressionFactory = ScopeSpace.Get().PatternFactory();
 
     var Matcher = MatcherFactory.CreateFromPatterns(
       ScopeSpace,

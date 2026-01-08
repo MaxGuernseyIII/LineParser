@@ -24,11 +24,11 @@ using System.Text.RegularExpressions;
 
 namespace LineParser;
 
-sealed class RegexPattern<Scope, Meaning>(Regex Pattern) : Pattern<Scope, Meaning> where Scope : MatchScope<Scope>
+sealed class RegexPattern<Scope>(Regex Pattern) : Pattern<Scope> where Scope : MatchScope<Scope>
 {
   readonly Regex Pattern = new("^" + Pattern.ToString().TrimStart('^'), Pattern.Options);
 
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry,
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubPatternMatcher<Scope> Reentry,
     MatchExecutionContext Context)
   {
     var M = Pattern.Match(ToMatch);

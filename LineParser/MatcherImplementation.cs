@@ -26,7 +26,7 @@ namespace LineParser;
 
 class MatcherImplementation<Scope, Meaning>(
   MatchScopeSpace<Scope> ScopeSpace,
-  ImmutableArray<(Scope Scope, Pattern<Scope, Meaning> Expression, Meaning Meaning)> Registry)
+  ImmutableArray<(Scope Scope, Pattern<Scope> Expression, Meaning Meaning)> Registry)
   : Matcher<Scope, Meaning>
   where Scope : MatchScope<Scope>
 {
@@ -35,11 +35,16 @@ class MatcherImplementation<Scope, Meaning>(
   public IEnumerable<MatchWithMeaning<Meaning>> Match(string ToParse, MatchExecutionContext Context, Scope Scope)
   {
     foreach (var Registered in Registry.Where(R => Scope.Includes(R.Scope)))
-    foreach (var Match in Registered.Expression.GetMatchesAtBeginningOf(ToParse, this, Context))
+    foreach (var Match in Registered.Expression.GetMatchesAtBeginningOf(ToParse, MatchWithoutMeaning, Context))
       yield return new()
       {
         Match = Match,
         Meaning = Registered.Meaning
       };
+  }
+
+  IEnumerable<Match> MatchWithoutMeaning(string ToParse, MatchExecutionContext Context, Scope Scope)
+  {
+    return Match(ToParse, Context, Scope).Select(M => M.Match);
   }
 }

@@ -28,7 +28,7 @@ namespace Specifications;
 [TestClass]
 public sealed class CompositeExpressionBehaviors
 {
-  PatternFactory<NullScope, object> PatternFactory = null!;
+  PatternFactory<NullScope> PatternFactory = null!;
 
   [TestInitialize]
   public void Setup()
@@ -52,7 +52,7 @@ public sealed class CompositeExpressionBehaviors
 
     var FirstMatch0 = FirstMatches[0];
     var FirstMatch1 = FirstMatches[1];
-    IEnumerable<Pattern<NullScope, object>> Expressions =
+    IEnumerable<Pattern<NullScope>> Expressions =
     [
       new MockPattern<NullScope, object>
       {

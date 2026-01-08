@@ -28,7 +28,7 @@ namespace Specifications;
 [TestClass]
 public class AlternativesExpressionBehaviors
 {
-  PatternFactory<NullScope, object> PatternFactory = null!;
+  PatternFactory<NullScope> PatternFactory = null!;
 
   [TestInitialize]
   public void Setup()

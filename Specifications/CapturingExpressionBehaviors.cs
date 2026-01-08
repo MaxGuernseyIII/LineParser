@@ -28,7 +28,7 @@ namespace Specifications;
 [TestClass]
 public class CapturingExpressionBehaviors
 {
-  PatternFactory<NullScope, object> PatternFactory = null!;
+  PatternFactory<NullScope> PatternFactory = null!;
 
   [TestInitialize]
   public void Setup()
@@ -41,7 +41,7 @@ public class CapturingExpressionBehaviors
   {
     var Input = Any.String();
     var UnderlyingOutput = Any.ArrayOf(Any.Match);
-    Pattern<NullScope, object> ToCapturePattern = new MockPattern<NullScope, object>
+    Pattern<NullScope> ToCapturePattern = new MockPattern<NullScope, object>
     {
       Results =
       {

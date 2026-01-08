@@ -27,7 +27,7 @@ namespace Specifications;
 static class TestMatcherFactory
 {
   public static Matcher<SupplyAndDemandScope<string>, object> CreateFromRegistryWithoutMeaning(
-    IEnumerable<(SupplyAndDemandScope<string> Scope, Pattern<SupplyAndDemandScope<string>, object> Expression)>
+    IEnumerable<(SupplyAndDemandScope<string> Scope, Pattern<SupplyAndDemandScope<string>> Expression)>
       Registry)
   {
     return MatcherFactory.CreateFromRegistry(
@@ -38,7 +38,7 @@ static class TestMatcherFactory
   }
 
   public static Matcher<NullScope, object> CreateFromExpressionsWithoutMeaning(
-    IEnumerable<Pattern<NullScope, object>> Expressions
+    IEnumerable<Pattern<NullScope>> Expressions
   )
   {
     return MatcherFactory.CreateFromPatterns(MatchScopeSpaces.Null, Expressions.Select(E => (E, new object())));

@@ -20,17 +20,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using LineParser;
+namespace LineParser;
 
-namespace Specifications;
-
-sealed class MockPattern<Scope, Meaning> : Pattern<Scope> where Scope : MatchScope<Scope>
-{
-  public Dictionary<string, IEnumerable<Match>> Results = [];
-
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubPatternMatcher<Scope> Reentry,
-    MatchExecutionContext Context)
-  {
-    return !Results.TryGetValue(ToMatch, out var Result) ? [] : Result;
-  }
-}
+public delegate IEnumerable<Match> SubPatternMatcher<in Scope>(string ToMatch, MatchExecutionContext Context, Scope Scope);
