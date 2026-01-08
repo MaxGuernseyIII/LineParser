@@ -28,7 +28,7 @@ namespace LineParser.CucumberExpressions;
 public class CucumberExpressionToExpressionMapper<Scope, Meaning>(MatchScopeSpace<Scope> ScopeSpace)
   where Scope : MatchScope<Scope>
 {
-  readonly PatternFactory<Scope> PatternFactory = ScopeSpace.Get().PatternFactory();
+  readonly Factory<Scope> Factory = ScopeSpace.Get().PatternFactory();
   readonly CucumberExpressionParser Parser = new();
 
   public Pattern<Scope> Map(
@@ -47,23 +47,23 @@ public class CucumberExpressionToExpressionMapper<Scope, Meaning>(MatchScopeSpac
     foreach (var Node in Nodes)
       Parts.Add(Node.Type switch
       {
-        NodeType.TEXT_NODE => PatternFactory.Constant(Node.Text),
-        NodeType.OPTIONAL_NODE => PatternFactory.Alternatives(
+        NodeType.TEXT_NODE => Factory.Constant(Node.Text),
+        NodeType.OPTIONAL_NODE => Factory.Alternatives(
         [
           ConvertNodesToExpression(Node.Nodes, ScopeForString),
-          PatternFactory.Constant("")
+          Factory.Constant("")
         ]),
 
-        NodeType.ALTERNATION_NODE => PatternFactory.Alternatives(
+        NodeType.ALTERNATION_NODE => Factory.Alternatives(
           Node.Nodes.Select(N => ConvertNodesToExpression(N.Nodes, ScopeForString))
         ),
         NodeType.ALTERNATIVE_NODE => ConvertNodesToExpression(Node.Nodes, ScopeForString),
-        NodeType.PARAMETER_NODE => PatternFactory.Capturing(
-          PatternFactory.Recursive(ScopeForString(Node.Text))),
+        NodeType.PARAMETER_NODE => Factory.Capturing(
+          Factory.Recursive(ScopeForString(Node.Text))),
         NodeType.EXPRESSION_NODE => ConvertNodesToExpression(Node.Nodes, ScopeForString),
         _ => throw new ArgumentOutOfRangeException($"Unknown node type: {Node.Type}")
       });
 
-    return PatternFactory.Composite(Parts);
+    return Factory.Composite(Parts);
   }
 }

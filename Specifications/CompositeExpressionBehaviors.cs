@@ -28,12 +28,12 @@ namespace Specifications;
 [TestClass]
 public sealed class CompositeExpressionBehaviors
 {
-  PatternFactory<NullScope> PatternFactory = null!;
+  Factory<NullScope> Factory = null!;
 
   [TestInitialize]
   public void Setup()
   {
-    PatternFactory = MatchScopeSpaces.Null.Get().PatternFactory();
+    Factory = MatchScopeSpaces.Null.Get().PatternFactory();
   }
 
   [TestMethod]
@@ -75,7 +75,7 @@ public sealed class CompositeExpressionBehaviors
           .ToDictionary(Key => Key, IEnumerable<Match> (_) => FinalMatches)
       }
     ];
-    var Expression = PatternFactory.Composite(Expressions);
+    var Expression = Factory.Composite(Expressions);
     var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
 
     var Actual = Matcher.Match(OverallString).Select(M => M.Match);

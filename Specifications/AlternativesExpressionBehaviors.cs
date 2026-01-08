@@ -28,12 +28,12 @@ namespace Specifications;
 [TestClass]
 public class AlternativesExpressionBehaviors
 {
-  PatternFactory<NullScope> PatternFactory = null!;
+  Factory<NullScope> Factory = null!;
 
   [TestInitialize]
   public void Setup()
   {
-    PatternFactory = MatchScopeSpaces.Null.Get().PatternFactory();
+    Factory = MatchScopeSpaces.Null.Get().PatternFactory();
   }
 
   [TestMethod]
@@ -42,7 +42,7 @@ public class AlternativesExpressionBehaviors
     var ToMatch = Any.String();
     var Option1Matches = Any.Matches();
     var Option2Matches = Any.Matches();
-    var Alternatives = PatternFactory.Alternatives([
+    var Alternatives = Factory.Alternatives([
       new MockPattern<NullScope, object>
       {
         Results =

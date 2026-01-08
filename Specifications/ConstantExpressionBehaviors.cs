@@ -28,12 +28,12 @@ namespace Specifications;
 [TestClass]
 public sealed class ConstantExpressionBehaviors
 {
-  PatternFactory<NullScope> PatternFactory = null!;
+  Factory<NullScope> Factory = null!;
 
   [TestInitialize]
   public void SetUp()
   {
-    PatternFactory = MatchScopeSpaces.Null.Get().PatternFactory();
+    Factory = MatchScopeSpaces.Null.Get().PatternFactory();
   }
 
   [TestMethod]
@@ -41,7 +41,7 @@ public sealed class ConstantExpressionBehaviors
   {
     var ToMatch = Any.String();
 
-    var Expression = PatternFactory.Constant(ToMatch);
+    var Expression = Factory.Constant(ToMatch);
     var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
 
     var Matches = Matcher.ExactMatch(ToMatch).Select(M => M.Match);
@@ -60,7 +60,7 @@ public sealed class ConstantExpressionBehaviors
   {
     var ToMatch = Any.String();
 
-    var Expression = PatternFactory.Constant(ToMatch);
+    var Expression = Factory.Constant(ToMatch);
     var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
 
     var Matches = Matcher.ExactMatch(ToMatch + Any.String());
@@ -73,7 +73,7 @@ public sealed class ConstantExpressionBehaviors
     var ToMatch = Any.String();
     var Remainder = Any.String();
 
-    var Expression = PatternFactory.Constant(ToMatch);
+    var Expression = Factory.Constant(ToMatch);
     var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
 
     var Matches = Matcher.Match(ToMatch + Remainder).Select(M => M.Match);
@@ -93,7 +93,7 @@ public sealed class ConstantExpressionBehaviors
     var ToMatch = Any.String();
     var Remainder = Any.String();
 
-    var Expression = PatternFactory.Constant(ToMatch);
+    var Expression = Factory.Constant(ToMatch);
     var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
 
     var Matches = Matcher.Match(Any.String() + Remainder);
@@ -106,7 +106,7 @@ public sealed class ConstantExpressionBehaviors
     var ToMatch = Any.String();
     var Remainder = Any.String();
 
-    var Expression = PatternFactory.Constant(ToMatch);
+    var Expression = Factory.Constant(ToMatch);
     var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
 
     var Matches = Matcher.Match(Any.String() + ToMatch + Remainder);

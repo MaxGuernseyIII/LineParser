@@ -31,7 +31,7 @@ public class Samples
   //[TestMethod]
   //public void FirstStep()
   //{
-  //  var Patterns = MatchScopeSpaces.Null.Get().PatternFactory();
+  //  var Patterns = MatchScopeSpaces.Null.Get().Factory();
   //  var MeatPattern = Patterns.Constant("meat");
   //  var Matcher = MatcherFactory.CreateFromPatterns([MeatPattern])
   //}

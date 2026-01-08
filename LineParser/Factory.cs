@@ -24,7 +24,7 @@ using System.Text.RegularExpressions;
 
 namespace LineParser;
 
-public class PatternFactory<Scope>(MatchScopeSpace<Scope> ScopeSpace) where Scope : MatchScope<Scope>
+public class Factory<Scope>(MatchScopeSpace<Scope> ScopeSpace) where Scope : MatchScope<Scope>
 {
   public Matcher<Scope, object> Matcher(
     IEnumerable<Pattern<Scope>> Patterns)
@@ -41,7 +41,11 @@ public class PatternFactory<Scope>(MatchScopeSpace<Scope> ScopeSpace) where Scop
   public Matcher<Scope, Meaning> Matcher<Meaning>(
     IEnumerable<(Scope Scope, Pattern<Scope> Pattern, Meaning Meaning)> PatternsWithMeanings)
   {
-    return MatcherFactory.CreateFromRegistry(ScopeSpace, PatternsWithMeanings);
+    return new MatcherImplementation<Scope, Meaning>(
+      ScopeSpace,
+      [
+        ..(IEnumerable<(Scope Scope, Pattern<Scope> Expression, Meaning Meaning)>) PatternsWithMeanings
+      ]);
   }
 
   public Pattern<Scope> Anything()

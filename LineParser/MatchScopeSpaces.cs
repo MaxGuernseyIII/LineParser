@@ -50,7 +50,7 @@ public static class MatchScopeSpaces
 
   public readonly ref struct Related<Scope>(MatchScopeSpace<Scope> ScopeSpace) where Scope : MatchScope<Scope>
   {
-    public PatternFactory<Scope> PatternFactory()
+    public Factory<Scope> PatternFactory()
     {
       return new(ScopeSpace);
     }

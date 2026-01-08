@@ -30,14 +30,14 @@ using StringScope = SupplyAndDemandScope<string>;
 [TestClass]
 public class MatcherBehaviors
 {
-  PatternFactory<StringScope> PatternFactory = null!;
+  Factory<StringScope> Factory = null!;
   StringScope.Space ScopeSpace = null!;
 
   [TestInitialize]
   public void Setup()
   {
     ScopeSpace = MatchScopeSpaces.SupplyAndDemand<string>();
-    PatternFactory = ScopeSpace.Get().PatternFactory();
+    Factory = ScopeSpace.Get().PatternFactory();
   }
 
   [TestMethod]
@@ -45,8 +45,8 @@ public class MatcherBehaviors
   {
     var ToMatch = Any.String();
     var Meaning = new object();
-    var Matcher = PatternFactory.Matcher([
-        (PatternFactory.Constant(ToMatch), Meaning)
+    var Matcher = Factory.Matcher([
+        (Factory.Constant(ToMatch), Meaning)
       ]);
 
     var Actual = Matcher.Match(ToMatch);
@@ -60,12 +60,11 @@ public class MatcherBehaviors
     var ToMatch = Any.String();
     var TargetScope = Any.String();
     var Meaning = new object();
-    var Matcher = MatcherFactory.CreateFromRegistry(
-      ScopeSpace,
+    var Matcher = Factory.Matcher(
       [
-        (ScopeSpace.Supply(Any.String()), PatternFactory.Constant(ToMatch), new()),
-        (ScopeSpace.Supply(TargetScope), PatternFactory.Constant(ToMatch), Meaning),
-        (ScopeSpace.Supply(Any.String()), PatternFactory.Constant(ToMatch), new())
+        (ScopeSpace.Supply(Any.String()), Factory.Constant(ToMatch), new()),
+        (ScopeSpace.Supply(TargetScope), Factory.Constant(ToMatch), Meaning),
+        (ScopeSpace.Supply(Any.String()), Factory.Constant(ToMatch), new())
       ]);
 
     var Actual = Matcher.Match(ToMatch, new(), ScopeSpace.Demand(TargetScope)).Select(M => M.Meaning);

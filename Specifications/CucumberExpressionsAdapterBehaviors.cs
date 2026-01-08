@@ -43,8 +43,7 @@ public class CucumberExpressionsAdapterBehaviors
       "this/these is/are my/our cucumber expression(s), which we use for {Purpose} and other things.",
       Name => ScopeSpace.Demand($"parameter:{Name}"));
 
-    var Matcher = MatcherFactory.CreateFromRegistry(
-      ScopeSpace,
+    var Matcher = Factory.Matcher(
       [
         (ScopeSpace.Supply("type:step"), Expression, StepMeaning),
         (ScopeSpace.Supply("parameter:Purpose"), Factory.Constant("testing"), null!),

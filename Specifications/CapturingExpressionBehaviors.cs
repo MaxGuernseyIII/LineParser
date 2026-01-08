@@ -28,12 +28,12 @@ namespace Specifications;
 [TestClass]
 public class CapturingExpressionBehaviors
 {
-  PatternFactory<NullScope> PatternFactory = null!;
+  Factory<NullScope> Factory = null!;
 
   [TestInitialize]
   public void Setup()
   {
-    PatternFactory = MatchScopeSpaces.Null.Get().PatternFactory();
+    Factory = MatchScopeSpaces.Null.Get().PatternFactory();
   }
 
   [TestMethod]
@@ -48,7 +48,7 @@ public class CapturingExpressionBehaviors
         {Input, UnderlyingOutput}
       }
     };
-    var Expression = PatternFactory.Capturing(ToCapturePattern);
+    var Expression = Factory.Capturing(ToCapturePattern);
     var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
 
     var Actual = Matcher.Match(Input).Select(M => M.Match);

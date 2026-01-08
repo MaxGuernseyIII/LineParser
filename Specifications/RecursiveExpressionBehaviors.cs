@@ -30,14 +30,14 @@ using StringScope = SupplyAndDemandScope<string>;
 [TestClass]
 public class RecursiveExpressionBehaviors
 {
-  PatternFactory<StringScope> PatternFactory = null!;
+  Factory<StringScope> Factory = null!;
   StringScope.Space ScopeSpace = null!;
 
   [TestInitialize]
   public void Setup()
   {
     ScopeSpace = MatchScopeSpaces.SupplyAndDemand<string>();
-    PatternFactory = ScopeSpace.Get().PatternFactory();
+    Factory = ScopeSpace.Get().PatternFactory();
   }
 
   [TestMethod]
@@ -47,8 +47,8 @@ public class RecursiveExpressionBehaviors
     var OuterScope = Any.String();
     var MatchedStub = Any.String();
     var ToParse = MatchedStub + Any.String();
-    var Recursive = PatternFactory.Recursive(ScopeSpace.Demand(InnerScope));
-    var Constant = PatternFactory.Constant(MatchedStub);
+    var Recursive = Factory.Recursive(ScopeSpace.Demand(InnerScope));
+    var Constant = Factory.Constant(MatchedStub);
     var Matcher = TestMatcherFactory.CreateFromRegistryWithoutMeaning([
       (ScopeSpace.Supply(InnerScope), Constant),
       (ScopeSpace.Supply(OuterScope), Recursive)
@@ -64,7 +64,7 @@ public class RecursiveExpressionBehaviors
   {
     var Scope = Any.String();
     var ToParse = Any.String();
-    var Recursive = PatternFactory.Recursive(ScopeSpace.Demand(Scope));
+    var Recursive = Factory.Recursive(ScopeSpace.Demand(Scope));
     var Matcher = TestMatcherFactory.CreateFromRegistryWithoutMeaning([
       (ScopeSpace.Supply(Scope), Recursive)
     ]);
