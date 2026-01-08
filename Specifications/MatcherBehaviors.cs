@@ -20,31 +20,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Text.RegularExpressions;
+using LineParser;
 
-namespace LineParser;
+namespace Specifications;
 
-sealed class RegexExpression<Scope, Meaning>(Regex Pattern) : Expression<Scope, Meaning> where Scope : MatchScope<Scope>
+using StringScope = SupplyAndDemandScope<string>;
+
+[TestClass]
+public class MatcherBehaviors
 {
-  readonly Regex Pattern = new("^" + Pattern.ToString().TrimStart('^'), Pattern.Options);
-
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry,
-    MatchExecutionContext Context)
+  [TestMethod]
+  public void SuppliesAnnotatedMeaning()
   {
-    var M = Pattern.Match(ToMatch);
-    if (M.Success)
-      yield return new()
-      {
-        Matched = M.Value,
-        Remainder = ToMatch[M.Value.Length..],
-        Captured =
-        [
-          ..M.Groups.Values.Skip(1).Select(C => new Match.Capture
-          {
-            At = C.Index,
-            Value = C.Value
-          })
-        ]
-      };
   }
 }

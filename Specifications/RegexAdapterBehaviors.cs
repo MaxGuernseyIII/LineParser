@@ -61,4 +61,17 @@ public class RegexAdapterBehaviors
       }
     ]);
   }
+
+  [TestMethod]
+  public void OnlyMatchesAtCurrentLocation()
+  {
+    var ToMatch = "there is some cheese in the house ";
+    var ToParse = Any.String() + ToMatch + Any.String();
+    var Pattern = new Regex("there is (some|no) cheese in the (house|refrigerator) ", RegexOptions.Compiled);
+    var Expression = new ExpressionFactory<NullScope, object>().CreateForRegex(Pattern);
+
+    var Matches = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]).Match(ToParse);
+
+    Matches.ShouldBe([]);
+  }
 }

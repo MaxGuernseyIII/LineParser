@@ -20,31 +20,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Text.RegularExpressions;
+using LineParser;
 
-namespace LineParser;
+namespace Specifications;
 
-sealed class RegexExpression<Scope, Meaning>(Regex Pattern) : Expression<Scope, Meaning> where Scope : MatchScope<Scope>
+static class TestMatcherFactory
 {
-  readonly Regex Pattern = new("^" + Pattern.ToString().TrimStart('^'), Pattern.Options);
-
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry,
-    MatchExecutionContext Context)
+  public static Matcher<SupplyAndDemandScope<string>, object> CreateFromRegistryWithoutMeaning(
+    IEnumerable<(SupplyAndDemandScope<string> Scope, Expression<SupplyAndDemandScope<string>, object> Expression)> Registry)
   {
-    var M = Pattern.Match(ToMatch);
-    if (M.Success)
-      yield return new()
-      {
-        Matched = M.Value,
-        Remainder = ToMatch[M.Value.Length..],
-        Captured =
-        [
-          ..M.Groups.Values.Skip(1).Select(C => new Match.Capture
-          {
-            At = C.Index,
-            Value = C.Value
-          })
-        ]
-      };
+    return MatcherFactory.CreateFromRegistry([
+      ..Registry.Select(E => (E.Scope, E.Expression, new object()))
+    ]);
+  }
+
+  public static Matcher<NullScope, object> CreateFromExpressionsWithoutMeaning(
+    IEnumerable<Expression<NullScope, object>> Expressions
+  )
+  {
+    return MatcherFactory.CreateFromExpressions(Expressions.Select(E => (E, new object())));
   }
 }
