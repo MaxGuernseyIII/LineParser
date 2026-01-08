@@ -4,17 +4,17 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <Authors>Max Guernsey</Authors>
+    <Company>Hexagon Software LLC</Company>
+
+    <Description>Extends LineParser to add support for cucumber expressions.</Description>
+
+    <PackageTags>text;parsing;recursion</PackageTags>
+    <PackageProjectUrl>https://github.com/MaxGuernseyIII/LineParser</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/MaxGuernseyIII/LineParser</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
-
-  <Authors>Max Guernsey</Authors>
-  <Company>Hexagon Software LLC</Company>
-
-  <Description>Extends LineParser to add support for cucumber expressions.</Description>
-
-  <PackageTags>text;parsing;recursion</PackageTags>
-  <PackageProjectUrl>https://github.com/MaxGuernseyIII/LineParser</PackageProjectUrl>
-  <RepositoryUrl>https://github.com/MaxGuernseyIII/LineParser</RepositoryUrl>
-  <RepositoryType>git</RepositoryType>
 
   <ItemGroup>
     <PackageReference Include="Cucumber.CucumberExpressions" Version="18.0.1" />
