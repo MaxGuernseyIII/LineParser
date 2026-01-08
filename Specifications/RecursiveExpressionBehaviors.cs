@@ -56,4 +56,19 @@ public class RecursiveExpressionBehaviors
 
     Actual.ShouldBe(Constant.GetMatchesAtBeginningOf(ToParse, Matcher, new()));
   }
+
+  [TestMethod]
+  public void DoesNotInfinitelyRecur()
+  {
+    var Scope = Any.String();
+    var ToParse = Any.String();
+    var Recursive = ExpressionFactory.CreateRecursive(StringScope.Demand(Scope));
+    var Matcher = TestMatcherFactory.CreateFromRegistryWithoutMeaning([
+      (StringScope.Supply(Scope),  Recursive)
+    ]);
+
+    var Actual = Matcher.Match(ToParse, new(), StringScope.Demand(Scope)).Select(M => M.Match);
+
+    Actual.ShouldBe([]);
+  }
 }

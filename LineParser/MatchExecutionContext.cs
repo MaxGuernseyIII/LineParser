@@ -24,4 +24,24 @@ namespace LineParser;
 
 public class MatchExecutionContext
 {
+  readonly Stack<(string ToMatch, object RecursiveExpression)> Frames = [];
+
+  public IEnumerable<Match> DoRecursive<Meaning, Scope>(string ToMatch, Expression<Scope, Meaning> RecursiveExpression, Func<IEnumerable<Match>> ToDo) where Scope : MatchScope<Scope>
+  {
+    var Key = (ToMatch, RecursiveExpression);
+
+    if (Frames.Contains(Key))
+      return [];
+
+    Frames.Push(Key);
+
+    try
+    {
+      return [..ToDo()];
+    }
+    finally
+    {
+      Frames.Pop();
+    }
+  }
 }
