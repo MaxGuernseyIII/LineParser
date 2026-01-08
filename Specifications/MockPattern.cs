@@ -28,7 +28,7 @@ sealed class MockPattern<Scope, Meaning> : Pattern<Scope> where Scope : Scope<Sc
 {
   public Dictionary<string, IEnumerable<Match>> Results = [];
 
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubPatternMatcher<Scope> Reentry,
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubpatternMatcher<Scope> Reentry,
     MatchExecutionContext Context)
   {
     return !Results.TryGetValue(ToMatch, out var Result) ? [] : Result;

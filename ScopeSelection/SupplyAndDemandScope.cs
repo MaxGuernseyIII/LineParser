@@ -22,14 +22,20 @@
 
 namespace ScopeSelection;
 
+/// <summary>
+/// A kind of scope based on supply and demand of tokens.
+/// </summary>
+/// <typeparam name="T">The type of token.</typeparam>
 public sealed record SupplyAndDemandScope<T> : Scope<SupplyAndDemandScope<T>>
 {
-  internal SupplyAndDemandScope()
+  internal SupplyAndDemandScope(Predicate<Predicate<T>> CheckForSupport, Predicate<T> SupportsToken)
   {
+    this.CheckForSupport = CheckForSupport;
+    this.SupportsToken = SupportsToken;
   }
 
-  public required Predicate<Predicate<T>> CheckForSupport { get; init; }
-  public required Predicate<T> SupportsToken { get; init; }
+  readonly Predicate<Predicate<T>> CheckForSupport;
+  readonly Predicate<T> SupportsToken;
 
   public bool IsSatisfiedBy(SupplyAndDemandScope<T> Other)
   {
@@ -68,17 +74,9 @@ public sealed record SupplyAndDemandScope<T> : Scope<SupplyAndDemandScope<T>>
 
   public sealed class Space : ScopeSpace<SupplyAndDemandScope<T>>
   {
-    public SupplyAndDemandScope<T> Any { get; } = new()
-    {
-      CheckForSupport = Always,
-      SupportsToken = Always
-    };
+    public SupplyAndDemandScope<T> Any { get; } = new(Always, Always);
 
-    public SupplyAndDemandScope<T> Unspecified { get; } = new()
-    {
-      CheckForSupport = Always,
-      SupportsToken = Never
-    };
+    public SupplyAndDemandScope<T> Unspecified { get; } = new(Always, Never);
 
 
     public SupplyAndDemandScope<T> Union(SupplyAndDemandScope<T> L, SupplyAndDemandScope<T> R)
@@ -87,11 +85,7 @@ public sealed record SupplyAndDemandScope<T> : Scope<SupplyAndDemandScope<T>>
       var RSupportsToken = R.SupportsToken;
       var LCheckForSupport = L.CheckForSupport;
       var RCheckForSupport = R.CheckForSupport;
-      return new()
-      {
-        CheckForSupport = Support => LCheckForSupport(Support) || RCheckForSupport(Support),
-        SupportsToken = Token => LSupportsToken(Token) || RSupportsToken(Token)
-      };
+      return new(Support => LCheckForSupport(Support) || RCheckForSupport(Support), Token => LSupportsToken(Token) || RSupportsToken(Token));
     }
 
     public SupplyAndDemandScope<T> Intersection(SupplyAndDemandScope<T> L, SupplyAndDemandScope<T> R)
@@ -100,39 +94,23 @@ public sealed record SupplyAndDemandScope<T> : Scope<SupplyAndDemandScope<T>>
       var RSupportsToken = R.SupportsToken;
       var LCheckForSupport = L.CheckForSupport;
       var RCheckForSupport = R.CheckForSupport;
-      return new()
-      {
-        CheckForSupport = Support => LCheckForSupport(Support) && RCheckForSupport(Support),
-        SupportsToken = Token => LSupportsToken(Token) && RSupportsToken(Token)
-      };
+      return new(Support => LCheckForSupport(Support) && RCheckForSupport(Support), Token => LSupportsToken(Token) && RSupportsToken(Token));
     }
 
 
     public SupplyAndDemandScope<T> For(T Token)
     {
-      return new()
-      {
-        CheckForSupport = DemandToken(Token),
-        SupportsToken = SupplyToken(Token)
-      };
+      return new(DemandToken(Token), SupplyToken(Token));
     }
 
     public SupplyAndDemandScope<T> Demand(T Token)
     {
-      return new()
-      {
-        SupportsToken = Never,
-        CheckForSupport = DemandToken(Token)
-      };
+      return new(DemandToken(Token), Never);
     }
 
     public SupplyAndDemandScope<T> Demand(IEnumerable<T> Tokens)
     {
-      return new()
-      {
-        SupportsToken = Never,
-        CheckForSupport = DemandTokens(Tokens)
-      };
+      return new(DemandTokens(Tokens), Never);
     }
 
     Predicate<Predicate<T>> DemandTokens(IEnumerable<T> Tokens)
@@ -142,20 +120,12 @@ public sealed record SupplyAndDemandScope<T> : Scope<SupplyAndDemandScope<T>>
 
     public SupplyAndDemandScope<T> Supply(T Token)
     {
-      return new()
-      {
-        SupportsToken = SupplyToken(Token),
-        CheckForSupport = Never
-      };
+      return new(Never, SupplyToken(Token));
     }
 
     public SupplyAndDemandScope<T> Supply(IEnumerable<T> Tokens)
     {
-      return new()
-      {
-        SupportsToken = SupplyTokens(Tokens),
-        CheckForSupport = Never
-      };
+      return new(Never, SupplyTokens(Tokens));
     }
 
     Predicate<T> SupplyTokens(IEnumerable<T> Tokens)

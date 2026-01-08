@@ -22,12 +22,16 @@
 
 namespace ScopeSelection;
 
+/// <summary>
+/// A kind of <see cref="Scope{Implementation}"/> that does not partition anything. The equivalent of not having scope at all.
+/// </summary>
 public sealed class NullScope : Scope<NullScope>
 {
   NullScope()
   {
   }
 
+  /// <inheritdoc />
   public bool IsSatisfiedBy(NullScope Other)
   {
     return true;

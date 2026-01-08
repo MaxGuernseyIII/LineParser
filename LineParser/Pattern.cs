@@ -33,9 +33,9 @@ public interface Pattern<out ScopeImplementation>
   /// Finds all <see cref="Match"/>es that start at the beginning of <see cref="ToMatch"/>.
   /// </summary>
   /// <param name="ToMatch">The string to match.</param>
-  /// <param name="FindSubPattern">The operation that can be used to match a subpattern.</param>
+  /// <param name="FindSubpattern">The operation that can be used to match a subpattern.</param>
   /// <param name="Context">The state of the parse operation.</param>
   /// <returns>All valid <see cref="Match"/>es.</returns>
   IEnumerable<Match> GetMatchesAtBeginningOf(
-    string ToMatch, SubPatternMatcher<ScopeImplementation> FindSubPattern, MatchExecutionContext Context);
+    string ToMatch, SubpatternMatcher<ScopeImplementation> FindSubpattern, MatchExecutionContext Context);
 }

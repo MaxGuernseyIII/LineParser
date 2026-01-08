@@ -24,7 +24,7 @@ namespace LineParser;
 
 class AnythingPattern<Scope> : Pattern<Scope> where Scope : Scope<Scope>
 {
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubPatternMatcher<Scope> Reentry,
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubpatternMatcher<Scope> Reentry,
     MatchExecutionContext Context)
   {
     return Enumerable.Range(0, ToMatch.Length + 1).Reverse().Select(Split => new Match

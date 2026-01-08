@@ -28,7 +28,7 @@ sealed class RegexPattern<Scope>(Regex Pattern) : Pattern<Scope> where Scope : S
 {
   readonly Regex Pattern = new("^" + Pattern.ToString().TrimStart('^'), Pattern.Options);
 
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubPatternMatcher<Scope> Reentry,
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubpatternMatcher<Scope> Reentry,
     MatchExecutionContext Context)
   {
     var M = Pattern.Match(ToMatch);

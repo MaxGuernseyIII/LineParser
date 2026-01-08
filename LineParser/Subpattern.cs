@@ -20,8 +20,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-namespace ScopeSelection;
+namespace LineParser;
 
-public static class Scopes
+sealed class Subpattern<Scope>(Scope Demand) : Pattern<Scope>
+  where Scope : Scope<Scope>
 {
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubpatternMatcher<Scope> Reentry,
+    MatchExecutionContext Context)
+  {
+    return Context.DoRecursive(ToMatch, this, () => Reentry(ToMatch, Context, Demand));
+  }
 }

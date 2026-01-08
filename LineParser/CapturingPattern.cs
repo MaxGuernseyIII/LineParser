@@ -25,7 +25,7 @@ namespace LineParser;
 sealed class CapturingPattern<Scope>(Pattern<Scope> ToCapturePattern)
   : Pattern<Scope> where Scope : Scope<Scope>
 {
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubPatternMatcher<Scope> Reentry,
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubpatternMatcher<Scope> Reentry,
     MatchExecutionContext Context)
   {
     return ToCapturePattern.GetMatchesAtBeginningOf(ToMatch, Reentry, Context)

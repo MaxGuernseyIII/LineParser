@@ -22,5 +22,9 @@
 
 namespace LineParser;
 
-public delegate IEnumerable<Match> SubPatternMatcher<in Scope>(string ToMatch, MatchExecutionContext Context,
-  Scope Scope);
+/// <summary>
+/// A delegate for executing recursive matches of subpatterns.
+/// </summary>
+/// <typeparam name="ScopeImplementation">The type of <see cref="Scope{Implementation}"/> used to perform matches.</typeparam>
+public delegate IEnumerable<Match> SubpatternMatcher<in ScopeImplementation>(string ToMatch, MatchExecutionContext Context,
+  ScopeImplementation Scope);

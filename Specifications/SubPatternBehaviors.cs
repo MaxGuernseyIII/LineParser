@@ -47,7 +47,7 @@ public class SubPatternBehaviors
     var OuterScope = Any.String();
     var MatchedStub = Any.String();
     var ToParse = MatchedStub + Any.String();
-    var Recursive = Factory.SubPattern(ScopeSpace.Demand(InnerScope));
+    var Recursive = Factory.Subpattern(ScopeSpace.Demand(InnerScope));
     var Constant = Factory.Constant(MatchedStub);
     var Matcher = TestMatcherFactory.CreateFromRegistryWithoutMeaning([
       (ScopeSpace.Supply(InnerScope), Pattern: Constant),
@@ -65,7 +65,7 @@ public class SubPatternBehaviors
   {
     var Scope = Any.String();
     var ToParse = Any.String();
-    var Recursive = Factory.SubPattern(ScopeSpace.Demand(Scope));
+    var Recursive = Factory.Subpattern(ScopeSpace.Demand(Scope));
     var Matcher = TestMatcherFactory.CreateFromRegistryWithoutMeaning([
       (ScopeSpace.Supply(Scope), Pattern: Recursive)
     ]);

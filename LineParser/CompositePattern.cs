@@ -26,7 +26,7 @@ sealed class CompositePattern<Scope>(IEnumerable<Pattern<Scope>> Patterns)
   : Pattern<Scope> where Scope : Scope<Scope>
 {
   public IEnumerable<Match> GetMatchesAtBeginningOf(
-    string ToMatch, SubPatternMatcher<Scope> Reentry, MatchExecutionContext Context)
+    string ToMatch, SubpatternMatcher<Scope> Reentry, MatchExecutionContext Context)
   {
     IEnumerable<Match> Result =
     [

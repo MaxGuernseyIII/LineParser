@@ -59,7 +59,7 @@ class CucumberExpressionToExpressionMapper<Scope>(Factory<Scope> Factory)
         ),
         NodeType.ALTERNATIVE_NODE => ConvertNodesToPattern(Node.Nodes, ScopeForString),
         NodeType.PARAMETER_NODE => Factory.Capturing(
-          Factory.SubPattern(ScopeForString(Node.Text))),
+          Factory.Subpattern(ScopeForString(Node.Text))),
         NodeType.EXPRESSION_NODE => ConvertNodesToPattern(Node.Nodes, ScopeForString),
         _ => throw new ArgumentOutOfRangeException($"Unknown node type: {Node.Type}")
       });
