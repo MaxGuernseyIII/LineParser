@@ -20,19 +20,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-namespace LineParser;
+using System.Text.RegularExpressions;
+using LineParser;
+using Shouldly;
 
-public static class MatcherFactory
+namespace Specifications;
+
+[TestClass]
+public class RegexAdapterBehaviors
 {
-  public static Matcher<Scope, Meaning> CreateFromExpressions<Scope, Meaning>(
-    IEnumerable<(Expression<Scope, Meaning> Expression, Meaning Meaning)> Expressions) where Scope : MatchScope<Scope>
+  [TestMethod]
+  public void UsesRegexToParse()
   {
-    return CreateFromRegistry([..Expressions.Select(E => (Scope: Scope.Unspecified, E.Expression, E.Meaning))]);
-  }
+    var Remainder = Any.String();
+    var ToMatch = "there is some cheese in the house ";
+    var ToParse = ToMatch + Remainder;
+    var Pattern = new Regex("there is (some|no) cheese in the (house|refrigerator) ", RegexOptions.Compiled);
+    var Expression = new ExpressionFactory<NullScope, object>().CreateForRegex(Pattern);
 
-  public static Matcher<Scope, Meaning> CreateFromRegistry<Scope, Meaning>(IEnumerable<(Scope Scope, Expression<Scope, Meaning> Expression, Meaning Meaning)> Registry)
-    where Scope : MatchScope<Scope>
-  {
-    return new MatcherImplementation<Scope, Meaning>([..Registry]);
+    var Matches = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]).Match(ToParse);
+
+    Matches.ShouldBe([
+      new()
+      {
+        Matched = ToMatch,
+        Remainder = Remainder,
+        Captured =
+        [
+          new()
+          {
+            At = 9,
+            Value = "some"
+          },
+          new()
+          {
+            At = 28,
+            Value = "house"
+          }
+        ]
+      }
+    ]);
   }
 }

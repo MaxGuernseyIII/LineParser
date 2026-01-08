@@ -75,7 +75,7 @@ public sealed class CompositeExpressionBehaviors
       }
     ];
     var Expression = ExpressionFactory.CreateComposite(Expressions);
-    var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
+    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
 
     var Actual = Matcher.Match(OverallString);
 

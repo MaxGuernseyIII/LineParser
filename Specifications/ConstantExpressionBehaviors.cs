@@ -42,7 +42,7 @@ public sealed class ConstantExpressionBehaviors
     var ToMatch = Any.String();
 
     var Expression = ExpressionFactory.CreateConstant(ToMatch);
-    var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
+    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
 
     var Matches = Matcher.ExactMatch(ToMatch);
     Matches.ShouldBe([
@@ -61,7 +61,7 @@ public sealed class ConstantExpressionBehaviors
     var ToMatch = Any.String();
 
     var Expression = ExpressionFactory.CreateConstant(ToMatch);
-    var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
+    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
 
     var Matches = Matcher.ExactMatch(ToMatch + Any.String());
     Matches.ShouldBe([]);
@@ -74,7 +74,7 @@ public sealed class ConstantExpressionBehaviors
     var Remainder = Any.String();
 
     var Expression = ExpressionFactory.CreateConstant(ToMatch);
-    var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
+    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
 
     var Matches = Matcher.Match(ToMatch + Remainder);
     Matches.ShouldBe([
@@ -94,7 +94,7 @@ public sealed class ConstantExpressionBehaviors
     var Remainder = Any.String();
 
     var Expression = ExpressionFactory.CreateConstant(ToMatch);
-    var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
+    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
 
     var Matches = Matcher.Match(Any.String() + Remainder);
     Matches.ShouldBe([]);
@@ -107,7 +107,7 @@ public sealed class ConstantExpressionBehaviors
     var Remainder = Any.String();
 
     var Expression = ExpressionFactory.CreateConstant(ToMatch);
-    var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
+    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
 
     var Matches = Matcher.Match(Any.String() + ToMatch + Remainder);
     Matches.ShouldBe([]);

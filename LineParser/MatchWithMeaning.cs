@@ -22,17 +22,8 @@
 
 namespace LineParser;
 
-public static class MatcherFactory
+public readonly record struct MatchWithMeaning<TMeaning>
 {
-  public static Matcher<Scope, Meaning> CreateFromExpressions<Scope, Meaning>(
-    IEnumerable<(Expression<Scope, Meaning> Expression, Meaning Meaning)> Expressions) where Scope : MatchScope<Scope>
-  {
-    return CreateFromRegistry([..Expressions.Select(E => (Scope: Scope.Unspecified, E.Expression, E.Meaning))]);
-  }
-
-  public static Matcher<Scope, Meaning> CreateFromRegistry<Scope, Meaning>(IEnumerable<(Scope Scope, Expression<Scope, Meaning> Expression, Meaning Meaning)> Registry)
-    where Scope : MatchScope<Scope>
-  {
-    return new MatcherImplementation<Scope, Meaning>([..Registry]);
-  }
+  public required Match Match { get; init; }
+  public readonly TMeaning Meaning { get; init; }
 }

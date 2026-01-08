@@ -20,7 +20,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Text.RegularExpressions;
 using LineParser;
 using Shouldly;
 
@@ -50,7 +49,7 @@ public class CapturingExpressionBehaviors
       }
     };
     var Expression = ExpressionFactory.CreateCapturing(ToCaptureExpression);
-    var Matcher = MatcherFactory.CreateFromExpressions([Expression]);
+    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
 
     var Actual = Matcher.Match(Input);
 
@@ -66,42 +65,5 @@ public class CapturingExpressionBehaviors
           }
         ]
       }));
-  }
-}
-
-[TestClass]
-public class RegexAdapterBehaviors
-{
-  [TestMethod]
-  public void UsesRegexToParse()
-  {
-    var Remainder = Any.String();
-    var ToMatch = "there is some cheese in the house ";
-    var ToParse = ToMatch + Remainder;
-    var Pattern = new Regex("there is (some|no) cheese in the (house|refrigerator) ", RegexOptions.Compiled);
-    var Expression = new ExpressionFactory<NullScope, object>().CreateForRegex(Pattern);
-
-    var Matches = MatcherFactory.CreateFromExpressions([Expression]).Match(ToParse);
-
-    Matches.ShouldBe([
-      new()
-      {
-        Matched = ToMatch,
-        Remainder = Remainder,
-        Captured =
-        [
-          new()
-          {
-            At = 9,
-            Value = "some"
-          },
-          new()
-          {
-            At = 28,
-            Value = "house"
-          }
-        ]
-      }
-    ]);
   }
 }

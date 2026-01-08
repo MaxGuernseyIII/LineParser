@@ -47,7 +47,7 @@ public class RecursiveMatcherBehaviors
     var ToParse = Before + MatchedStub + Any.String();
     var Recursive = ExpressionFactory.CreateRecursive(StringScope.Demand(ScopeString));
     var Constant = ExpressionFactory.CreateConstant(MatchedStub);
-    var Matcher = MatcherFactory.CreateFromRegistry<StringScope, object>([
+    var Matcher = TestMatcherFactory.CreateFromRegistryWithoutMeaning([
       (StringScope.Supply(ScopeString), Constant),
       (StringScope.Unspecified,  Recursive)
     ]);
@@ -55,5 +55,23 @@ public class RecursiveMatcherBehaviors
     var Actual = Matcher.Match(ToParse);
 
     Actual.ShouldBe(Constant.GetMatchesAtBeginningOf(ToParse, Matcher, new()));
+  }
+}
+
+static class TestMatcherFactory
+{
+  public static Matcher<StringScope, object> CreateFromRegistryWithoutMeaning(
+    IEnumerable<(StringScope Scope, Expression<StringScope, object> Expression)> Registry)
+  {
+    return MatcherFactory.CreateFromRegistry([
+      ..Registry.Select(E => (E.Scope, E.Expression, new object()))
+    ]);
+  }
+
+  public static Matcher<NullScope, object> CreateFromExpressionsWithoutMeaning(
+    IEnumerable<Expression<NullScope, object>> Expressions
+  )
+  {
+    return MatcherFactory.CreateFromExpressions(Expressions.Select(E => (E, new object())));
   }
 }

@@ -24,7 +24,7 @@ using System.Collections.Immutable;
 
 namespace LineParser;
 
-class MatcherImplementation<Scope, Meaning>(ImmutableArray<(Scope Scope, Expression<Scope, Meaning> Expression)> Registry)
+class MatcherImplementation<Scope, Meaning>(ImmutableArray<(Scope Scope, Expression<Scope, Meaning> Expression, Meaning Meaning)> Registry)
   : Matcher<Scope, Meaning>
   where Scope : MatchScope<Scope>
 {
