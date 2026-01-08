@@ -23,10 +23,10 @@
 namespace LineParser;
 
 public interface Matcher<
-  Scope,
+  ScopeImplementation,
   Meaning>
-  where Scope : Scope<Scope>
+  where ScopeImplementation : Scope<ScopeImplementation>
 {
-  ScopeSpace<Scope> ScopeSpace { get; }
-  IEnumerable<MatchWithMeaning<Meaning>> Match(string ToParse, MatchExecutionContext Context, Scope Scope);
+  ScopeSpace<ScopeImplementation> ScopeSpace { get; }
+  IEnumerable<MatchWithMeaning<Meaning>> Match(string ToParse, MatchExecutionContext Context, ScopeImplementation Scope);
 }

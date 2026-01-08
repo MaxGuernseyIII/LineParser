@@ -48,13 +48,13 @@ class CucumberExpressionToExpressionMapper<Scope>(Factory<Scope> Factory)
       Parts.Add(Node.Type switch
       {
         NodeType.TEXT_NODE => Factory.Constant(Node.Text),
-        NodeType.OPTIONAL_NODE => Factory.Alternatives(
+        NodeType.OPTIONAL_NODE => Factory.Parallel(
         [
           ConvertNodesToPattern(Node.Nodes, ScopeForString),
           Factory.Constant("")
         ]),
 
-        NodeType.ALTERNATION_NODE => Factory.Alternatives(
+        NodeType.ALTERNATION_NODE => Factory.Parallel(
           Node.Nodes.Select(N => ConvertNodesToPattern(N.Nodes, ScopeForString))
         ),
         NodeType.ALTERNATIVE_NODE => ConvertNodesToPattern(Node.Nodes, ScopeForString),
@@ -64,6 +64,6 @@ class CucumberExpressionToExpressionMapper<Scope>(Factory<Scope> Factory)
         _ => throw new ArgumentOutOfRangeException($"Unknown node type: {Node.Type}")
       });
 
-    return Factory.Composite(Parts);
+    return Factory.Sequence(Parts);
   }
 }

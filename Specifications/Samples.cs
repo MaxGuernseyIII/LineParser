@@ -69,7 +69,7 @@ public class Samples
     var ExpressionFactory = ScopeSpaces.Null.GetFactory();
     var Matcher = ExpressionFactory.Matcher(
     [
-      (ExpressionFactory.Composite([
+      (ExpressionFactory.Sequence([
           ExpressionFactory.Constant("user \""),
           ExpressionFactory.Capturing(
             ExpressionFactory.Regex(new("(?:[^\"]|\"\")*"))),

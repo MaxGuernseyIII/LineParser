@@ -75,7 +75,7 @@ public sealed class CompositePatternBehaviors
           .ToDictionary(Key => Key, IEnumerable<Match> (_) => FinalMatches)
       }
     ];
-    var Pattern = Factory.Composite(Patterns);
+    var Pattern = Factory.Sequence(Patterns);
     var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Pattern]);
 
     var Actual = Matcher.Match(OverallString).Select(M => M.Match);

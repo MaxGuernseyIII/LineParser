@@ -42,7 +42,7 @@ public class AlternativesPatternBehaviors
     var ToMatch = Any.String();
     var Option1Matches = Any.Matches();
     var Option2Matches = Any.Matches();
-    var Alternatives = Factory.Alternatives([
+    var Alternatives = Factory.Parallel([
       new MockPattern<NullScope, object>
       {
         Results =
