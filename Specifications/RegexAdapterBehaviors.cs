@@ -23,6 +23,7 @@
 using System.Text.RegularExpressions;
 using LineParser;
 using Shouldly;
+using Match = LineParser.Match;
 
 namespace Specifications;
 
@@ -74,5 +75,29 @@ public class RegexAdapterBehaviors
     var Matches = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Pattern]).Match(ToParse);
 
     Matches.ShouldBe([]);
+  }
+
+  [TestMethod]
+  public void FindsAlternatives()
+  {
+    var ToMatch = "there is some cheese in the house ";
+    var Extra = Any.String();
+    var ToParse = ToMatch + Extra;
+    var Regex = new Regex("there is (?:some cheese in the house )?", RegexOptions.Compiled);
+    var Pattern = ScopeSpaces.Null.GetFactory().Regex(Regex);
+
+    var Matches = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Pattern]).Match(ToParse).Select(M => M.Match);
+
+    Matches.ShouldBe([
+      new()
+      {
+        Matched = "there is ",
+        Remainder = "some cheese in the house " + Extra
+        },
+      new () {
+        Matched = "there is some cheese in the house ",
+        Remainder = Extra
+        }
+    ], true);
   }
 }

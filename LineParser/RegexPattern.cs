@@ -26,26 +26,29 @@ namespace LineParser;
 
 sealed class RegexPattern<ScopeImplementation>(Regex Pattern) : Pattern<ScopeImplementation> where ScopeImplementation : Scope<ScopeImplementation>
 {
-  readonly Regex Pattern = new("^" + Pattern.ToString().TrimStart('^'), Pattern.Options);
+  readonly Regex Pattern = new("^" + Pattern.ToString().TrimStart('^').TrimEnd('$') + "$", Pattern.Options);
+  readonly AnythingPattern<ScopeImplementation> Core = new();
 
   public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubpatternMatcher<ScopeImplementation> Reentry,
     MatchExecutionContext Context)
   {
-    var M = Pattern.Match(ToMatch);
-    if (M.Success)
-      yield return new()
-      {
-        Matched = M.Value,
-        Remainder = ToMatch.Substring(M.Value.Length),
-        Captured =
-        [
-          ..M.Groups.Cast<Group>().Skip(1).Select(C => new Match.Capture
-          {
-            At = C.Index,
-            Value = C.Value
-          })
-        ]
-      };
+    return
+      Core.GetMatchesAtBeginningOf(ToMatch, Reentry, Context)
+        .Select(Match => (Match, RegexMatch: Pattern.Match(Match.Matched)))
+        .Where(Pair => Pair.RegexMatch.Success)
+        .Select(Pair => new Match()
+        {
+          Matched = Pair.RegexMatch.Value,
+          Remainder = ToMatch.Substring(Pair.RegexMatch.Value.Length),
+          Captured =
+          [
+            ..Pair.RegexMatch.Groups.Cast<Group>().Skip(1).Select(C => new Match.Capture
+            {
+              At = C.Index,
+              Value = C.Value
+            })
+          ]
+        });
   }
 
   public TResult Query<TResult>(GraphQuery<ScopeImplementation, TResult> Query)

@@ -148,7 +148,7 @@ public class GraphQueryBehavior
   [TestMethod]
   public void Regex()
   {
-    var Regex = new Regex("^" + Any.String());
+    var Regex = new Regex("^" + Any.String() + "$");
     var Node = Factory.Regex(Regex);
 
     var Actual = Node.Query(new TestGraphQuery<StringScope, Regex>()
@@ -159,4 +159,19 @@ public class GraphQueryBehavior
     Actual.ToString().ShouldBe(Regex.ToString());
     Actual.Options.ShouldBe(Regex.Options);
   }
+
+  //[TestMethod]
+  //public void ToSimplifiedRegex()
+  //{
+  //  var Matcher = Factory.Sequence([
+  //    Factory.Constant("a"),
+  //    Factory.Anything(),
+  //    Factory.Capturing(Factory.Constant("b")),
+  //    Factory.Parallel([
+  //      Factory.Constant("c"),
+  //      Factory.Constant("d"),
+  //    ]),
+  //    Factory.Regex(new Regex("^$"))
+  //  ]);
+  //}
 }
