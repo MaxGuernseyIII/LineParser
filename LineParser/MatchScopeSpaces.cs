@@ -42,17 +42,9 @@ public static class MatchScopeSpaces
   extension<Scope>(MatchScopeSpace<Scope> This)
     where Scope : MatchScope<Scope>
   {
-    public Related<Scope> Get()
+    public Factory<Scope> GetFactory()
     {
       return new(This);
-    }
-  }
-
-  public readonly ref struct Related<Scope>(MatchScopeSpace<Scope> ScopeSpace) where Scope : MatchScope<Scope>
-  {
-    public Factory<Scope> PatternFactory()
-    {
-      return new(ScopeSpace);
     }
   }
 }

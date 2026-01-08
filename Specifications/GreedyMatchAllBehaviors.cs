@@ -33,7 +33,7 @@ public class GreedyMatchAllBehaviors
   [TestInitialize]
   public void Setup()
   {
-    Factory = MatchScopeSpaces.Null.Get().PatternFactory();
+    Factory = MatchScopeSpaces.Null.GetFactory();
   }
 
   [TestMethod]

@@ -15,7 +15,7 @@ Start by adding the `LineParser` and possibly the `LineParser.CucumberExpression
 Then create an expression:
 
 ```csharp
-var ExpressionFactory = MatchScopeSpaces.Null.Get().PatternFactory();
+var ExpressionFactory = MatchScopeSpaces.Null.GetFactory();
 var MeatFinder = ExpressionFactory.CreateConstant("meat");
 ```
 

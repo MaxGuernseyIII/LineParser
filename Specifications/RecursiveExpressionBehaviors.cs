@@ -37,7 +37,7 @@ public class RecursiveExpressionBehaviors
   public void Setup()
   {
     ScopeSpace = MatchScopeSpaces.SupplyAndDemand<string>();
-    Factory = ScopeSpace.Get().PatternFactory();
+    Factory = ScopeSpace.GetFactory();
   }
 
   [TestMethod]

@@ -33,7 +33,7 @@ public sealed class CompositeExpressionBehaviors
   [TestInitialize]
   public void Setup()
   {
-    Factory = MatchScopeSpaces.Null.Get().PatternFactory();
+    Factory = MatchScopeSpaces.Null.GetFactory();
   }
 
   [TestMethod]

@@ -30,7 +30,7 @@ static class TestMatcherFactory
     IEnumerable<(SupplyAndDemandScope<string> Scope, Pattern<SupplyAndDemandScope<string>> Expression)>
       Registry)
   {
-    return MatchScopeSpaces.SupplyAndDemand<string>().Get().PatternFactory().Matcher(
+    return MatchScopeSpaces.SupplyAndDemand<string>().GetFactory().Matcher(
     [
       ..Registry.Select(E => (E.Scope, E.Expression, new object()))
     ]);
@@ -40,6 +40,6 @@ static class TestMatcherFactory
     IEnumerable<Pattern<NullScope>> Expressions
   )
   {
-    return MatchScopeSpaces.Null.Get().PatternFactory().Matcher(Expressions);
+    return MatchScopeSpaces.Null.GetFactory().Matcher(Expressions);
   }
 }

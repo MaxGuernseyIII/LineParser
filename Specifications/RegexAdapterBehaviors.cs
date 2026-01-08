@@ -36,7 +36,7 @@ public class RegexAdapterBehaviors
     var ToMatch = "there is some cheese in the house ";
     var ToParse = ToMatch + Remainder;
     var Pattern = new Regex("there is (some|no) cheese in the (house|refrigerator) ", RegexOptions.Compiled);
-    var Expression = MatchScopeSpaces.Null.Get().PatternFactory().Regex(Pattern);
+    var Expression = MatchScopeSpaces.Null.GetFactory().Regex(Pattern);
 
     var Matches = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]).Match(ToParse)
       .Select(M => M.Match);
@@ -69,7 +69,7 @@ public class RegexAdapterBehaviors
     var ToMatch = "there is some cheese in the house ";
     var ToParse = Any.String() + ToMatch + Any.String();
     var Pattern = new Regex("there is (some|no) cheese in the (house|refrigerator) ", RegexOptions.Compiled);
-    var Expression = MatchScopeSpaces.Null.Get().PatternFactory().Regex(Pattern);
+    var Expression = MatchScopeSpaces.Null.GetFactory().Regex(Pattern);
 
     var Matches = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]).Match(ToParse);
 

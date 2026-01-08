@@ -28,7 +28,7 @@ namespace LineParser.CucumberExpressions;
 public class CucumberExpressionToExpressionMapper<Scope, Meaning>(MatchScopeSpace<Scope> ScopeSpace)
   where Scope : MatchScope<Scope>
 {
-  readonly Factory<Scope> Factory = ScopeSpace.Get().PatternFactory();
+  readonly Factory<Scope> Factory = ScopeSpace.GetFactory();
   readonly CucumberExpressionParser Parser = new();
 
   public Pattern<Scope> Map(
