@@ -28,7 +28,7 @@ namespace Specifications;
 using StringScope = SupplyAndDemandScope<string>;
 
 [TestClass]
-public class RecursiveMatcherBehaviors
+public class RecursiveExpressionBehaviors
 {
   ExpressionFactory<StringScope, object> ExpressionFactory = null!;
 
@@ -43,14 +43,13 @@ public class RecursiveMatcherBehaviors
   {
     var InnerScope = Any.String();
     var OuterScope = Any.String();
-    var Before = Any.String();
     var MatchedStub = Any.String();
-    var ToParse = Before + MatchedStub + Any.String();
+    var ToParse = MatchedStub + Any.String();
     var Recursive = ExpressionFactory.CreateRecursive(StringScope.Demand(InnerScope));
     var Constant = ExpressionFactory.CreateConstant(MatchedStub);
     var Matcher = TestMatcherFactory.CreateFromRegistryWithoutMeaning([
       (StringScope.Supply(InnerScope), Constant),
-      (StringScope.For(OuterScope),  Recursive)
+      (StringScope.Supply(OuterScope),  Recursive)
     ]);
 
     var Actual = Matcher.Match(ToParse, new(), StringScope.Demand(OuterScope)).Select(M => M.Match);

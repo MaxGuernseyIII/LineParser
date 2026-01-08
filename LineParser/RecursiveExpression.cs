@@ -5,6 +5,6 @@ sealed class RecursiveExpression<Scope, Meaning>(Scope Demand) : Expression<Scop
 {
   public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry, MatchExecutionContext Context)
   {
-    yield break;
+    return Reentry.Match(ToMatch, Context, Demand).Select(M => M.Match);
   }
 }
