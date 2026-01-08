@@ -48,6 +48,6 @@ sealed class CompositePattern<ScopeImplementation>(IEnumerable<Pattern<ScopeImpl
 
   public TResult Query<TResult>(GraphQuery<ScopeImplementation, TResult> Query)
   {
-    throw new NotImplementedException();
+    return Query.QuerySequence(Patterns);
   }
 }

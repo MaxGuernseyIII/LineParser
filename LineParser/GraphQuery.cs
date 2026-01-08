@@ -32,4 +32,11 @@ public interface GraphQuery<in TScope, out TResult>
   /// </summary>
   /// <returns>The result of the query.</returns>
   TResult QueryAnything();
+
+  /// <summary>
+  /// Invoked when a node represents a series of sequential steps.
+  /// </summary>
+  /// <param name="Steps">The steps.</param>
+  /// <returns>The result of the query.</returns>
+  TResult QuerySequence(IEnumerable<Pattern<TScope>> Steps);
 }

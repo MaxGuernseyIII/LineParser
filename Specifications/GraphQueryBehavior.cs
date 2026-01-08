@@ -40,8 +40,7 @@ public class GraphQueryBehavior
   public void MatcherTreatsPatternsAsAlternatives()
   {
     var Matcher = Factory.Matcher([
-      Factory.Constant(""),
-      Factory.Constant("")
+      new MockPattern<NullScope>(), new MockPattern<NullScope>()
     ]);
 
     var Actual = Matcher.Query(new TestGraphQuery<NullScope, IEnumerable<Pattern<NullScope>>>()
@@ -56,8 +55,7 @@ public class GraphQueryBehavior
   public void ParallelTreatsPatternsAsAlternatives()
   {
     IEnumerable<Pattern<NullScope>> Patterns = [
-      Factory.Constant(""),
-      Factory.Constant("")
+      new MockPattern<NullScope>(), new MockPattern<NullScope>()
     ];
     var Node = Factory.Parallel(Patterns);
 
@@ -108,5 +106,23 @@ public class GraphQueryBehavior
     });
 
     Actual.ShouldBe(1);
+  }
+
+  [TestMethod]
+  public void Sequence()
+  {
+    IEnumerable<Pattern<NullScope>> Patterns =
+    [
+      new MockPattern<NullScope>(), new MockPattern<NullScope>()
+    ];
+
+    var Node = Factory.Sequence(Patterns);
+
+    var Actual = Node.Query(new TestGraphQuery<NullScope, IEnumerable<Pattern<NullScope>>>()
+    {
+      OnQuerySequence = P => P
+    });
+
+    Actual.ShouldBe(Patterns);
   }
 }
