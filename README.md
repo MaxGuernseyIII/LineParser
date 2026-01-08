@@ -12,93 +12,77 @@ Reqnroll currently depends on the cucumber expressions package. That package is 
 
 Start by adding the `LineParser` and possibly the `LineParser.CucumberExpressions` package to your project.
 
-Then create an expression:
+Then create an a pattern:
 
 ```csharp
-var ExpressionFactory = MatchScopeSpaces.Null.GetFactory();
-var MeatFinder = ExpressionFactory.CreateConstant("meat");
+    var Factory = MatchScopeSpaces.Null.GetFactory();
+    var MeatPattern = Factory.Constant("meat");
 ```
-
-An expression is a definition of one possible pattern.
 
 After that, package the expression into a matcher:
 
 ```csharp
-var Matcher = MatcherFactory.CreateFromExpressions([
-  (MeatFinder, new object())
-]);
+    var Matcher = Factory.Matcher([MeatPattern]);
 ```
 
 Then use the matcher to scan a string...
 
 ```csharp
-// will return []
-var CheeseMatches = Matcher.ExactMatch("cheese");
-
-// will return an enumerable with one match and no captures.
-var MeatMatches = Matcher.ExactMatch("meat");
+    Matcher.ExactMatch("meat").Count().ShouldBe(1);
+    Matcher.ExactMatch("cheese").Count().ShouldBe(0);
 ```
 
 The return value of the `Matcher.ExactMatch` is an `IEnumerable` of `MatchWithMeaning<Meaning>`. When a pattern matches, it supplies all of possible matches that apply. Therefore: If no patterns match, the result will be empty and if there are multiple syntactically-valid interpretations, the result will have more than one entry.
 
 ## Adding Meaning
 
-When defining the expressions in a matcher, you pass a tuple for each pattern. The first parameter of the tuple is the pattern itself. The second is an arbirtary token of meaning.
+Patterns have the ability to be associated with an arbitrary object that assigns a meaning to each pattern. You're not stuck using `object`s as opaque cookies, either.
 
-You're not stuck using `object`s as opaque cookies, either. You can control the type used to define meaning with the `Meaning` type parameter, which is the second type parameter in all the generic structures throughout `LineParser`.
+You can control the type used to define meaning with the `Meaning` type parameter.
 
-For instance, if you have an interface called `IBinder` that you want to be able to use to consume a match, you can, change how you construct your `ExpressionFactory`:
+For instance, if you have a class called `Binder` that you want to be able to use to consume a match, change how you construct your `Matcher` to drive inference of the `Meaning` type and supply appropriate meaning objects:
 
 ```csharp
-var ExpressionFactory = new ExpressionFactory<NullScope, IBinder>();
-var MeatFinder = ExpressionFactory.CreateConstant("meat");
-var TheMeaningOfMeat = BinderFactory.ForMeat();
+    var TheMeaningOfMeat = BinderFactory.ForMeat();
+    var Matcher = Factory.Matcher([(MeatPattern, TheMeaningOfMeat)]);
 ```
 
-Then pass in the meaning object when constructing your matcher:
+The resulting match will carry the associated meaning.
 
 ```csharp
-var Matcher = MatcherFactory.CreateFromExpressions([
-  (MeatFinder, TheMeaningOfMeat)
-]);
+    Matcher.ExactMatch("meat").Single().Meaning.ShouldBeSameAs(TheMeaningOfMeat);
 ```
 
 If the matcher finds something that matches the pattern, it will return `TheMeaningOfMeat` along with the associated match.
 
 ## Defining Scopes
 
-The first type parameter is `Scope`. This is used to constrain the set of possible expressions in a matcher when executing a query. For instance, if you have a `Matcher` loaded with patterns for both statements and parameters, you might want to run a match that only finds statements.
+Patterns can also be associated with scopes, which are used to constrain the set of possible expressions in a matcher when executing a query.
+
+For instance, if you have a `Matcher` loaded with patterns for both statements and parameters, you might want to run a match that only finds statements.
 
 (Don't worry, the statemetns will still be allowed to find subexpressions. But even saying that is a bit of a digression.)
 
-While Scope is constrainded to implement the interface `MatchScope<Scope>`, you don't have to implement your own kind of scope. There is a class called `SupplyAndDemandScope<T>` that solves most problems. If you need multiple dimensions of scope, there's also a `CompositeScope<L, R>` that solves that problem for you.
+All scopes must implement the interface `MatchScope<Scope>`, but you don't have to implement your own kind of scope. There is a class called `SupplyAndDemandScope<T>` that solves most problems. If you need multiple dimensions of scope, there's also a `CompositeScope<L, R>` that solves that problem for you.
 
-Update your sample code to use the built in scopes. Start by adding a using...
+Update your sample code to use the built in scopes. Start by adding a using a different scope space to make your factory.
 
 ```csharp
-using StringScope = SupplyAndDemandScope<string>;
+    var ScopeSpace = MatchScopeSpaces.SupplyAndDemand<string>();
+    var Factory = ScopeSpace.GetFactory();
 ```
 
-Then change how you construct your factory and matcher:
+Then change how you construct your matcher:
 
 ```csharp
-var ExpressionFactory = new ExpressionFactory<StringScope, IBinder>();
-
-// ...
-
-var Matcher = MatcherFactory.CreateFromRegistry([
-  (StringScope.Supply("food"), MeatFinder, TheMeaningOfMeat),
-]);
+    var Matcher = Factory.Matcher([(ScopeSpace.Supply("food"), MeatPattern, TheMeaningOfMeat)]);
 ```
 
 To constrain how the matcher works, pass in a scope to `ExactMatch`...
 
 ```csharp
-// finds the expression
-var MeatMatches = Matcher.ExactMatch("meat", StringScope.Demand("food"));
-
-// does not search for the expression because it is out of scope
-var MeatMatches = Matcher.ExactMatch("meat", StringScope.Demand("airplanes"));
+    Matcher.ExactMatch("meat", ScopeSpace.Demand("food")).Count().ShouldBe(1);
+    Matcher.ExactMatch("meat", ScopeSpace.Demand("airplanes")).Count().ShouldBe(0);
 ```
 
 ## More Sophisticated Expressions
@@ -108,38 +92,39 @@ If all you wanted to do was check equivalence, you'd use `==` or `object.Equals(
 You can construct more sophisticated graphs:
 
 ```csharp
-var ExpressionFactory = new ExpressionFactory<NullScope, string>();
-
-var Matcher = MatcherFactory.CreateFromExpressions([
-  (ExpressionFactory.CreateComposite([
-      ExpressionFactory.CreateConstant("user \""),
-      ExpressionFactory.CreateCapturing(
-        ExpressionFactory.CreateForRegex(new("(?:[^\"]|\"\")*"))),
-      ExpressionFactory.CreateConstant("\"")
-    ]),
-    "username")
-]);
-
-var Matches = Matcher.ExactMatch("user \"jumper9\"");
-Matches.ShouldBe([
-  new()
-  {
-    Match = new()
-    {
-      Matched = "user \"jumper9\"",
-      Remainder = "",
-      Captured =
+    var ExpressionFactory = MatchScopeSpaces.Null.GetFactory();
+    var Matcher = ExpressionFactory.Matcher(
       [
-        new()
+        (ExpressionFactory.Composite([
+            ExpressionFactory.Constant("user \""),
+            ExpressionFactory.Capturing(
+              ExpressionFactory.Regex(new("(?:[^\"]|\"\")*"))),
+            ExpressionFactory.Constant("\"")
+          ]),
+          "username")
+      ]);
+
+    var Matches = Matcher.ExactMatch("user \"jumper9\"");
+
+    Matches.ShouldBe([
+      new()
+      {
+        Match = new()
         {
-          At = 6,
-          Value = "jumper9"
-        }
-      ]
-    },
-    Meaning = "username"
-  }
-]);
+          Matched = "user \"jumper9\"",
+          Remainder = "",
+          Captured =
+          [
+            new()
+            {
+              At = 6,
+              Value = "jumper9"
+            }
+          ]
+        },
+        Meaning = "username"
+      }
+    ]);
 ```
 
 That only barely scratches the surface of how an expression can be structured.

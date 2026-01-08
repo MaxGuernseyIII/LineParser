@@ -26,6 +26,8 @@ namespace LineParser;
 
 public class Factory<Scope>(MatchScopeSpace<Scope> ScopeSpace) where Scope : MatchScope<Scope>
 {
+  public MatchScopeSpace<Scope> ScopeSpace { get; } = ScopeSpace;
+
   public Matcher<Scope, object> Matcher(
     IEnumerable<Pattern<Scope>> Patterns)
   {

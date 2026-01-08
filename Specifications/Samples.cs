@@ -28,20 +28,57 @@ namespace Specifications;
 [TestClass]
 public class Samples
 {
-  //[TestMethod]
-  //public void FirstStep()
-  //{
-  //  var Patterns = MatchScopeSpaces.Null.Get().Factory();
-  //  var MeatPattern = Patterns.Constant("meat");
-  //  var Matcher = MatcherFactory.CreateFromPatterns([MeatPattern])
-  //}
+  [TestMethod]
+  public void FirstStep()
+  {
+    var Factory = MatchScopeSpaces.Null.GetFactory();
+    var MeatPattern = Factory.Constant("meat");
+    var Matcher = Factory.Matcher([MeatPattern]);
+
+    Matcher.ExactMatch("meat").Count().ShouldBe(1);
+    Matcher.ExactMatch("cheese").Count().ShouldBe(0);
+  }
+
+  class Binder
+  {
+  }
+
+  static class BinderFactory
+  {
+    public static Binder ForMeat()
+    {
+      return new();
+    }
+  }
+
+  [TestMethod]
+  public void AddingMeaning()
+  {
+    var Factory = MatchScopeSpaces.Null.GetFactory();
+    var MeatPattern = Factory.Constant("meat");
+    var TheMeaningOfMeat = BinderFactory.ForMeat();
+    var Matcher = Factory.Matcher([(MeatPattern, TheMeaningOfMeat)]);
+
+    Matcher.ExactMatch("meat").Single().Meaning.ShouldBeSameAs(TheMeaningOfMeat);
+  }
+
+  [TestMethod]
+  public void AddingScope()
+  {
+    var ScopeSpace = MatchScopeSpaces.SupplyAndDemand<string>();
+    var Factory = ScopeSpace.GetFactory();
+    var MeatPattern = Factory.Constant("meat");
+    var TheMeaningOfMeat = BinderFactory.ForMeat();
+    var Matcher = Factory.Matcher([(ScopeSpace.Supply("food"), MeatPattern, TheMeaningOfMeat)]);
+
+    Matcher.ExactMatch("meat", ScopeSpace.Demand("food")).Count().ShouldBe(1);
+    Matcher.ExactMatch("meat", ScopeSpace.Demand("airplanes")).Count().ShouldBe(0);
+  }
 
   [TestMethod]
   public void MatchWithConditionals()
   {
-    var ScopeSpace = MatchScopeSpaces.Null;
-    var ExpressionFactory = ScopeSpace.GetFactory();
-
+    var ExpressionFactory = MatchScopeSpaces.Null.GetFactory();
     var Matcher = ExpressionFactory.Matcher(
       [
         (ExpressionFactory.Composite([
@@ -54,6 +91,7 @@ public class Samples
       ]);
 
     var Matches = Matcher.ExactMatch("user \"jumper9\"");
+
     Matches.ShouldBe([
       new()
       {
