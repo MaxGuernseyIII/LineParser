@@ -41,7 +41,12 @@ public readonly record struct Match
 
   public static Match operator +(Match Left, Match Right) => new()
   {
-    Matched = Left.Matched + Right.Matched, Remainder = Right.Remainder, Captured = [..Left.Captured, ..Right.Captured]
+    Matched = Left.Matched + Right.Matched,
+    Remainder = Right.Remainder, 
+    Captured = [
+      ..Left.Captured, 
+      ..Right.Captured.Select(C => C with { At = Left.Matched.Length + C.At })
+    ]
   };
 
   public bool Equals(Match Other)
