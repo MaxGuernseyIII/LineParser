@@ -28,18 +28,18 @@ using System;
 namespace System.Runtime.CompilerServices
 {
     // Needed for `init` setters
-    public static class IsExternalInit { }
+    static class IsExternalInit { }
 
     // Needed for `required` members (C# 11)
     [AttributeUsage(AttributeTargets.All, AllowMultiple = true, Inherited = false)]
-    public sealed class CompilerFeatureRequiredAttribute : Attribute
+    sealed class CompilerFeatureRequiredAttribute : Attribute
     {
         public CompilerFeatureRequiredAttribute(string featureName) { }
     }
 
     // Some toolchains expect this one in this namespace too
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false, Inherited = false)]
-    public sealed class RequiredMemberAttribute : Attribute
+    sealed class RequiredMemberAttribute : Attribute
     {
         public RequiredMemberAttribute() { }
     }
@@ -55,14 +55,14 @@ namespace System.Diagnostics.CodeAnalysis
         AttributeTargets.Property,
         AllowMultiple = false,
         Inherited = false)]
-    public sealed class RequiredMemberAttribute : Attribute
+    sealed class RequiredMemberAttribute : Attribute
     {
         public RequiredMemberAttribute() { }
     }
 
     // Marks ctors that set all required members
     [AttributeUsage(AttributeTargets.Constructor, AllowMultiple = false, Inherited = false)]
-    public sealed class SetsRequiredMembersAttribute : Attribute
+    sealed class SetsRequiredMembersAttribute : Attribute
     {
         public SetsRequiredMembersAttribute() { }
     }
