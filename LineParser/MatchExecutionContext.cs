@@ -26,10 +26,10 @@ public class MatchExecutionContext
 {
   readonly Stack<(string ToMatch, object RecursiveExpression)> Frames = [];
 
-  public IEnumerable<Match> DoRecursive<Meaning, Scope>(string ToMatch, Expression<Scope, Meaning> RecursiveExpression,
+  public IEnumerable<Match> DoRecursive<Meaning, Scope>(string ToMatch, Pattern<Scope, Meaning> RecursivePattern,
     Func<IEnumerable<Match>> ToDo) where Scope : MatchScope<Scope>
   {
-    var Key = (ToMatch, RecursiveExpression);
+    var Key = (ToMatch, RecursiveExpression: RecursivePattern);
 
     if (Frames.Contains(Key))
       yield break;

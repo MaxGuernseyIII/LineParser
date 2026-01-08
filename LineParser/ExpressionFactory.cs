@@ -27,38 +27,38 @@ namespace LineParser;
 public class ExpressionFactory<Scope, Meaning>
   where Scope : MatchScope<Scope>
 {
-  public Expression<Scope, Meaning> CreateRecursive(Scope Demand)
+  public Pattern<Scope, Meaning> CreateRecursive(Scope Demand)
   {
-    return new RecursiveExpression<Scope, Meaning>(Demand);
+    return new RecursivePattern<Scope, Meaning>(Demand);
   }
 
-  public Expression<Scope, Meaning> CreateCapturing(Expression<Scope, Meaning> ToCaptureExpression)
+  public Pattern<Scope, Meaning> CreateCapturing(Pattern<Scope, Meaning> ToCapturePattern)
   {
-    return new CapturingExpression<Scope, Meaning>(ToCaptureExpression);
+    return new CapturingPattern<Scope, Meaning>(ToCapturePattern);
   }
 
-  public Expression<Scope, Meaning> CreateComposite(IEnumerable<Expression<Scope, Meaning>> Expressions)
+  public Pattern<Scope, Meaning> CreateComposite(IEnumerable<Pattern<Scope, Meaning>> Expressions)
   {
-    return new CompositeExpression<Scope, Meaning>(Expressions);
+    return new CompositePattern<Scope, Meaning>(Expressions);
   }
 
-  public Expression<Scope, Meaning> CreateConstant(string Value)
+  public Pattern<Scope, Meaning> CreateConstant(string Value)
   {
-    return new ConstantExpression<Scope, Meaning>(Value);
+    return new ConstantPattern<Scope, Meaning>(Value);
   }
 
-  public Expression<Scope, Meaning> CreateForRegex(Regex Pattern)
+  public Pattern<Scope, Meaning> CreateForRegex(Regex Pattern)
   {
-    return new RegexExpression<Scope, Meaning>(Pattern);
+    return new RegexPattern<Scope, Meaning>(Pattern);
   }
 
-  public Expression<Scope, Meaning> CreateAlternatives(IEnumerable<Expression<Scope, Meaning>> Expressions)
+  public Pattern<Scope, Meaning> CreateAlternatives(IEnumerable<Pattern<Scope, Meaning>> Expressions)
   {
     return new Alternatives<Scope, Meaning>(Expressions);
   }
 
-  public Expression<Scope, Meaning> CreateMatchAnything()
+  public Pattern<Scope, Meaning> CreateMatchAnything()
   {
-    return new AnythingExpression<Scope, Meaning>();
+    return new AnythingPattern<Scope, Meaning>();
   }
 }

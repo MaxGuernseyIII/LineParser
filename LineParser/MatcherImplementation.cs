@@ -26,7 +26,7 @@ namespace LineParser;
 
 class MatcherImplementation<Scope, Meaning>(
   MatchScopeSpace<Scope> ScopeSpace,
-  ImmutableArray<(Scope Scope, Expression<Scope, Meaning> Expression, Meaning Meaning)> Registry)
+  ImmutableArray<(Scope Scope, Pattern<Scope, Meaning> Expression, Meaning Meaning)> Registry)
   : Matcher<Scope, Meaning>
   where Scope : MatchScope<Scope>
 {

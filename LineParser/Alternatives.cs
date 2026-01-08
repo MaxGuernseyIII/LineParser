@@ -22,8 +22,8 @@
 
 namespace LineParser;
 
-sealed class Alternatives<Scope, Meaning>(IEnumerable<Expression<Scope, Meaning>> Expressions)
-  : Expression<Scope, Meaning> where Scope : MatchScope<Scope>
+sealed class Alternatives<Scope, Meaning>(IEnumerable<Pattern<Scope, Meaning>> Expressions)
+  : Pattern<Scope, Meaning> where Scope : MatchScope<Scope>
 {
   public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry,
     MatchExecutionContext Context)

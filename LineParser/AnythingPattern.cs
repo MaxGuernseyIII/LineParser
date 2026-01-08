@@ -20,17 +20,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using LineParser;
+namespace LineParser;
 
-namespace Specifications;
-
-sealed class MockExpression<Scope, Meaning> : Expression<Scope, Meaning> where Scope : MatchScope<Scope>
+public class AnythingPattern<Scope, Meaning> : Pattern<Scope, Meaning> where Scope : MatchScope<Scope>
 {
-  public Dictionary<string, IEnumerable<Match>> Results = [];
-
   public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry,
     MatchExecutionContext Context)
   {
-    return !Results.TryGetValue(ToMatch, out var Result) ? [] : Result;
+    return Enumerable.Range(0, ToMatch.Length + 1).Reverse().Select(Split => new Match
+    {
+      Matched = ToMatch.Substring(0, Split),
+      Remainder = ToMatch.Substring(Split),
+      Captured = []
+    });
   }
 }

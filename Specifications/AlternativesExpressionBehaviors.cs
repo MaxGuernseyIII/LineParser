@@ -43,14 +43,14 @@ public class AlternativesExpressionBehaviors
     var Option1Matches = Any.Matches();
     var Option2Matches = Any.Matches();
     var Alternatives = ExpressionFactory.CreateAlternatives([
-      new MockExpression<NullScope, object>
+      new MockPattern<NullScope, object>
       {
         Results =
         {
           {ToMatch, Option1Matches}
         }
       },
-      new MockExpression<NullScope, object>
+      new MockPattern<NullScope, object>
       {
         Results =
         {

@@ -52,16 +52,16 @@ public sealed class CompositeExpressionBehaviors
 
     var FirstMatch0 = FirstMatches[0];
     var FirstMatch1 = FirstMatches[1];
-    IEnumerable<Expression<NullScope, object>> Expressions =
+    IEnumerable<Pattern<NullScope, object>> Expressions =
     [
-      new MockExpression<NullScope, object>
+      new MockPattern<NullScope, object>
       {
         Results =
         {
           {OverallString, FirstMatches}
         }
       },
-      new MockExpression<NullScope, object>
+      new MockPattern<NullScope, object>
       {
         Results =
         {
@@ -69,7 +69,7 @@ public sealed class CompositeExpressionBehaviors
           {FirstMatch1.Remainder, MatchesForRemainder1}
         }
       },
-      new MockExpression<NullScope, object>
+      new MockPattern<NullScope, object>
       {
         Results = MatchesForRemainder0.Concat(MatchesForRemainder1).Select(R => R.Remainder).Distinct()
           .ToDictionary(Key => Key, IEnumerable<Match> (_) => FinalMatches)

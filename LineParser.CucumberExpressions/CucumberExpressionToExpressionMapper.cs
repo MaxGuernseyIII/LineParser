@@ -30,7 +30,7 @@ public class CucumberExpressionToExpressionMapper<Scope, Meaning> where Scope : 
   readonly ExpressionFactory<Scope, Meaning> ExpressionFactory = new();
   readonly CucumberExpressionParser Parser = new();
 
-  public Expression<Scope, Meaning> Map(
+  public Pattern<Scope, Meaning> Map(
     string Expression,
     Func<string, Scope> GetScopeForString)
   {
@@ -40,9 +40,9 @@ public class CucumberExpressionToExpressionMapper<Scope, Meaning> where Scope : 
     return ConvertNodesToExpression(Tree.Nodes, GetScopeForString);
   }
 
-  Expression<Scope, Meaning> ConvertNodesToExpression(IEnumerable<Node> Nodes, Func<string, Scope> ScopeForString)
+  Pattern<Scope, Meaning> ConvertNodesToExpression(IEnumerable<Node> Nodes, Func<string, Scope> ScopeForString)
   {
-    var Parts = new List<Expression<Scope, Meaning>>();
+    var Parts = new List<Pattern<Scope, Meaning>>();
 
     foreach (var Node in Nodes)
       Parts.Add(Node.Type switch

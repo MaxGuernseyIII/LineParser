@@ -20,14 +20,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Text.RegularExpressions;
+
 namespace LineParser;
 
-sealed class RecursiveExpression<Scope, Meaning>(Scope Demand) : Expression<Scope, Meaning>
-  where Scope : MatchScope<Scope>
+sealed class RegexPattern<Scope, Meaning>(Regex Pattern) : Pattern<Scope, Meaning> where Scope : MatchScope<Scope>
 {
+  readonly Regex Pattern = new("^" + Pattern.ToString().TrimStart('^'), Pattern.Options);
+
   public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry,
     MatchExecutionContext Context)
   {
-    return Context.DoRecursive(ToMatch, this, () => Reentry.Match(ToMatch, Context, Demand).Select(M => M.Match));
+    var M = Pattern.Match(ToMatch);
+    if (M.Success)
+      yield return new()
+      {
+        Matched = M.Value,
+        Remainder = ToMatch.Substring(M.Value.Length),
+        Captured =
+        [
+          ..M.Groups.Cast<Group>().Skip(1).Select(C => new Match.Capture
+          {
+            At = C.Index,
+            Value = C.Value
+          })
+        ]
+      };
   }
 }

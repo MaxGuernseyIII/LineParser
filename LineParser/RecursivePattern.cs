@@ -22,16 +22,12 @@
 
 namespace LineParser;
 
-public class AnythingExpression<Scope, Meaning> : Expression<Scope, Meaning> where Scope : MatchScope<Scope>
+sealed class RecursivePattern<Scope, Meaning>(Scope Demand) : Pattern<Scope, Meaning>
+  where Scope : MatchScope<Scope>
 {
   public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry,
     MatchExecutionContext Context)
   {
-    return Enumerable.Range(0, ToMatch.Length + 1).Reverse().Select(Split => new Match
-    {
-      Matched = ToMatch.Substring(0, Split),
-      Remainder = ToMatch.Substring(Split),
-      Captured = []
-    });
+    return Context.DoRecursive(ToMatch, this, () => Reentry.Match(ToMatch, Context, Demand).Select(M => M.Match));
   }
 }

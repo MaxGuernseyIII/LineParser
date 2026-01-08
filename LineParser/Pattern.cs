@@ -20,31 +20,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Text.RegularExpressions;
-
 namespace LineParser;
 
-sealed class RegexExpression<Scope, Meaning>(Regex Pattern) : Expression<Scope, Meaning> where Scope : MatchScope<Scope>
+public interface Pattern<Scope, Meaning>
+  where Scope : MatchScope<Scope>
 {
-  readonly Regex Pattern = new("^" + Pattern.ToString().TrimStart('^'), Pattern.Options);
-
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry,
-    MatchExecutionContext Context)
-  {
-    var M = Pattern.Match(ToMatch);
-    if (M.Success)
-      yield return new()
-      {
-        Matched = M.Value,
-        Remainder = ToMatch.Substring(M.Value.Length),
-        Captured =
-        [
-          ..M.Groups.Cast<Group>().Skip(1).Select(C => new Match.Capture
-          {
-            At = C.Index,
-            Value = C.Value
-          })
-        ]
-      };
-  }
+  IEnumerable<Match> GetMatchesAtBeginningOf(
+    string ToMatch, Matcher<Scope, Meaning> Reentry, MatchExecutionContext Context);
 }
