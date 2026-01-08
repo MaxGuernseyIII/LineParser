@@ -24,6 +24,9 @@ using ScopeSelection;
 
 namespace LineParser.CucumberExpressions;
 
+/// <summary>
+/// 
+/// </summary>
 public static class FactoryExtensions
 {
   extension<Scope>(Factory<Scope> This) where Scope : Scope<Scope>
