@@ -33,7 +33,7 @@ public sealed class ConstantExpressionBehaviors
   [TestInitialize]
   public void SetUp()
   {
-    PatternFactory = new();
+    PatternFactory = MatchScopeSpaces.Null.Get().PatternFactory();
   }
 
   [TestMethod]

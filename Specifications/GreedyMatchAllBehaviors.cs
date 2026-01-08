@@ -28,12 +28,12 @@ namespace Specifications;
 [TestClass]
 public class GreedyMatchAllBehaviors
 {
-  PatternFactory<NullScope, object> PatternFactory;
+  PatternFactory<NullScope, object> PatternFactory = null!;
 
   [TestInitialize]
   public void Setup()
   {
-    PatternFactory = new();
+    PatternFactory = MatchScopeSpaces.Null.Get().PatternFactory();
   }
 
   [TestMethod]

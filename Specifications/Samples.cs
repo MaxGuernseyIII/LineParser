@@ -28,13 +28,21 @@ namespace Specifications;
 [TestClass]
 public class Samples
 {
+  //[TestMethod]
+  //public void FirstStep()
+  //{
+  //  var Patterns = MatchScopeSpaces.Null.Get().PatternFactory();
+  //  var MeatPattern = Patterns.Constant("meat");
+  //  var Matcher = MatcherFactory.CreateFromPatterns([MeatPattern])
+  //}
+
   [TestMethod]
   public void MatchWithConditionals()
   {
     var ScopeSpace = MatchScopeSpaces.Null;
     var ExpressionFactory = ScopeSpace.Get().PatternFactory<object>();
 
-    var Matcher = MatcherFactory.CreateFromExpressions(
+    var Matcher = MatcherFactory.CreateFromPatterns(
       ScopeSpace,
       [
         (ExpressionFactory.Composite([

@@ -25,9 +25,10 @@ using CucumberExpressions.Parsing;
 
 namespace LineParser.CucumberExpressions;
 
-public class CucumberExpressionToExpressionMapper<Scope, Meaning> where Scope : MatchScope<Scope>
+public class CucumberExpressionToExpressionMapper<Scope, Meaning>(MatchScopeSpace<Scope> ScopeSpace)
+  where Scope : MatchScope<Scope>
 {
-  readonly PatternFactory<Scope, Meaning> PatternFactory = new();
+  readonly PatternFactory<Scope, Meaning> PatternFactory = ScopeSpace.Get().PatternFactory<Meaning>();
   readonly CucumberExpressionParser Parser = new();
 
   public Pattern<Scope, Meaning> Map(

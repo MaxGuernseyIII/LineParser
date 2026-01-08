@@ -37,7 +37,7 @@ public class CucumberExpressionsAdapterBehaviors
     var ScopeSpace = MatchScopeSpaces.SupplyAndDemand<string>();
     var Factory = ScopeSpace.Get().PatternFactory<object>();
 
-    var Mapper = new CucumberExpressionToExpressionMapper<StringScope, object>();
+    var Mapper = new CucumberExpressionToExpressionMapper<StringScope, object>(ScopeSpace);
     var StepMeaning = new object();
     var Expression = Mapper.Map(
       "this/these is/are my/our cucumber expression(s), which we use for {Purpose} and other things.",

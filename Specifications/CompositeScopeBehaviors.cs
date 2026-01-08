@@ -29,8 +29,8 @@ namespace Specifications;
 public class CompositeScopeBehaviors
 {
   MatchScopeSpace<CompositeScope<MockScope1, MockScope2>> Space = null!;
-  MockScope1.Space Space1;
-  MockScope2.Space Space2;
+  MockScope1.Space Space1 = null!;
+  MockScope2.Space Space2 = null!;
 
   [TestInitialize]
   public void Setup()

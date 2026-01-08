@@ -41,6 +41,6 @@ static class TestMatcherFactory
     IEnumerable<Pattern<NullScope, object>> Expressions
   )
   {
-    return MatcherFactory.CreateFromExpressions(MatchScopeSpaces.Null, Expressions.Select(E => (E, new object())));
+    return MatcherFactory.CreateFromPatterns(MatchScopeSpaces.Null, Expressions.Select(E => (E, new object())));
   }
 }

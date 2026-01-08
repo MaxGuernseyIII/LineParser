@@ -24,8 +24,7 @@ using System.Text.RegularExpressions;
 
 namespace LineParser;
 
-public class PatternFactory<Scope, Meaning>
-  where Scope : MatchScope<Scope>
+public class PatternFactory<Scope, Meaning>(MatchScopeSpace<Scope> ScopeSpace) where Scope : MatchScope<Scope>
 {
   public Pattern<Scope, Meaning> Anything()
   {

@@ -33,7 +33,7 @@ public class AlternativesExpressionBehaviors
   [TestInitialize]
   public void Setup()
   {
-    PatternFactory = new();
+    PatternFactory = MatchScopeSpaces.Null.Get().PatternFactory();
   }
 
   [TestMethod]
