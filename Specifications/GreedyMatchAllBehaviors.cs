@@ -28,12 +28,12 @@ namespace Specifications;
 [TestClass]
 public class GreedyMatchAllBehaviors
 {
-  ExpressionFactory<NullScope, object> ExpressionFactory;
+  PatternFactory<NullScope, object> PatternFactory;
 
   [TestInitialize]
   public void Setup()
   {
-    ExpressionFactory = new();
+    PatternFactory = new();
   }
 
   [TestMethod]
@@ -41,7 +41,7 @@ public class GreedyMatchAllBehaviors
   {
     var ToMatch = Any.String();
     var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([
-      ExpressionFactory.CreateMatchAnything()
+      PatternFactory.Anything()
     ]);
 
     var Actual = Matcher.Match(ToMatch).Select(M => M.Match);

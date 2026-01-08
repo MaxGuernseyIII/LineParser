@@ -37,11 +37,11 @@ public class Samples
     var Matcher = MatcherFactory.CreateFromExpressions(
       ScopeSpace,
       [
-        (ExpressionFactory.CreateComposite([
-            ExpressionFactory.CreateConstant("user \""),
-            ExpressionFactory.CreateCapturing(
-              ExpressionFactory.CreateForRegex(new("(?:[^\"]|\"\")*"))),
-            ExpressionFactory.CreateConstant("\"")
+        (ExpressionFactory.Composite([
+            ExpressionFactory.Constant("user \""),
+            ExpressionFactory.Capturing(
+              ExpressionFactory.Regex(new("(?:[^\"]|\"\")*"))),
+            ExpressionFactory.Constant("\"")
           ]),
           "username")
       ]);

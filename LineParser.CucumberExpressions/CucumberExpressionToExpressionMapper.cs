@@ -27,7 +27,7 @@ namespace LineParser.CucumberExpressions;
 
 public class CucumberExpressionToExpressionMapper<Scope, Meaning> where Scope : MatchScope<Scope>
 {
-  readonly ExpressionFactory<Scope, Meaning> ExpressionFactory = new();
+  readonly PatternFactory<Scope, Meaning> PatternFactory = new();
   readonly CucumberExpressionParser Parser = new();
 
   public Pattern<Scope, Meaning> Map(
@@ -36,7 +36,6 @@ public class CucumberExpressionToExpressionMapper<Scope, Meaning> where Scope : 
   {
     var Tree = Parser.Parse(Expression);
 
-    //return ExpressionFactory.CreateConstant(Expression);
     return ConvertNodesToExpression(Tree.Nodes, GetScopeForString);
   }
 
@@ -47,23 +46,23 @@ public class CucumberExpressionToExpressionMapper<Scope, Meaning> where Scope : 
     foreach (var Node in Nodes)
       Parts.Add(Node.Type switch
       {
-        NodeType.TEXT_NODE => ExpressionFactory.CreateConstant(Node.Text),
-        NodeType.OPTIONAL_NODE => ExpressionFactory.CreateAlternatives(
+        NodeType.TEXT_NODE => PatternFactory.Constant(Node.Text),
+        NodeType.OPTIONAL_NODE => PatternFactory.Alternatives(
         [
           ConvertNodesToExpression(Node.Nodes, ScopeForString),
-          ExpressionFactory.CreateConstant("")
+          PatternFactory.Constant("")
         ]),
 
-        NodeType.ALTERNATION_NODE => ExpressionFactory.CreateAlternatives(
+        NodeType.ALTERNATION_NODE => PatternFactory.Alternatives(
           Node.Nodes.Select(N => ConvertNodesToExpression(N.Nodes, ScopeForString))
         ),
         NodeType.ALTERNATIVE_NODE => ConvertNodesToExpression(Node.Nodes, ScopeForString),
-        NodeType.PARAMETER_NODE => ExpressionFactory.CreateCapturing(
-          ExpressionFactory.CreateRecursive(ScopeForString(Node.Text))),
+        NodeType.PARAMETER_NODE => PatternFactory.Capturing(
+          PatternFactory.Recursive(ScopeForString(Node.Text))),
         NodeType.EXPRESSION_NODE => ConvertNodesToExpression(Node.Nodes, ScopeForString),
         _ => throw new ArgumentOutOfRangeException($"Unknown node type: {Node.Type}")
       });
 
-    return ExpressionFactory.CreateComposite(Parts);
+    return PatternFactory.Composite(Parts);
   }
 }

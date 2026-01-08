@@ -50,7 +50,7 @@ public static class MatchScopeSpaces
 
   public struct Related<Scope>(MatchScopeSpace<Scope> ScopeSpace) where Scope : MatchScope<Scope>
   {
-    public ExpressionFactory<Scope, Meaning> PatternFactory<Meaning>()
+    public PatternFactory<Scope, Meaning> PatternFactory<Meaning>()
     {
       return new();
     }

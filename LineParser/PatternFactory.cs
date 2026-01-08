@@ -24,41 +24,41 @@ using System.Text.RegularExpressions;
 
 namespace LineParser;
 
-public class ExpressionFactory<Scope, Meaning>
+public class PatternFactory<Scope, Meaning>
   where Scope : MatchScope<Scope>
 {
-  public Pattern<Scope, Meaning> CreateRecursive(Scope Demand)
+  public Pattern<Scope, Meaning> Anything()
   {
-    return new RecursivePattern<Scope, Meaning>(Demand);
+    return new AnythingPattern<Scope, Meaning>();
   }
 
-  public Pattern<Scope, Meaning> CreateCapturing(Pattern<Scope, Meaning> ToCapturePattern)
-  {
-    return new CapturingPattern<Scope, Meaning>(ToCapturePattern);
-  }
-
-  public Pattern<Scope, Meaning> CreateComposite(IEnumerable<Pattern<Scope, Meaning>> Expressions)
-  {
-    return new CompositePattern<Scope, Meaning>(Expressions);
-  }
-
-  public Pattern<Scope, Meaning> CreateConstant(string Value)
+  public Pattern<Scope, Meaning> Constant(string Value)
   {
     return new ConstantPattern<Scope, Meaning>(Value);
   }
 
-  public Pattern<Scope, Meaning> CreateForRegex(Regex Pattern)
+  public Pattern<Scope, Meaning> Composite(IEnumerable<Pattern<Scope, Meaning>> Expressions)
   {
-    return new RegexPattern<Scope, Meaning>(Pattern);
+    return new CompositePattern<Scope, Meaning>(Expressions);
   }
 
-  public Pattern<Scope, Meaning> CreateAlternatives(IEnumerable<Pattern<Scope, Meaning>> Expressions)
+  public Pattern<Scope, Meaning> Alternatives(IEnumerable<Pattern<Scope, Meaning>> Expressions)
   {
     return new Alternatives<Scope, Meaning>(Expressions);
   }
 
-  public Pattern<Scope, Meaning> CreateMatchAnything()
+  public Pattern<Scope, Meaning> Capturing(Pattern<Scope, Meaning> ToCapturePattern)
   {
-    return new AnythingPattern<Scope, Meaning>();
+    return new CapturingPattern<Scope, Meaning>(ToCapturePattern);
+  }
+
+  public Pattern<Scope, Meaning> Recursive(Scope Demand)
+  {
+    return new RecursivePattern<Scope, Meaning>(Demand);
+  }
+
+  public Pattern<Scope, Meaning> Regex(Regex Pattern)
+  {
+    return new RegexPattern<Scope, Meaning>(Pattern);
   }
 }

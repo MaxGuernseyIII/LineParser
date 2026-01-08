@@ -47,8 +47,8 @@ public class CucumberExpressionsAdapterBehaviors
       ScopeSpace,
       [
         (ScopeSpace.Supply("type:step"), Expression, StepMeaning),
-        (ScopeSpace.Supply("parameter:Purpose"), Factory.CreateConstant("testing"), null!),
-        (ScopeSpace.Supply("parameter:Purpose"), Factory.CreateConstant("important work"), null!)
+        (ScopeSpace.Supply("parameter:Purpose"), Factory.Constant("testing"), null!),
+        (ScopeSpace.Supply("parameter:Purpose"), Factory.Constant("important work"), null!)
       ]);
 
     var CucumberExpression = "this is my cucumber expression, which we use for testing and other things.";
