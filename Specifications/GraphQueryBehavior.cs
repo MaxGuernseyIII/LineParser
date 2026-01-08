@@ -68,4 +68,18 @@ public class GraphQueryBehavior
 
     Actual.ShouldBe(Patterns);
   }
+
+  [TestMethod]
+  public void ConstantQuery()
+  {
+    var Content = Any.String();
+    var Node = Factory.Constant(Content);
+
+    var Actual = Node.Query(new TestGraphQuery<NullScope, string>()
+    {
+      OnQueryConstant = C => C
+    });
+
+    Actual.ShouldBe(Content);
+  }
 }

@@ -38,6 +38,6 @@ sealed class ConstantPattern<ScopeImplementation>(string Value)
 
   public TResult Query<TResult>(GraphQuery<ScopeImplementation, TResult> Query)
   {
-    throw new NotImplementedException();
+    return Query.QueryConstant(Value);
   }
 }

@@ -10,6 +10,13 @@ public interface GraphQuery<in TScope, out TResult>
   /// Invoked when a node represents a set of parallel alternatives.
   /// </summary>
   /// <param name="Alternatives"></param>
-  /// <returns></returns>
+  /// <returns>The result of the query.</returns>
   TResult QueryAlternativePatterns(IEnumerable<Pattern<TScope>> Alternatives);
+
+  /// <summary>
+  /// Invoked when a node represents a constant string.
+  /// </summary>
+  /// <param name="Content">The constant string.</param>
+  /// <returns>The result of the query.</returns>
+  TResult QueryConstant(string Content);
 }
