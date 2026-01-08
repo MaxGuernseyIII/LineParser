@@ -22,14 +22,25 @@
 
 namespace LineParser;
 
+/// <summary>
+/// Stores internal, temporary state for performing a match operation.
+/// </summary>
 public class MatchExecutionContext
 {
   readonly Stack<(string ToMatch, object RecursiveExpression)> Frames = [];
 
-  public IEnumerable<Match> DoRecursive<Scope>(
+  /// <summary>
+  /// Ensures that a match operation does not invoke itself.
+  /// </summary>
+  /// <typeparam name="ScopeImplementation">The type of <see cref="Scope{Implementation}"/> that governs any given match operation.</typeparam>
+  /// <param name="ToMatch">The string currently being matched.</param>
+  /// <param name="RecursivePattern">The <see cref="Pattern{ScopeImplementation}"/> that is making the recursive call.</param>
+  /// <param name="ToDo"></param>
+  /// <returns>The result of the potentially-recursive call.</returns>
+  public IEnumerable<Match> DoRecursive<ScopeImplementation>(
     string ToMatch,
-    Pattern<Scope> RecursivePattern,
-    Func<IEnumerable<Match>> ToDo) where Scope : Scope<Scope>
+    Pattern<ScopeImplementation> RecursivePattern,
+    Func<IEnumerable<Match>> ToDo) where ScopeImplementation : Scope<ScopeImplementation>
   {
     var Key = (ToMatch, RecursiveExpression: RecursivePattern);
 

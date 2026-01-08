@@ -22,25 +22,50 @@
 
 namespace LineParser;
 
+/// <summary>
+/// Methods that simplify use of <see cref="Matcher{ScopeImplementation,Meaning}"/>.
+/// </summary>
 public static class MatcherExtensions
 {
   extension<Scope, Meaning>(Matcher<Scope, Meaning> This) where Scope : Scope<Scope>
   {
+    /// <summary>
+    /// Find all matches that start at the beginning of <see cref="ToParse"/>.
+    /// </summary>
+    /// <param name="ToParse">The string to match.</param>
+    /// <returns>All partial and complete matches that start at index <c>0</c> of <see cref="ToParse"/>.</returns>
     public IEnumerable<MatchWithMeaning<Meaning>> Match(string ToParse)
     {
       return This.Match(ToParse, This.ScopeSpace.Any);
     }
 
+    /// <summary>
+    /// Find all matches that start at the beginning of <see cref="ToParse"/>, but only for patterns that are in <see cref="MatchScope"/>.
+    /// </summary>
+    /// <param name="ToParse">The string to match.</param>
+    /// <param name="MatchScope">The <see cref="Scope{Implementation}"/> that selects the <see cref="Pattern{ScopeImplementation}"/>s which will be used to perform the match operation.</param>
+    /// <returns>All partial and complete matches that start at index <c>0</c> of <see cref="ToParse"/>.</returns>
     public IEnumerable<MatchWithMeaning<Meaning>> Match(string ToParse, Scope MatchScope)
     {
       return This.Match(ToParse, new(), MatchScope);
     }
 
+    /// <summary>
+    /// Find all matches that start at the beginning of <see cref="ToParse"/> and match the entire string.
+    /// </summary>
+    /// <param name="ToParse">The string to match.</param>
+    /// <returns>All partial and complete matches that start at index <c>0</c> of <see cref="ToParse"/>.</returns>
     public IEnumerable<MatchWithMeaning<Meaning>> ExactMatch(string ToParse)
     {
       return This.ExactMatch(ToParse, This.ScopeSpace.Any);
     }
 
+    /// <summary>
+    /// Find all matches that start at the beginning of <see cref="ToParse"/> and match the entire string, but only for patterns that are in <see cref="MatchScope"/>.
+    /// </summary>
+    /// <param name="ToParse">The string to match.</param>
+    /// <param name="MatchScope">The <see cref="Scope{Implementation}"/> that selects the <see cref="Pattern{ScopeImplementation}"/>s which will be used to perform the match operation.</param>
+    /// <returns>All partial and complete matches that start at index <c>0</c> of <see cref="ToParse"/>.</returns>
     public IEnumerable<MatchWithMeaning<Meaning>> ExactMatch(string ToParse, Scope MatchScope)
     {
       return This.Match(ToParse, MatchScope).Where(M => M.Match.Remainder == "");
