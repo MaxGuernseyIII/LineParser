@@ -98,9 +98,19 @@ public readonly record struct Match
     return true;
   }
 
+  /// <summary>
+  /// A captured string at a specific location.
+  /// </summary>
   public readonly record struct Capture
   {
+    /// <summary>
+    /// Where in the string the <see cref="Capture"/> was found.
+    /// </summary>
     public required int At { get; init; }
+
+    /// <summary>
+    /// The contents of the <see cref="Capture"/>.
+    /// </summary>
     public required string Value { get; init; }
   }
 }

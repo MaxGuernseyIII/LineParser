@@ -22,11 +22,28 @@
 
 namespace LineParser;
 
+/// <summary>
+/// Scans a string for all possible matches using a set of <see cref="Pattern{ScopeImplementation}"/>s.
+/// </summary>
+/// <typeparam name="ScopeImplementation">The type of <see cref="Scope{Implementation}"/> used to select the <see cref="Pattern{ScopeImplementation}"/>s used in a match operation.</typeparam>
+/// <typeparam name="Meaning">The type of object used to define the meaning of a match.</typeparam>
 public interface Matcher<
   ScopeImplementation,
   Meaning>
   where ScopeImplementation : Scope<ScopeImplementation>
 {
+  /// <summary>
+  /// The <see cref="ScopeSpace{ScopeImplementation}"/> for this <see cref="Matcher{ScopeImplementation,Meaning}"/>.
+  /// </summary>
   ScopeSpace<ScopeImplementation> ScopeSpace { get; }
+
+
+  /// <summary>
+  /// Finds all the possible matches for the input string. You should not call this directly and instead should use an extension method from <see cref="MatcherExtensions"/>.
+  /// </summary>
+  /// <param name="ToParse">The string to match.</param>
+  /// <param name="Context">A mutable state object that use used during parsing.</param>
+  /// <param name="Scope">The definition of the set of <see cref="Pattern{ScopeImplementation}"/>s to use.</param>
+  /// <returns>All the possible <see cref="LineParser.Match"/>es with their associated meanings.</returns>
   IEnumerable<MatchWithMeaning<Meaning>> Match(string ToParse, MatchExecutionContext Context, ScopeImplementation Scope);
 }
