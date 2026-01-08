@@ -43,14 +43,14 @@ public class AlternativesPatternBehaviors
     var Option1Matches = Any.Matches();
     var Option2Matches = Any.Matches();
     var Alternatives = Factory.Parallel([
-      new MockPattern<NullScope, object>
+      new MockPattern<NullScope>
       {
         Results =
         {
           {ToMatch, Option1Matches}
         }
       },
-      new MockPattern<NullScope, object>
+      new MockPattern<NullScope>
       {
         Results =
         {

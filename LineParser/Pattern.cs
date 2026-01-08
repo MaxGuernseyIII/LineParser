@@ -38,4 +38,12 @@ public interface Pattern<out ScopeImplementation>
   /// <returns>All valid <see cref="Match"/>es.</returns>
   IEnumerable<Match> GetMatchesAtBeginningOf(
     string ToMatch, SubpatternMatcher<ScopeImplementation> FindSubpattern, MatchExecutionContext Context);
+
+  /// <summary>
+  /// Executes a query against this <see cref="Pattern{ScopeImplementation}"/>.
+  /// </summary>
+  /// <param name="Query">The query to run.</param>
+  /// <typeparam name="TResult">The type of the result of the query.</typeparam>
+  /// <returns>The result of the query.</returns>
+  TResult Query<TResult>(GraphQuery<ScopeImplementation, TResult> Query);
 }

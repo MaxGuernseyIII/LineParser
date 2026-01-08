@@ -22,12 +22,17 @@
 
 namespace LineParser;
 
-sealed class Alternatives<Scope>(IEnumerable<Pattern<Scope>> Patterns)
-  : Pattern<Scope> where Scope : Scope<Scope>
+sealed class Alternatives<ScopeImplementation>(IEnumerable<Pattern<ScopeImplementation>> Patterns)
+  : Pattern<ScopeImplementation> where ScopeImplementation : Scope<ScopeImplementation>
 {
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubpatternMatcher<Scope> Reentry,
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubpatternMatcher<ScopeImplementation> Reentry,
     MatchExecutionContext Context)
   {
     return Patterns.SelectMany(E => E.GetMatchesAtBeginningOf(ToMatch, Reentry, Context));
+  }
+
+  public TResult Query<TResult>(GraphQuery<ScopeImplementation, TResult> Query)
+  {
+    return Query.QueryAlternativePatterns(Patterns);
   }
 }

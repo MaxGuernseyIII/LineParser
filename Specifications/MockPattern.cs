@@ -24,13 +24,18 @@ using LineParser;
 
 namespace Specifications;
 
-sealed class MockPattern<Scope, Meaning> : Pattern<Scope> where Scope : Scope<Scope>
+sealed class MockPattern<ScopeImplementation> : Pattern<ScopeImplementation> where ScopeImplementation : Scope<ScopeImplementation>
 {
   public Dictionary<string, IEnumerable<Match>> Results = [];
 
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubpatternMatcher<Scope> Reentry,
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubpatternMatcher<ScopeImplementation> Reentry,
     MatchExecutionContext Context)
   {
     return !Results.TryGetValue(ToMatch, out var Result) ? [] : Result;
+  }
+
+  public TResult Query<TResult>(GraphQuery<ScopeImplementation, TResult> Query)
+  {
+    throw new NotImplementedException();
   }
 }

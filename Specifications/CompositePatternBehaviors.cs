@@ -54,14 +54,14 @@ public sealed class CompositePatternBehaviors
     var FirstMatch1 = FirstMatches[1];
     IEnumerable<Pattern<NullScope>> Patterns =
     [
-      new MockPattern<NullScope, object>
+      new MockPattern<NullScope>
       {
         Results =
         {
           {OverallString, FirstMatches}
         }
       },
-      new MockPattern<NullScope, object>
+      new MockPattern<NullScope>
       {
         Results =
         {
@@ -69,7 +69,7 @@ public sealed class CompositePatternBehaviors
           {FirstMatch1.Remainder, MatchesForRemainder1}
         }
       },
-      new MockPattern<NullScope, object>
+      new MockPattern<NullScope>
       {
         Results = MatchesForRemainder0.Concat(MatchesForRemainder1).Select(R => R.Remainder).Distinct()
           .ToDictionary(Key => Key, IEnumerable<Match> (_) => FinalMatches)

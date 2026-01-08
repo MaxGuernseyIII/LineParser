@@ -22,11 +22,11 @@
 
 namespace LineParser;
 
-sealed class CompositePattern<Scope>(IEnumerable<Pattern<Scope>> Patterns)
-  : Pattern<Scope> where Scope : Scope<Scope>
+sealed class CompositePattern<ScopeImplementation>(IEnumerable<Pattern<ScopeImplementation>> Patterns)
+  : Pattern<ScopeImplementation> where ScopeImplementation : Scope<ScopeImplementation>
 {
   public IEnumerable<Match> GetMatchesAtBeginningOf(
-    string ToMatch, SubpatternMatcher<Scope> Reentry, MatchExecutionContext Context)
+    string ToMatch, SubpatternMatcher<ScopeImplementation> Reentry, MatchExecutionContext Context)
   {
     IEnumerable<Match> Result =
     [
@@ -44,5 +44,10 @@ sealed class CompositePattern<Scope>(IEnumerable<Pattern<Scope>> Patterns)
           .Select(Right => Left + Right));
 
     return Result;
+  }
+
+  public TResult Query<TResult>(GraphQuery<ScopeImplementation, TResult> Query)
+  {
+    throw new NotImplementedException();
   }
 }

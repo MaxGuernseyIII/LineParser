@@ -22,9 +22,9 @@
 
 namespace LineParser;
 
-class AnythingPattern<Scope> : Pattern<Scope> where Scope : Scope<Scope>
+class AnythingPattern<ScopeImplementation> : Pattern<ScopeImplementation> where ScopeImplementation : Scope<ScopeImplementation>
 {
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubpatternMatcher<Scope> Reentry,
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubpatternMatcher<ScopeImplementation> Reentry,
     MatchExecutionContext Context)
   {
     return Enumerable.Range(0, ToMatch.Length + 1).Reverse().Select(Split => new Match
@@ -33,5 +33,10 @@ class AnythingPattern<Scope> : Pattern<Scope> where Scope : Scope<Scope>
       Remainder = ToMatch.Substring(Split),
       Captured = []
     });
+  }
+
+  public TResult Query<TResult>(GraphQuery<ScopeImplementation, TResult> Query)
+  {
+    throw new NotImplementedException();
   }
 }

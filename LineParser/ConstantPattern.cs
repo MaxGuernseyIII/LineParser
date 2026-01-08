@@ -22,10 +22,10 @@
 
 namespace LineParser;
 
-sealed class ConstantPattern<Scope>(string Value)
-  : Pattern<Scope> where Scope : Scope<Scope>
+sealed class ConstantPattern<ScopeImplementation>(string Value)
+  : Pattern<ScopeImplementation> where ScopeImplementation : Scope<ScopeImplementation>
 {
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubpatternMatcher<Scope> Reentry,
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubpatternMatcher<ScopeImplementation> Reentry,
     MatchExecutionContext Context)
   {
     if (ToMatch.StartsWith(Value))
@@ -34,5 +34,10 @@ sealed class ConstantPattern<Scope>(string Value)
         Matched = Value,
         Remainder = ToMatch.Substring(Value.Length)
       };
+  }
+
+  public TResult Query<TResult>(GraphQuery<ScopeImplementation, TResult> Query)
+  {
+    throw new NotImplementedException();
   }
 }

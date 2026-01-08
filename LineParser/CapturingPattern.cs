@@ -22,10 +22,10 @@
 
 namespace LineParser;
 
-sealed class CapturingPattern<Scope>(Pattern<Scope> ToCapturePattern)
-  : Pattern<Scope> where Scope : Scope<Scope>
+sealed class CapturingPattern<ScopeImplementation>(Pattern<ScopeImplementation> ToCapturePattern)
+  : Pattern<ScopeImplementation> where ScopeImplementation : Scope<ScopeImplementation>
 {
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubpatternMatcher<Scope> Reentry,
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubpatternMatcher<ScopeImplementation> Reentry,
     MatchExecutionContext Context)
   {
     return ToCapturePattern.GetMatchesAtBeginningOf(ToMatch, Reentry, Context)
@@ -40,5 +40,10 @@ sealed class CapturingPattern<Scope>(Pattern<Scope> ToCapturePattern)
           }
         ]
       });
+  }
+
+  public TResult Query<TResult>(GraphQuery<ScopeImplementation, TResult> Query)
+  {
+    throw new NotImplementedException();
   }
 }

@@ -20,36 +20,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Text.RegularExpressions;
+using LineParser;
 
-namespace LineParser;
+namespace Specifications;
 
-sealed class RegexPattern<ScopeImplementation>(Regex Pattern) : Pattern<ScopeImplementation> where ScopeImplementation : Scope<ScopeImplementation>
+class TestGraphQuery<TScope, T> : GraphQuery<TScope, T>
+  where TScope : Scope<TScope>
 {
-  readonly Regex Pattern = new("^" + Pattern.ToString().TrimStart('^'), Pattern.Options);
-
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubpatternMatcher<ScopeImplementation> Reentry,
-    MatchExecutionContext Context)
+  static T Fail<U>(U _)
   {
-    var M = Pattern.Match(ToMatch);
-    if (M.Success)
-      yield return new()
-      {
-        Matched = M.Value,
-        Remainder = ToMatch.Substring(M.Value.Length),
-        Captured =
-        [
-          ..M.Groups.Cast<Group>().Skip(1).Select(C => new Match.Capture
-          {
-            At = C.Index,
-            Value = C.Value
-          })
-        ]
-      };
+    Assert.Fail();
+    return default!;
   }
 
-  public TResult Query<TResult>(GraphQuery<ScopeImplementation, TResult> Query)
+  public Func<IEnumerable<Pattern<TScope>>, T> OnQueryPatternAlternatives { get; set; } = Fail;
+
+  public T QueryAlternativePatterns(IEnumerable<Pattern<TScope>> Alternatives)
   {
-    throw new NotImplementedException();
+    return OnQueryPatternAlternatives(Alternatives);
   }
 }

@@ -41,7 +41,7 @@ public class CapturingPatternBehaviors
   {
     var Input = Any.String();
     var UnderlyingOutput = Any.ArrayOf(Any.Match);
-    Pattern<NullScope> ToCapturePattern = new MockPattern<NullScope, object>
+    Pattern<NullScope> ToCapturePattern = new MockPattern<NullScope>
     {
       Results =
       {

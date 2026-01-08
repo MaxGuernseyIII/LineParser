@@ -51,21 +51,21 @@ public class GraphQueryBehavior
 
     Actual.ShouldBe(Matcher.Patterns);
   }
-}
 
-class TestGraphQuery<TScope, T> : GraphQuery<TScope, T>
-  where TScope : Scope<TScope>
-{
-  static T Fail<U>(U _)
+  [TestMethod]
+  public void ParallelTreatsPatternsAsAlternatives()
   {
-    Assert.Fail();
-    return default!;
-  }
+    IEnumerable<Pattern<NullScope>> Patterns = [
+      Factory.Constant(""),
+      Factory.Constant("")
+    ];
+    var Node = Factory.Parallel(Patterns);
 
-  public Func<IEnumerable<Pattern<TScope>>, T> OnQueryPatternAlternatives { get; set; } = Fail;
+    var Actual = Node.Query(new TestGraphQuery<NullScope, IEnumerable<Pattern<NullScope>>>()
+    {
+      OnQueryPatternAlternatives = P => P
+    });
 
-  public T QueryAlternativePatterns(IEnumerable<Pattern<TScope>> Alternatives)
-  {
-    return OnQueryPatternAlternatives(Alternatives);
+    Actual.ShouldBe(Patterns);
   }
 }
