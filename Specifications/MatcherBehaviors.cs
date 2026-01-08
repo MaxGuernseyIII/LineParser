@@ -21,6 +21,7 @@
 // SOFTWARE.
 
 using LineParser;
+using Shouldly;
 
 namespace Specifications;
 
@@ -42,9 +43,12 @@ public class MatcherBehaviors
   {
     var ToMatch = Any.String();
     var Meaning = new object();
-
     var Matcher = MatcherFactory.CreateFromExpressions([
       (ExpressionFactory.CreateConstant(ToMatch), Meaning)
     ]);
+
+    var Actual = Matcher.Match(ToMatch);
+
+    Actual.Single().Meaning.ShouldBe(Meaning);
   }
 }

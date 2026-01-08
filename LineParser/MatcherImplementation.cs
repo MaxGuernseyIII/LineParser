@@ -35,7 +35,7 @@ class MatcherImplementation<Scope, Meaning>(ImmutableArray<(Scope Scope, Express
       yield return new()
       {
         Match = Match,
-        Meaning = default!
+        Meaning = Registered.Meaning
       };
   }
 }
