@@ -22,7 +22,7 @@
 
 namespace ScopeSelection;
 
-public class NullScope : Scope<NullScope>
+public sealed class NullScope : Scope<NullScope>
 {
   NullScope()
   {
@@ -40,12 +40,12 @@ public class NullScope : Scope<NullScope>
     public NullScope Unspecified => Any;
 
 
-    public NullScope Or(NullScope L, NullScope R)
+    public NullScope Union(NullScope L, NullScope R)
     {
       return Any;
     }
 
-    public NullScope And(NullScope L, NullScope R)
+    public NullScope Intersection(NullScope L, NullScope R)
     {
       return Any;
     }

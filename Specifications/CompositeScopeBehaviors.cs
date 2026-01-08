@@ -116,7 +116,7 @@ public class CompositeScopeBehaviors
     var LeftLeft = new MockScope1([], [(RightLeft, NewLeft)], []);
     var LeftRight = new MockScope2([], [(RightRight, NewRight)], []);
 
-    var Actual = Space.Or(new(LeftLeft, LeftRight),
+    var Actual = Space.Union(new(LeftLeft, LeftRight),
       new(RightLeft, RightRight));
 
     Actual.ShouldBeEquivalentTo(new CompositeScope<MockScope1, MockScope2>(NewLeft, NewRight));
@@ -132,7 +132,7 @@ public class CompositeScopeBehaviors
     var LeftLeft = new MockScope1([], [], [(RightLeft, NewLeft)]);
     var LeftRight = new MockScope2([], [], [(RightRight, NewRight)]);
 
-    var Actual = Space.And(new(LeftLeft, LeftRight),
+    var Actual = Space.Intersection(new(LeftLeft, LeftRight),
       new(RightLeft, RightRight));
 
     Actual.ShouldBeEquivalentTo(new CompositeScope<MockScope1, MockScope2>(NewLeft, NewRight));

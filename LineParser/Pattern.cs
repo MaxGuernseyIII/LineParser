@@ -22,9 +22,20 @@
 
 namespace LineParser;
 
+/// <summary>
+/// The definition of a pattern, which is something that can match part of a string.
+/// </summary>
+/// <typeparam name="ScopeImplementation">The kind of scope used to select <see cref="Pattern{ScopeImplementation}"/>s for a match operation.</typeparam>
 public interface Pattern<out ScopeImplementation>
   where ScopeImplementation : Scope<ScopeImplementation>
 {
+  /// <summary>
+  /// Finds all <see cref="Match"/>es that start at the beginning of <see cref="ToMatch"/>.
+  /// </summary>
+  /// <param name="ToMatch">The string to match.</param>
+  /// <param name="FindSubPattern">The operation that can be used to match a subpattern.</param>
+  /// <param name="Context">The state of the parse operation.</param>
+  /// <returns>All valid <see cref="Match"/>es.</returns>
   IEnumerable<Match> GetMatchesAtBeginningOf(
     string ToMatch, SubPatternMatcher<ScopeImplementation> FindSubPattern, MatchExecutionContext Context);
 }

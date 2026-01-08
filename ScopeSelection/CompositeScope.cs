@@ -85,19 +85,19 @@ public sealed class CompositeScope<TLeft, TRight>(TLeft Left, TRight Right) : Sc
     public CompositeScope<TLeft, TRight> Unspecified { get; } = new(LeftDimension.Unspecified, RightDimension.Unspecified);
 
     /// <inheritdoc />
-    public CompositeScope<TLeft, TRight> Or(
+    public CompositeScope<TLeft, TRight> Union(
       CompositeScope<TLeft, TRight> L,
       CompositeScope<TLeft, TRight> R)
     {
-      return new(LeftDimension.Or(L.Left, R.Left), RightDimension.Or(L.Right, R.Right));
+      return new(LeftDimension.Union(L.Left, R.Left), RightDimension.Union(L.Right, R.Right));
     }
 
     /// <inheritdoc />
-    public CompositeScope<TLeft, TRight> And(
+    public CompositeScope<TLeft, TRight> Intersection(
       CompositeScope<TLeft, TRight> L,
       CompositeScope<TLeft, TRight> R)
     {
-      return new(LeftDimension.And(L.Left, R.Left), RightDimension.And(L.Right, R.Right));
+      return new(LeftDimension.Intersection(L.Left, R.Left), RightDimension.Intersection(L.Right, R.Right));
     }
 
     /// <summary>

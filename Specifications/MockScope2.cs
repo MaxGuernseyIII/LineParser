@@ -55,12 +55,12 @@ class MockScope2(
     public MockScope2 Unspecified { get; } = new([], [], []);
 
 
-    public MockScope2 Or(MockScope2 L, MockScope2 R)
+    public MockScope2 Union(MockScope2 L, MockScope2 R)
     {
       return L.Ored.Single(O => O.Other == R).Result;
     }
 
-    public MockScope2 And(MockScope2 L, MockScope2 R)
+    public MockScope2 Intersection(MockScope2 L, MockScope2 R)
     {
       return L.Anded.Single(O => O.Other == R).Result;
     }

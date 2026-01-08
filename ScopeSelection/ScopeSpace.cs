@@ -22,11 +22,36 @@
 
 namespace ScopeSelection;
 
+/// <summary>
+/// The set of rules governing a <see cref="Scope{Implementation}"/>.
+/// </summary>
+/// <typeparam name="ScopeImplementation">The type of <see cref="Scope{Implementation}"/> governed.</typeparam>
 public interface ScopeSpace<ScopeImplementation>
   where ScopeImplementation : Scope<ScopeImplementation>
 {
+  /// <summary>
+  /// A <see cref="Scope{Implementation}"/> that can be satisfied by any other scope.
+  /// </summary>
   public ScopeImplementation Any { get; }
+
+  /// <summary>
+  /// A <see cref="Scope{Implementation}"/> that has no declarations. Typically, this means an "empty" <see cref="Scope{Implementation}"/> - one that will not satisfy any other <see cref="Scope{Implementation}"/> upon interrogation.
+  /// </summary>
   public ScopeImplementation Unspecified { get; }
-  public ScopeImplementation Or(ScopeImplementation L, ScopeImplementation R);
-  public ScopeImplementation And(ScopeImplementation L, ScopeImplementation R);
+
+  /// <summary>
+  /// A <see cref="Scope{Implementation}"/> that represents the union of <see cref="L"/> and <see cref="R"/>.
+  /// </summary>
+  /// <param name="L">A <see cref="Scope{Implementation}"/> to merge.</param>
+  /// <param name="R">A <see cref="Scope{Implementation}"/> to merge.</param>
+  /// <returns>The requested <see cref="Scope{Implementation}"/>.</returns>
+  public ScopeImplementation Union(ScopeImplementation L, ScopeImplementation R);
+
+  /// <summary>
+  /// A <see cref="Scope{Implementation}"/> that represents the intersection of <see cref="L"/> and <see cref="R"/>.
+  /// </summary>
+  /// <param name="L">A <see cref="Scope{Implementation}"/> to merge.</param>
+  /// <param name="R">A <see cref="Scope{Implementation}"/> to merge.</param>
+  /// <returns>The requested <see cref="Scope{Implementation}"/>.</returns>
+  public ScopeImplementation Intersection(ScopeImplementation L, ScopeImplementation R);
 }

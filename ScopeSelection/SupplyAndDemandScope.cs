@@ -81,7 +81,7 @@ public sealed record SupplyAndDemandScope<T> : Scope<SupplyAndDemandScope<T>>
     };
 
 
-    public SupplyAndDemandScope<T> Or(SupplyAndDemandScope<T> L, SupplyAndDemandScope<T> R)
+    public SupplyAndDemandScope<T> Union(SupplyAndDemandScope<T> L, SupplyAndDemandScope<T> R)
     {
       var LSupportsToken = L.SupportsToken;
       var RSupportsToken = R.SupportsToken;
@@ -94,7 +94,7 @@ public sealed record SupplyAndDemandScope<T> : Scope<SupplyAndDemandScope<T>>
       };
     }
 
-    public SupplyAndDemandScope<T> And(SupplyAndDemandScope<T> L, SupplyAndDemandScope<T> R)
+    public SupplyAndDemandScope<T> Intersection(SupplyAndDemandScope<T> L, SupplyAndDemandScope<T> R)
     {
       var LSupportsToken = L.SupportsToken;
       var RSupportsToken = R.SupportsToken;
