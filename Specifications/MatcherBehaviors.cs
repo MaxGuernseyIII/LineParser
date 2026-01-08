@@ -85,6 +85,17 @@ public class MatcherBehaviors
 
     Match.ShouldBe([
       Pattern
-      ]);
+    ]);
+  }
+
+  [TestMethod]
+  public void ExposesPatterns()
+  {
+    var ToMatch = Any.String();
+    var Pattern1 = Factory.Constant(ToMatch);
+    var Pattern2 = Factory.Constant(ToMatch);
+    var Matcher = Factory.Matcher([Pattern1, Pattern2]);
+
+    Matcher.Patterns.ShouldBe([Pattern1, Pattern2]);
   }
 }

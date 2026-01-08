@@ -37,6 +37,10 @@ public interface Matcher<
   /// </summary>
   ScopeSpace<ScopeImplementation> ScopeSpace { get; }
 
+  /// <summary>
+  /// The patterns used in this <see cref="Matcher{ScopeImplementation,Meaning}"/>.
+  /// </summary>
+  IEnumerable<Pattern<ScopeImplementation>> Patterns { get; }
 
   /// <summary>
   /// Finds all the possible matches for the input string. You should not call this directly and instead should use an extension method from <see cref="MatcherExtensions"/>.
