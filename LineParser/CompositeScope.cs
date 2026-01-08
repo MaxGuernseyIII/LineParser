@@ -22,6 +22,18 @@
 
 namespace LineParser;
 
+/// <summary>
+/// A <see cref="MatchScope{Scope}"/> that combines two other <see cref="MatchScope{Scope}"/>s into two isolated dimensions.
+///
+/// Inclusion in the resulting combined scope requires the independent inclusion on the left and right dimensions.
+/// </summary>
+/// <example>
+/// 
+/// </example>
+/// <param name="Left"></param>
+/// <param name="Right"></param>
+/// <typeparam name="TLeft"></typeparam>
+/// <typeparam name="TRight"></typeparam>
 public sealed class CompositeScope<TLeft, TRight>(TLeft Left, TRight Right) : MatchScope<CompositeScope<TLeft, TRight>>
   where TLeft : MatchScope<TLeft>
   where TRight : MatchScope<TRight>
@@ -29,12 +41,12 @@ public sealed class CompositeScope<TLeft, TRight>(TLeft Left, TRight Right) : Ma
   public TLeft Left { get; } = Left;
   public TRight Right { get; } = Right;
 
-  public bool Includes(CompositeScope<TLeft, TRight> Other)
+  public bool IsSatisfiedBy(CompositeScope<TLeft, TRight> Other)
   {
-    return Left.Includes(Other.Left) && Right.Includes(Other.Right);
+    return Left.IsSatisfiedBy(Other.Left) && Right.IsSatisfiedBy(Other.Right);
   }
 
-  internal sealed class Space(MatchScopeSpace<TLeft> Left, MatchScopeSpace<TRight> Right)
+  public sealed class Space(MatchScopeSpace<TLeft> Left, MatchScopeSpace<TRight> Right)
     : MatchScopeSpace<CompositeScope<TLeft, TRight>>
   {
     public CompositeScope<TLeft, TRight> Any { get; } = new(Left.Any, Right.Any);
@@ -53,6 +65,11 @@ public sealed class CompositeScope<TLeft, TRight>(TLeft Left, TRight Right) : Ma
       CompositeScope<TLeft, TRight> R)
     {
       return new(Left.And(L.Left, R.Left), Right.And(L.Right, R.Right));
+    }
+
+    public CompositeScope<TLeft, TRight> Combine(TLeft Left, TRight Right)
+    {
+      return new(Left, Right);
     }
   }
 }

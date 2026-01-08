@@ -32,7 +32,7 @@ class MockScope1(
   readonly IReadOnlyList<(MockScope1 Other, MockScope1 Result)> Anded = Anded;
   readonly IReadOnlyList<(MockScope1 Other, MockScope1 Result)> Ored = Ored;
 
-  public bool Includes(MockScope1 Other)
+  public bool IsSatisfiedBy(MockScope1 Other)
   {
     return Included.Contains(Other);
   }

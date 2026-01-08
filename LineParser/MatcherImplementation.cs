@@ -34,7 +34,7 @@ class MatcherImplementation<Scope, Meaning>(
 
   public IEnumerable<MatchWithMeaning<Meaning>> Match(string ToParse, MatchExecutionContext Context, Scope Scope)
   {
-    foreach (var Registered in Registry.Where(R => Scope.Includes(R.Scope)))
+    foreach (var Registered in Registry.Where(R => Scope.IsSatisfiedBy(R.Scope)))
     foreach (var Match in Registered.Pattern.GetMatchesAtBeginningOf(ToParse, MatchWithoutMeaning, Context))
       yield return new()
       {

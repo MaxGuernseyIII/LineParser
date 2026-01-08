@@ -35,7 +35,7 @@ class MockScope2(
 
   public static MockScope2 Unspecified => new([], [], []);
 
-  public bool Includes(MockScope2 Other)
+  public bool IsSatisfiedBy(MockScope2 Other)
   {
     return Included.Contains(Other);
   }

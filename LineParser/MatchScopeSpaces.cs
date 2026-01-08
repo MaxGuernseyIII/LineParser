@@ -26,12 +26,12 @@ public static class MatchScopeSpaces
 {
   public static MatchScopeSpace<NullScope> Null { get; } = new NullScope.Space();
 
-  public static MatchScopeSpace<CompositeScope<TLeft, TRight>> Composite<TLeft, TRight>(MatchScopeSpace<TLeft> Left,
+  public static CompositeScope<TLeft, TRight>.Space Composite<TLeft, TRight>(MatchScopeSpace<TLeft> Left,
     MatchScopeSpace<TRight> Right)
     where TLeft : MatchScope<TLeft>
     where TRight : MatchScope<TRight>
   {
-    return new CompositeScope<TLeft, TRight>.Space(Left, Right);
+    return new(Left, Right);
   }
 
   public static SupplyAndDemandScope<Token>.Space SupplyAndDemand<Token>()
@@ -47,4 +47,8 @@ public static class MatchScopeSpaces
       return new(This);
     }
   }
+}
+
+public static class MatchScopes
+{
 }

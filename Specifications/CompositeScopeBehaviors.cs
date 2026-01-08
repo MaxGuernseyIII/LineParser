@@ -64,7 +64,7 @@ public class CompositeScopeBehaviors
       new([Right], [], [])
     );
 
-    Composed.Includes(new(Left, Right)).ShouldBeTrue();
+    Composed.IsSatisfiedBy(new(Left, Right)).ShouldBeTrue();
   }
 
   [TestMethod]
@@ -77,7 +77,7 @@ public class CompositeScopeBehaviors
       new([], [], [])
     );
 
-    Composed.Includes(new(Left, Right)).ShouldBeFalse();
+    Composed.IsSatisfiedBy(new(Left, Right)).ShouldBeFalse();
   }
 
   [TestMethod]
@@ -90,7 +90,7 @@ public class CompositeScopeBehaviors
       new([Right], [], [])
     );
 
-    Composed.Includes(new(Left, Right)).ShouldBeFalse();
+    Composed.IsSatisfiedBy(new(Left, Right)).ShouldBeFalse();
   }
 
   [TestMethod]
@@ -103,7 +103,7 @@ public class CompositeScopeBehaviors
       new([], [], [])
     );
 
-    Composed.Includes(new(Left, Right)).ShouldBeFalse();
+    Composed.IsSatisfiedBy(new(Left, Right)).ShouldBeFalse();
   }
 
   [TestMethod]
@@ -136,5 +136,25 @@ public class CompositeScopeBehaviors
       new(RightLeft, RightRight));
 
     Actual.ShouldBeEquivalentTo(new CompositeScope<MockScope1, MockScope2>(NewLeft, NewRight));
+  }
+
+  class Statement {}
+  class Parameter {}
+
+  [TestMethod]
+  public void Example()
+  {
+    var TypeDimension = MatchScopeSpaces.SupplyAndDemand<Type>();
+    var TagsDimension = MatchScopeSpaces.SupplyAndDemand<string>();
+    var CombinedScopeSpace = MatchScopeSpaces.Composite(TypeDimension, TagsDimension);
+    var Supplied = CombinedScopeSpace.Combine(
+      TypeDimension.Supply(typeof(Statement)),
+      TagsDimension.Supply(["@ui", "@account-management", "@login"]));
+    var Demanded = CombinedScopeSpace.Combine(
+      TypeDimension.Any,
+      TagsDimension.Demand(["@ui", "@login"])
+    );
+
+    Demanded.IsSatisfiedBy(Supplied).ShouldBe(true);
   }
 }

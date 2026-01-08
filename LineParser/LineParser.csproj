@@ -17,6 +17,9 @@
     <RepositoryType>git</RepositoryType>
 
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!--<WarningsAsErrors>1591</WarningsAsErrors>-->
   </PropertyGroup>
 
   <ItemGroup>

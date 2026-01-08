@@ -31,7 +31,7 @@ public sealed record SupplyAndDemandScope<T> : MatchScope<SupplyAndDemandScope<T
   public required Predicate<Predicate<T>> CheckForSupport { get; init; }
   public required Predicate<T> SupportsToken { get; init; }
 
-  public bool Includes(SupplyAndDemandScope<T> Other)
+  public bool IsSatisfiedBy(SupplyAndDemandScope<T> Other)
   {
     return CheckForSupport(Other.SupportsToken);
   }
@@ -126,6 +126,20 @@ public sealed record SupplyAndDemandScope<T> : MatchScope<SupplyAndDemandScope<T
       };
     }
 
+    public SupplyAndDemandScope<T> Demand(IEnumerable<T> Tokens)
+    {
+      return new()
+      {
+        SupportsToken = Never,
+        CheckForSupport = DemandTokens(Tokens)
+      };
+    }
+
+    Predicate<Predicate<T>> DemandTokens(IEnumerable<T> Tokens)
+    {
+      return Demanded => Tokens.All(Token => Demanded(Token));
+    }
+
     public SupplyAndDemandScope<T> Supply(T Token)
     {
       return new()
@@ -133,6 +147,20 @@ public sealed record SupplyAndDemandScope<T> : MatchScope<SupplyAndDemandScope<T
         SupportsToken = SupplyToken(Token),
         CheckForSupport = Never
       };
+    }
+
+    public SupplyAndDemandScope<T> Supply(IEnumerable<T> Tokens)
+    {
+      return new()
+      {
+        SupportsToken = SupplyTokens(Tokens),
+        CheckForSupport = Never
+      };
+    }
+
+    Predicate<T> SupplyTokens(IEnumerable<T> Tokens)
+    {
+      return Tokens.Contains;
     }
   }
 }

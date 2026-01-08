@@ -28,7 +28,7 @@ public class NullScope : MatchScope<NullScope>
   {
   }
 
-  public bool Includes(NullScope Other)
+  public bool IsSatisfiedBy(NullScope Other)
   {
     return true;
   }

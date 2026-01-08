@@ -25,7 +25,7 @@ namespace LineParser;
 public interface MatchScope<in Scope>
   where Scope : MatchScope<Scope>
 {
-  public bool Includes(Scope Other);
+  public bool IsSatisfiedBy(Scope Other);
 }
 
 public interface MatchScopeSpace<Scope>
