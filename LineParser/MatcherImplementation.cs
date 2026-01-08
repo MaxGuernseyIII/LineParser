@@ -28,10 +28,14 @@ class MatcherImplementation<Scope, Meaning>(ImmutableArray<(Scope Scope, Express
   : Matcher<Scope, Meaning>
   where Scope : MatchScope<Scope>
 {
-  public IEnumerable<Match> Match(string ToParse, MatchExecutionContext Context, Scope Scope)
+  public IEnumerable<MatchWithMeaning<Meaning>> Match(string ToParse, MatchExecutionContext Context, Scope Scope)
   {
     foreach (var Registered in Registry)
     foreach (var Match in Registered.Expression.GetMatchesAtBeginningOf(ToParse, this, Context))
-      yield return Match;
+      yield return new()
+      {
+        Match = Match,
+        Meaning = default!
+      };
   }
 }

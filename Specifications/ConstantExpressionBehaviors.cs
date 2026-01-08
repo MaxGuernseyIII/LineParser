@@ -44,7 +44,7 @@ public sealed class ConstantExpressionBehaviors
     var Expression = ExpressionFactory.CreateConstant(ToMatch);
     var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
 
-    var Matches = Matcher.ExactMatch(ToMatch);
+    var Matches = Matcher.ExactMatch(ToMatch).Select(M => M.Match);
     Matches.ShouldBe([
       new()
       {
@@ -76,7 +76,7 @@ public sealed class ConstantExpressionBehaviors
     var Expression = ExpressionFactory.CreateConstant(ToMatch);
     var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
 
-    var Matches = Matcher.Match(ToMatch + Remainder);
+    var Matches = Matcher.Match(ToMatch + Remainder).Select(M => M.Match);
     Matches.ShouldBe([
       new()
       {

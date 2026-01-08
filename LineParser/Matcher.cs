@@ -27,5 +27,5 @@ public interface Matcher<
   Meaning>
   where Scope : MatchScope<Scope>
 {
-  IEnumerable<Match> Match(string ToParse, MatchExecutionContext Context, Scope Scope);
+  IEnumerable<MatchWithMeaning<Meaning>> Match(string ToParse, MatchExecutionContext Context, Scope Scope);
 }

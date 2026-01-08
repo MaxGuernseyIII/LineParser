@@ -77,7 +77,7 @@ public sealed class CompositeExpressionBehaviors
     var Expression = ExpressionFactory.CreateComposite(Expressions);
     var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
 
-    var Actual = Matcher.Match(OverallString);
+    var Actual = Matcher.Match(OverallString).Select(M => M.Match);
 
     var Expected = MatchesForRemainder0.SelectMany(Level2 => FinalMatches.Select(Level3 => FirstMatch0 + Level2 + Level3))
       .Concat(MatchesForRemainder1.SelectMany(Level2 => FinalMatches.Select(Level3 => FirstMatch1 + Level2 + Level3)));

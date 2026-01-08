@@ -24,13 +24,13 @@ namespace LineParser;
 
 public static class MatcherExtensions
 {
-  public static IEnumerable<Match> Match<Scope, Meaning>(this Matcher<Scope, Meaning> This, string ToParse) where Scope : MatchScope<Scope>
+  public static IEnumerable<MatchWithMeaning<Meaning>> Match<Scope, Meaning>(this Matcher<Scope, Meaning> This, string ToParse) where Scope : MatchScope<Scope>
   {
     return This.Match(ToParse, new(), Scope.Any);
   }
 
-  public static IEnumerable<Match> ExactMatch<Scope, Meaning>(this Matcher<Scope, Meaning> This, string ToParse) where Scope : MatchScope<Scope>
+  public static IEnumerable<MatchWithMeaning<Meaning>> ExactMatch<Scope, Meaning>(this Matcher<Scope, Meaning> This, string ToParse) where Scope : MatchScope<Scope>
   {
-    return This.Match(ToParse).Where(M => M.Remainder == "");
+    return This.Match(ToParse).Where(M => M.Match.Remainder == "");
   }
 }

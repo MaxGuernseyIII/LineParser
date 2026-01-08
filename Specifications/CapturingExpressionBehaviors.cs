@@ -51,7 +51,7 @@ public class CapturingExpressionBehaviors
     var Expression = ExpressionFactory.CreateCapturing(ToCaptureExpression);
     var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
 
-    var Actual = Matcher.Match(Input);
+    var Actual = Matcher.Match(Input).Select(M => M.Match);
 
     Actual.ShouldBe(UnderlyingOutput.Select(M =>
       M with

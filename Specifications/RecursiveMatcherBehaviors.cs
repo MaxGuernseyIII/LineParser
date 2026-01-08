@@ -53,7 +53,7 @@ public class RecursiveMatcherBehaviors
       (StringScope.For(OuterScope),  Recursive)
     ]);
 
-    var Actual = Matcher.Match(ToParse, new(), StringScope.Demand(OuterScope));
+    var Actual = Matcher.Match(ToParse, new(), StringScope.Demand(OuterScope)).Select(M => M.Match);
 
     Actual.ShouldBe(Constant.GetMatchesAtBeginningOf(ToParse, Matcher, new()));
   }

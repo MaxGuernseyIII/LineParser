@@ -29,8 +29,22 @@ using StringScope = SupplyAndDemandScope<string>;
 [TestClass]
 public class MatcherBehaviors
 {
+  ExpressionFactory<StringScope, object> ExpressionFactory = null!;
+
+  [TestInitialize]
+  public void Setup()
+  {
+    ExpressionFactory = new();
+  }
+
   [TestMethod]
   public void SuppliesAnnotatedMeaning()
   {
+    var ToMatch = Any.String();
+    var Meaning = new object();
+
+    var Matcher = MatcherFactory.CreateFromExpressions([
+      (ExpressionFactory.CreateConstant(ToMatch), Meaning)
+    ]);
   }
 }
