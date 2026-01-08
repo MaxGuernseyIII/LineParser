@@ -25,21 +25,45 @@ using System.Text;
 
 namespace LineParser;
 
+/// <summary>
+/// A single candidate for matching a string. Note: It is only a complete match if it has an empty <see cref="Remainder"/>.
+/// </summary>
 public readonly record struct Match
 {
+  /// <summary>
+  /// Initialize the object.
+  /// </summary>
   public Match()
   {
   }
 
+  /// <summary>
+  /// The complete string that was matched from its beginning up to the point where matching either completed or failed.
+  /// </summary>
   public required string Matched { get; init; }
+
+  /// <summary>
+  /// The portion after <see cref="Matched"/> that was not matched by the <see cref="Pattern{ScopeImplementation}"/> or <see cref="Matcher{ScopeImplementation,Meaning}"/>.
+  /// </summary>
   public required string Remainder { get; init; }
+
+  /// <summary>
+  /// The list of captured strings (in order).
+  /// </summary>
   public ImmutableArray<Capture> Captured { get; init; } = ImmutableArray<Capture>.Empty;
 
+  /// <inheritdoc />
   public bool Equals(Match Other)
   {
     return Matched == Other.Matched && Remainder == Other.Remainder && Captured.SequenceEqual(Other.Captured);
   }
 
+  /// <summary>
+  /// Concatenates <see cref="Left"/> and <see cref="Right"/>.
+  /// </summary>
+  /// <param name="Left">The first match in the concatenation.</param>
+  /// <param name="Right">The match to be appended.</param>
+  /// <returns>The resulting <see cref="Match"/></returns>
   public static Match operator +(Match Left, Match Right)
   {
     return new()
@@ -54,6 +78,7 @@ public readonly record struct Match
     };
   }
 
+  /// <inheritdoc />
   public override int GetHashCode()
   {
     unchecked
