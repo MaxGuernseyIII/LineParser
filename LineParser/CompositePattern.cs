@@ -22,7 +22,7 @@
 
 namespace LineParser;
 
-sealed class CompositePattern<Scope>(IEnumerable<Pattern<Scope>> Expressions)
+sealed class CompositePattern<Scope>(IEnumerable<Pattern<Scope>> Patterns)
   : Pattern<Scope> where Scope : MatchScope<Scope>
 {
   public IEnumerable<Match> GetMatchesAtBeginningOf(
@@ -38,9 +38,9 @@ sealed class CompositePattern<Scope>(IEnumerable<Pattern<Scope>> Expressions)
       }
     ];
 
-    foreach (var Expression in Expressions)
+    foreach (var Pattern in Patterns)
       Result = Result.SelectMany(Left =>
-        Expression.GetMatchesAtBeginningOf(Left.Remainder, Reentry, Context)
+        Pattern.GetMatchesAtBeginningOf(Left.Remainder, Reentry, Context)
           .Select(Right => Left + Right));
 
     return Result;

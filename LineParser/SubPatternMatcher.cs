@@ -22,4 +22,5 @@
 
 namespace LineParser;
 
-public delegate IEnumerable<Match> SubPatternMatcher<in Scope>(string ToMatch, MatchExecutionContext Context, Scope Scope);
+public delegate IEnumerable<Match> SubPatternMatcher<in Scope>(string ToMatch, MatchExecutionContext Context,
+  Scope Scope);

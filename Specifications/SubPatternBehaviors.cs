@@ -28,7 +28,7 @@ namespace Specifications;
 using StringScope = SupplyAndDemandScope<string>;
 
 [TestClass]
-public class RecursiveExpressionBehaviors
+public class SubPatternBehaviors
 {
   Factory<StringScope> Factory = null!;
   StringScope.Space ScopeSpace = null!;
@@ -47,16 +47,17 @@ public class RecursiveExpressionBehaviors
     var OuterScope = Any.String();
     var MatchedStub = Any.String();
     var ToParse = MatchedStub + Any.String();
-    var Recursive = Factory.Recursive(ScopeSpace.Demand(InnerScope));
+    var Recursive = Factory.SubPattern(ScopeSpace.Demand(InnerScope));
     var Constant = Factory.Constant(MatchedStub);
     var Matcher = TestMatcherFactory.CreateFromRegistryWithoutMeaning([
-      (ScopeSpace.Supply(InnerScope), Constant),
-      (ScopeSpace.Supply(OuterScope), Recursive)
+      (ScopeSpace.Supply(InnerScope), Pattern: Constant),
+      (ScopeSpace.Supply(OuterScope), Pattern: Recursive)
     ]);
 
     var Actual = Matcher.Match(ToParse, new(), ScopeSpace.Demand(OuterScope)).Select(M => M.Match);
 
-    Actual.ShouldBe(Constant.GetMatchesAtBeginningOf(ToParse, (Match, Context, Scope) =>  Matcher.Match(Match, Context, Scope).Select(M => M.Match), new()));
+    Actual.ShouldBe(Constant.GetMatchesAtBeginningOf(ToParse,
+      (Match, Context, Scope) => Matcher.Match(Match, Context, Scope).Select(M => M.Match), new()));
   }
 
   [TestMethod]
@@ -64,9 +65,9 @@ public class RecursiveExpressionBehaviors
   {
     var Scope = Any.String();
     var ToParse = Any.String();
-    var Recursive = Factory.Recursive(ScopeSpace.Demand(Scope));
+    var Recursive = Factory.SubPattern(ScopeSpace.Demand(Scope));
     var Matcher = TestMatcherFactory.CreateFromRegistryWithoutMeaning([
-      (ScopeSpace.Supply(Scope), Recursive)
+      (ScopeSpace.Supply(Scope), Pattern: Recursive)
     ]);
 
     var Actual = Matcher.Match(ToParse, new(), ScopeSpace.Demand(Scope)).Select(M => M.Match);

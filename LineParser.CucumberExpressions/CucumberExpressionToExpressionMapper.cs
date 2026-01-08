@@ -25,22 +25,21 @@ using CucumberExpressions.Parsing;
 
 namespace LineParser.CucumberExpressions;
 
-public class CucumberExpressionToExpressionMapper<Scope, Meaning>(MatchScopeSpace<Scope> ScopeSpace)
+class CucumberExpressionToExpressionMapper<Scope>(Factory<Scope> Factory)
   where Scope : MatchScope<Scope>
 {
-  readonly Factory<Scope> Factory = ScopeSpace.GetFactory();
   readonly CucumberExpressionParser Parser = new();
 
   public Pattern<Scope> Map(
-    string Expression,
+    string Template,
     Func<string, Scope> GetScopeForString)
   {
-    var Tree = Parser.Parse(Expression);
+    var Tree = Parser.Parse(Template);
 
-    return ConvertNodesToExpression(Tree.Nodes, GetScopeForString);
+    return ConvertNodesToPattern(Tree.Nodes, GetScopeForString);
   }
 
-  Pattern<Scope> ConvertNodesToExpression(IEnumerable<Node> Nodes, Func<string, Scope> ScopeForString)
+  Pattern<Scope> ConvertNodesToPattern(IEnumerable<Node> Nodes, Func<string, Scope> ScopeForString)
   {
     var Parts = new List<Pattern<Scope>>();
 
@@ -50,17 +49,17 @@ public class CucumberExpressionToExpressionMapper<Scope, Meaning>(MatchScopeSpac
         NodeType.TEXT_NODE => Factory.Constant(Node.Text),
         NodeType.OPTIONAL_NODE => Factory.Alternatives(
         [
-          ConvertNodesToExpression(Node.Nodes, ScopeForString),
+          ConvertNodesToPattern(Node.Nodes, ScopeForString),
           Factory.Constant("")
         ]),
 
         NodeType.ALTERNATION_NODE => Factory.Alternatives(
-          Node.Nodes.Select(N => ConvertNodesToExpression(N.Nodes, ScopeForString))
+          Node.Nodes.Select(N => ConvertNodesToPattern(N.Nodes, ScopeForString))
         ),
-        NodeType.ALTERNATIVE_NODE => ConvertNodesToExpression(Node.Nodes, ScopeForString),
+        NodeType.ALTERNATIVE_NODE => ConvertNodesToPattern(Node.Nodes, ScopeForString),
         NodeType.PARAMETER_NODE => Factory.Capturing(
-          Factory.Recursive(ScopeForString(Node.Text))),
-        NodeType.EXPRESSION_NODE => ConvertNodesToExpression(Node.Nodes, ScopeForString),
+          Factory.SubPattern(ScopeForString(Node.Text))),
+        NodeType.EXPRESSION_NODE => ConvertNodesToPattern(Node.Nodes, ScopeForString),
         _ => throw new ArgumentOutOfRangeException($"Unknown node type: {Node.Type}")
       });
 

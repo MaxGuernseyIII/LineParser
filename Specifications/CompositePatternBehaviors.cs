@@ -26,7 +26,7 @@ using Shouldly;
 namespace Specifications;
 
 [TestClass]
-public sealed class CompositeExpressionBehaviors
+public sealed class CompositePatternBehaviors
 {
   Factory<NullScope> Factory = null!;
 
@@ -37,7 +37,7 @@ public sealed class CompositeExpressionBehaviors
   }
 
   [TestMethod]
-  public void ChainsExpressions()
+  public void ChainsPatterns()
   {
     var OverallString = Any.String();
 
@@ -52,7 +52,7 @@ public sealed class CompositeExpressionBehaviors
 
     var FirstMatch0 = FirstMatches[0];
     var FirstMatch1 = FirstMatches[1];
-    IEnumerable<Pattern<NullScope>> Expressions =
+    IEnumerable<Pattern<NullScope>> Patterns =
     [
       new MockPattern<NullScope, object>
       {
@@ -75,8 +75,8 @@ public sealed class CompositeExpressionBehaviors
           .ToDictionary(Key => Key, IEnumerable<Match> (_) => FinalMatches)
       }
     ];
-    var Expression = Factory.Composite(Expressions);
-    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
+    var Pattern = Factory.Composite(Patterns);
+    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Pattern]);
 
     var Actual = Matcher.Match(OverallString).Select(M => M.Match);
 

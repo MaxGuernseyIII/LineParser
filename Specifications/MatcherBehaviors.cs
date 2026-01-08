@@ -46,8 +46,8 @@ public class MatcherBehaviors
     var ToMatch = Any.String();
     var Meaning = new object();
     var Matcher = Factory.Matcher([
-        (Factory.Constant(ToMatch), Meaning)
-      ]);
+      (Factory.Constant(ToMatch), Meaning)
+    ]);
 
     var Actual = Matcher.Match(ToMatch);
 
@@ -61,11 +61,11 @@ public class MatcherBehaviors
     var TargetScope = Any.String();
     var Meaning = new object();
     var Matcher = Factory.Matcher(
-      [
-        (ScopeSpace.Supply(Any.String()), Factory.Constant(ToMatch), new()),
-        (ScopeSpace.Supply(TargetScope), Factory.Constant(ToMatch), Meaning),
-        (ScopeSpace.Supply(Any.String()), Factory.Constant(ToMatch), new())
-      ]);
+    [
+      (ScopeSpace.Supply(Any.String()), Factory.Constant(ToMatch), new()),
+      (ScopeSpace.Supply(TargetScope), Factory.Constant(ToMatch), Meaning),
+      (ScopeSpace.Supply(Any.String()), Factory.Constant(ToMatch), new())
+    ]);
 
     var Actual = Matcher.Match(ToMatch, new(), ScopeSpace.Demand(TargetScope)).Select(M => M.Meaning);
 

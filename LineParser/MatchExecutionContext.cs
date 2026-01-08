@@ -27,7 +27,7 @@ public class MatchExecutionContext
   readonly Stack<(string ToMatch, object RecursiveExpression)> Frames = [];
 
   public IEnumerable<Match> DoRecursive<Scope>(
-    string ToMatch, 
+    string ToMatch,
     Pattern<Scope> RecursivePattern,
     Func<IEnumerable<Match>> ToDo) where Scope : MatchScope<Scope>
   {

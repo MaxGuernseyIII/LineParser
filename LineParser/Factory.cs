@@ -46,7 +46,7 @@ public class Factory<Scope>(MatchScopeSpace<Scope> ScopeSpace) where Scope : Mat
     return new MatcherImplementation<Scope, Meaning>(
       ScopeSpace,
       [
-        ..(IEnumerable<(Scope Scope, Pattern<Scope> Expression, Meaning Meaning)>) PatternsWithMeanings
+        ..PatternsWithMeanings
       ]);
   }
 
@@ -60,14 +60,14 @@ public class Factory<Scope>(MatchScopeSpace<Scope> ScopeSpace) where Scope : Mat
     return new ConstantPattern<Scope>(Value);
   }
 
-  public Pattern<Scope> Composite(IEnumerable<Pattern<Scope>> Expressions)
+  public Pattern<Scope> Composite(IEnumerable<Pattern<Scope>> Patterns)
   {
-    return new CompositePattern<Scope>(Expressions);
+    return new CompositePattern<Scope>(Patterns);
   }
 
-  public Pattern<Scope> Alternatives(IEnumerable<Pattern<Scope>> Expressions)
+  public Pattern<Scope> Alternatives(IEnumerable<Pattern<Scope>> Patterns)
   {
-    return new Alternatives<Scope>(Expressions);
+    return new Alternatives<Scope>(Patterns);
   }
 
   public Pattern<Scope> Capturing(Pattern<Scope> ToCapturePattern)
@@ -75,7 +75,7 @@ public class Factory<Scope>(MatchScopeSpace<Scope> ScopeSpace) where Scope : Mat
     return new CapturingPattern<Scope>(ToCapturePattern);
   }
 
-  public Pattern<Scope> Recursive(Scope Demand)
+  public Pattern<Scope> SubPattern(Scope Demand)
   {
     return new RecursivePattern<Scope>(Demand);
   }

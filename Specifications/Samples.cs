@@ -39,18 +39,6 @@ public class Samples
     Matcher.ExactMatch("cheese").Count().ShouldBe(0);
   }
 
-  class Binder
-  {
-  }
-
-  static class BinderFactory
-  {
-    public static Binder ForMeat()
-    {
-      return new();
-    }
-  }
-
   [TestMethod]
   public void AddingMeaning()
   {
@@ -80,15 +68,15 @@ public class Samples
   {
     var ExpressionFactory = MatchScopeSpaces.Null.GetFactory();
     var Matcher = ExpressionFactory.Matcher(
-      [
-        (ExpressionFactory.Composite([
-            ExpressionFactory.Constant("user \""),
-            ExpressionFactory.Capturing(
-              ExpressionFactory.Regex(new("(?:[^\"]|\"\")*"))),
-            ExpressionFactory.Constant("\"")
-          ]),
-          "username")
-      ]);
+    [
+      (ExpressionFactory.Composite([
+          ExpressionFactory.Constant("user \""),
+          ExpressionFactory.Capturing(
+            ExpressionFactory.Regex(new("(?:[^\"]|\"\")*"))),
+          ExpressionFactory.Constant("\"")
+        ]),
+        "username")
+    ]);
 
     var Matches = Matcher.ExactMatch("user \"jumper9\"");
 
@@ -111,5 +99,17 @@ public class Samples
         Meaning = "username"
       }
     ]);
+  }
+
+  class Binder
+  {
+  }
+
+  static class BinderFactory
+  {
+    public static Binder ForMeat()
+    {
+      return new();
+    }
   }
 }

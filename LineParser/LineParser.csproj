@@ -9,7 +9,7 @@
     <Authors>Max Guernsey</Authors>
     <Company>Hexagon Software LLC</Company>
 
-    <Description>A parser for small blocks of text that supports recursive, extensible expressions.</Description>
+    <Description>A parser for small blocks of text that supports recursive, extensible patterns.</Description>
 
     <PackageTags>text;parsing;recursion</PackageTags>
     <PackageProjectUrl>https://github.com/MaxGuernseyIII/LineParser</PackageProjectUrl>

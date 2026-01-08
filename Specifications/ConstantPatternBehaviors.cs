@@ -26,7 +26,7 @@ using Shouldly;
 namespace Specifications;
 
 [TestClass]
-public sealed class ConstantExpressionBehaviors
+public sealed class ConstantPatternBehaviors
 {
   Factory<NullScope> Factory = null!;
 
@@ -41,8 +41,8 @@ public sealed class ConstantExpressionBehaviors
   {
     var ToMatch = Any.String();
 
-    var Expression = Factory.Constant(ToMatch);
-    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
+    var Pattern = Factory.Constant(ToMatch);
+    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Pattern]);
 
     var Matches = Matcher.ExactMatch(ToMatch).Select(M => M.Match);
     Matches.ShouldBe([
@@ -60,8 +60,8 @@ public sealed class ConstantExpressionBehaviors
   {
     var ToMatch = Any.String();
 
-    var Expression = Factory.Constant(ToMatch);
-    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
+    var Pattern = Factory.Constant(ToMatch);
+    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Pattern]);
 
     var Matches = Matcher.ExactMatch(ToMatch + Any.String());
     Matches.ShouldBe([]);
@@ -73,8 +73,8 @@ public sealed class ConstantExpressionBehaviors
     var ToMatch = Any.String();
     var Remainder = Any.String();
 
-    var Expression = Factory.Constant(ToMatch);
-    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
+    var Pattern = Factory.Constant(ToMatch);
+    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Pattern]);
 
     var Matches = Matcher.Match(ToMatch + Remainder).Select(M => M.Match);
     Matches.ShouldBe([
@@ -93,8 +93,8 @@ public sealed class ConstantExpressionBehaviors
     var ToMatch = Any.String();
     var Remainder = Any.String();
 
-    var Expression = Factory.Constant(ToMatch);
-    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
+    var Pattern = Factory.Constant(ToMatch);
+    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Pattern]);
 
     var Matches = Matcher.Match(Any.String() + Remainder);
     Matches.ShouldBe([]);
@@ -106,8 +106,8 @@ public sealed class ConstantExpressionBehaviors
     var ToMatch = Any.String();
     var Remainder = Any.String();
 
-    var Expression = Factory.Constant(ToMatch);
-    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
+    var Pattern = Factory.Constant(ToMatch);
+    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Pattern]);
 
     var Matches = Matcher.Match(Any.String() + ToMatch + Remainder);
     Matches.ShouldBe([]);

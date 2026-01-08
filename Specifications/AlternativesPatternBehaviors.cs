@@ -26,7 +26,7 @@ using Shouldly;
 namespace Specifications;
 
 [TestClass]
-public class AlternativesExpressionBehaviors
+public class AlternativesPatternBehaviors
 {
   Factory<NullScope> Factory = null!;
 

@@ -35,10 +35,10 @@ public class RegexAdapterBehaviors
     var Remainder = Any.String();
     var ToMatch = "there is some cheese in the house ";
     var ToParse = ToMatch + Remainder;
-    var Pattern = new Regex("there is (some|no) cheese in the (house|refrigerator) ", RegexOptions.Compiled);
-    var Expression = MatchScopeSpaces.Null.GetFactory().Regex(Pattern);
+    var Regex = new Regex("there is (some|no) cheese in the (house|refrigerator) ", RegexOptions.Compiled);
+    var Pattern = MatchScopeSpaces.Null.GetFactory().Regex(Regex);
 
-    var Matches = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]).Match(ToParse)
+    var Matches = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Pattern]).Match(ToParse)
       .Select(M => M.Match);
 
     Matches.ShouldBe([
@@ -68,10 +68,10 @@ public class RegexAdapterBehaviors
   {
     var ToMatch = "there is some cheese in the house ";
     var ToParse = Any.String() + ToMatch + Any.String();
-    var Pattern = new Regex("there is (some|no) cheese in the (house|refrigerator) ", RegexOptions.Compiled);
-    var Expression = MatchScopeSpaces.Null.GetFactory().Regex(Pattern);
+    var Regex = new Regex("there is (some|no) cheese in the (house|refrigerator) ", RegexOptions.Compiled);
+    var Pattern = MatchScopeSpaces.Null.GetFactory().Regex(Regex);
 
-    var Matches = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]).Match(ToParse);
+    var Matches = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Pattern]).Match(ToParse);
 
     Matches.ShouldBe([]);
   }

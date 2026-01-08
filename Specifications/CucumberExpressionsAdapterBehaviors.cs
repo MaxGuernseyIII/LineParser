@@ -26,29 +26,25 @@ using Shouldly;
 
 namespace Specifications;
 
-using StringScope = SupplyAndDemandScope<string>;
-
 [TestClass]
 public class CucumberExpressionsAdapterBehaviors
 {
   [TestMethod]
-  public void TopLevelExpression()
+  public void TopLevelPattern()
   {
     var ScopeSpace = MatchScopeSpaces.SupplyAndDemand<string>();
     var Factory = ScopeSpace.GetFactory();
-
-    var Mapper = new CucumberExpressionToExpressionMapper<StringScope, object>(ScopeSpace);
-    var StepMeaning = new object();
-    var Expression = Mapper.Map(
+    var Pattern = Factory.CucumberExpression(
       "this/these is/are my/our cucumber expression(s), which we use for {Purpose} and other things.",
       Name => ScopeSpace.Demand($"parameter:{Name}"));
 
+    var StepMeaning = new object();
     var Matcher = Factory.Matcher(
-      [
-        (ScopeSpace.Supply("type:step"), Expression, StepMeaning),
-        (ScopeSpace.Supply("parameter:Purpose"), Factory.Constant("testing"), null!),
-        (ScopeSpace.Supply("parameter:Purpose"), Factory.Constant("important work"), null!)
-      ]);
+    [
+      (ScopeSpace.Supply("type:step"), Pattern, StepMeaning),
+      (ScopeSpace.Supply("parameter:Purpose"), Factory.Constant("testing"), null!),
+      (ScopeSpace.Supply("parameter:Purpose"), Factory.Constant("important work"), null!)
+    ]);
 
     var CucumberExpression = "this is my cucumber expression, which we use for testing and other things.";
     var Actual = Matcher.ExactMatch(CucumberExpression, ScopeSpace.Demand("type:step"));

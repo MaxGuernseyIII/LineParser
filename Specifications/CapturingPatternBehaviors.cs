@@ -26,7 +26,7 @@ using Shouldly;
 namespace Specifications;
 
 [TestClass]
-public class CapturingExpressionBehaviors
+public class CapturingPatternBehaviors
 {
   Factory<NullScope> Factory = null!;
 
@@ -48,8 +48,8 @@ public class CapturingExpressionBehaviors
         {Input, UnderlyingOutput}
       }
     };
-    var Expression = Factory.Capturing(ToCapturePattern);
-    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]);
+    var Pattern = Factory.Capturing(ToCapturePattern);
+    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Pattern]);
 
     var Actual = Matcher.Match(Input).Select(M => M.Match);
 

@@ -21,36 +21,50 @@
 // SOFTWARE.
 
 using LineParser;
-using Shouldly;
 
 namespace Specifications;
 
-[TestClass]
-public class GreedyMatchAllBehaviors
+class MockScope2(
+  IReadOnlyList<MockScope2> Included,
+  IReadOnlyList<(MockScope2 Other, MockScope2 Result)> Ored,
+  IReadOnlyList<(MockScope2 Other, MockScope2 Result)> Anded) : MatchScope<MockScope2>
 {
-  Factory<NullScope> Factory = null!;
+  readonly IReadOnlyList<(MockScope2 Other, MockScope2 Result)> Anded = Anded;
+  readonly IReadOnlyList<(MockScope2 Other, MockScope2 Result)> Ored = Ored;
+  public static MockScope2 Any => new([], [], []);
 
-  [TestInitialize]
-  public void Setup()
+  public static MockScope2 Unspecified => new([], [], []);
+
+  public bool Includes(MockScope2 Other)
   {
-    Factory = MatchScopeSpaces.Null.GetFactory();
+    return Included.Contains(Other);
   }
 
-  [TestMethod]
-  public void FindsAllItemsThatStartAtBeginningOfMatchedString()
+  public static MockScope2 operator |(MockScope2 L, MockScope2 R)
   {
-    var ToMatch = Any.String();
-    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([
-      Factory.Anything()
-    ]);
+    return L.Ored.Single(O => O.Other == R).Result;
+  }
 
-    var Actual = Matcher.Match(ToMatch).Select(M => M.Match);
+  public static MockScope2 operator &(MockScope2 L, MockScope2 R)
+  {
+    return L.Anded.Single(O => O.Other == R).Result;
+  }
 
-    Actual.ShouldBe(Enumerable.Range(0, ToMatch.Length + 1).Reverse().Select(Split => new Match
+  public class Space : MatchScopeSpace<MockScope2>
+  {
+    public MockScope2 Any { get; } = new([], [], []);
+
+    public MockScope2 Unspecified { get; } = new([], [], []);
+
+
+    public MockScope2 Or(MockScope2 L, MockScope2 R)
     {
-      Matched = ToMatch[..Split],
-      Remainder = ToMatch[Split..],
-      Captured = []
-    }));
+      return L.Ored.Single(O => O.Other == R).Result;
+    }
+
+    public MockScope2 And(MockScope2 L, MockScope2 R)
+    {
+      return L.Anded.Single(O => O.Other == R).Result;
+    }
   }
 }

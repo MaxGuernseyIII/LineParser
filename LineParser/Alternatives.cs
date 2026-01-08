@@ -22,12 +22,12 @@
 
 namespace LineParser;
 
-sealed class Alternatives<Scope>(IEnumerable<Pattern<Scope>> Expressions)
+sealed class Alternatives<Scope>(IEnumerable<Pattern<Scope>> Patterns)
   : Pattern<Scope> where Scope : MatchScope<Scope>
 {
   public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubPatternMatcher<Scope> Reentry,
     MatchExecutionContext Context)
   {
-    return Expressions.SelectMany(E => E.GetMatchesAtBeginningOf(ToMatch, Reentry, Context));
+    return Patterns.SelectMany(E => E.GetMatchesAtBeginningOf(ToMatch, Reentry, Context));
   }
 }

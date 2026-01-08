@@ -20,15 +20,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-namespace LineParser;
+using LineParser;
+using Shouldly;
 
-public static class MatcherFactory
+namespace Specifications;
+
+[TestClass]
+public class AnyPatternBehaviors
 {
-  public static Matcher<Scope, Meaning> CreateFromRegistry<Scope, Meaning>(
-    MatchScopeSpace<Scope> ScopeSpace,
-    IEnumerable<(Scope Scope, Pattern<Scope> Expression, Meaning Meaning)> Registry)
-    where Scope : MatchScope<Scope>
+  Factory<NullScope> Factory = null!;
+
+  [TestInitialize]
+  public void Setup()
   {
-    return new MatcherImplementation<Scope, Meaning>(ScopeSpace, [..Registry]);
+    Factory = MatchScopeSpaces.Null.GetFactory();
+  }
+
+  [TestMethod]
+  public void FindsAllItemsThatStartAtBeginningOfMatchedString()
+  {
+    var ToMatch = Any.String();
+    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([
+      Factory.Anything()
+    ]);
+
+    var Actual = Matcher.Match(ToMatch).Select(M => M.Match);
+
+    Actual.ShouldBe(Enumerable.Range(0, ToMatch.Length + 1).Reverse().Select(Split => new Match
+    {
+      Matched = ToMatch[..Split],
+      Remainder = ToMatch[Split..],
+      Captured = []
+    }));
   }
 }

@@ -19,7 +19,7 @@ Then create an a pattern:
     var MeatPattern = Factory.Constant("meat");
 ```
 
-After that, package the expression into a matcher:
+After that, package the pattern into a matcher:
 
 ```csharp
     var Matcher = Factory.Matcher([MeatPattern]);
@@ -127,25 +127,25 @@ You can construct more sophisticated graphs:
     ]);
 ```
 
-That only barely scratches the surface of how an expression can be structured.
+That only barely scratches the surface of how a pattern can be structured.
 
 ## Adapters
 
-In the previous section, you saw how the `LineParser` package natively can adapt regular expressions into an expression. Another adapter that is provided in a separate package (`LineParser.CucumberExpressions`) imports the `CucumberExpressions` package's functionality into an expression graph.
+In the previous section, you saw how the `LineParser` package natively can adapt regular expressions into an pattern. Another adapter that is provided in a separate package (`LineParser.CucumberExpressions`) imports the `CucumberExpressions` package's functionality a pattern graph.
 
 Its use is quite straightforward:
 
 ```csharp
-var Expression = Mapper.Map(
-  "this/these is/are my/our cucumber expression(s), which we use for {Purpose} and other things.",
-  Name => StringScope.Demand($"parameter:{Name}"));
+    var Pattern = Factory.CucumberExpression(
+      "this/these is/are my/our cucumber expression(s), which we use for {Purpose} and other things.",
+      Name => ScopeSpace.Demand($"parameter:{Name}"));
 ```
 
-The first parameter is the cucumber expression you want to convert. The second parameter is a mechanism to convert a parameter's name into a scope object that can be used for recursive queries.
+The first parameter is the cucumber expression template you want to convert. The second parameter is a mechanism to convert a parameter's name into a scope object that can be used for recursive queries.
 
 ## Recursive Matches
 
-One of the things that makes `LineParser` so powerful is that it has a mechanism for extending a recursive grammar without having to define a complete, rigid grammar. This would probably not suffice for something as complex as a programming language but it is more than sufficient for cucumber expressions and other "little language" type structures.
+One of the things that makes `LineParser` so powerful is that it has a mechanism for extending a recursive parsing without having to define a complete, rigid grammar. This would probably not suffice for something as complex as a programming language but it is more than sufficient for cucumber expressions and other "little language" type structures.
 
 You can insert a placeholder for a recursive inner pattern match quite easily...
 

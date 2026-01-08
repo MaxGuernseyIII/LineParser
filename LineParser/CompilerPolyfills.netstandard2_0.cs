@@ -21,51 +21,47 @@
 // SOFTWARE.
 
 #if NETSTANDARD2_0
-using System;
-
-
-
 namespace System.Runtime.CompilerServices
 {
-    // Needed for `init` setters
-    static class IsExternalInit { }
+  // Needed for `init` setters
+  static class IsExternalInit
+  {
+  }
 
-    // Needed for `required` members (C# 11)
-    [AttributeUsage(AttributeTargets.All, AllowMultiple = true, Inherited = false)]
-    sealed class CompilerFeatureRequiredAttribute : Attribute
+  // Needed for `required` members (C# 11)
+  [AttributeUsage(AttributeTargets.All, AllowMultiple = true, Inherited = false)]
+  sealed class CompilerFeatureRequiredAttribute : Attribute
+  {
+    public CompilerFeatureRequiredAttribute(string featureName)
     {
-        public CompilerFeatureRequiredAttribute(string featureName) { }
     }
+  }
 
-    // Some toolchains expect this one in this namespace too
-    [AttributeUsage(AttributeTargets.All, AllowMultiple = false, Inherited = false)]
-    sealed class RequiredMemberAttribute : Attribute
-    {
-        public RequiredMemberAttribute() { }
-    }
+  // Some toolchains expect this one in this namespace too
+  [AttributeUsage(AttributeTargets.All, Inherited = false)]
+  sealed class RequiredMemberAttribute : Attribute
+  {
+  }
 }
 
 namespace System.Diagnostics.CodeAnalysis
 {
-    // Required-members metadata (commonly expected here)
-    [AttributeUsage(
-        AttributeTargets.Class |
-        AttributeTargets.Struct |
-        AttributeTargets.Field |
-        AttributeTargets.Property,
-        AllowMultiple = false,
-        Inherited = false)]
-    sealed class RequiredMemberAttribute : Attribute
-    {
-        public RequiredMemberAttribute() { }
-    }
+  // Required-members metadata (commonly expected here)
+  [AttributeUsage(
+    AttributeTargets.Class |
+    AttributeTargets.Struct |
+    AttributeTargets.Field |
+    AttributeTargets.Property,
+    Inherited = false)]
+  sealed class RequiredMemberAttribute : Attribute
+  {
+  }
 
-    // Marks ctors that set all required members
-    [AttributeUsage(AttributeTargets.Constructor, AllowMultiple = false, Inherited = false)]
-    sealed class SetsRequiredMembersAttribute : Attribute
-    {
-        public SetsRequiredMembersAttribute() { }
-    }
+  // Marks ctors that set all required members
+  [AttributeUsage(AttributeTargets.Constructor)]
+  sealed class SetsRequiredMembersAttribute : Attribute
+  {
+  }
 }
 
 #endif
