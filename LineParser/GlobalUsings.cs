@@ -21,3 +21,7 @@
 // SOFTWARE.
 
 global using ScopeSelection;
+
+using JetBrains.Annotations;
+
+[assembly: UsedImplicitly]
