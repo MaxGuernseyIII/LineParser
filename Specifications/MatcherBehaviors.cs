@@ -45,9 +45,7 @@ public class MatcherBehaviors
   {
     var ToMatch = Any.String();
     var Meaning = new object();
-    var Matcher = MatcherFactory.CreateFromPatterns(
-      ScopeSpace,
-      [
+    var Matcher = PatternFactory.Matcher([
         (PatternFactory.Constant(ToMatch), Meaning)
       ]);
 

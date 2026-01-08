@@ -30,17 +30,16 @@ static class TestMatcherFactory
     IEnumerable<(SupplyAndDemandScope<string> Scope, Pattern<SupplyAndDemandScope<string>> Expression)>
       Registry)
   {
-    return MatcherFactory.CreateFromRegistry(
-      MatchScopeSpaces.SupplyAndDemand<string>(),
-      [
-        ..Registry.Select(E => (E.Scope, E.Expression, new object()))
-      ]);
+    return MatchScopeSpaces.SupplyAndDemand<string>().Get().PatternFactory().Matcher(
+    [
+      ..Registry.Select(E => (E.Scope, E.Expression, new object()))
+    ]);
   }
 
   public static Matcher<NullScope, object> CreateFromExpressionsWithoutMeaning(
     IEnumerable<Pattern<NullScope>> Expressions
   )
   {
-    return MatcherFactory.CreateFromPatterns(MatchScopeSpaces.Null, Expressions.Select(E => (E, new object())));
+    return MatchScopeSpaces.Null.Get().PatternFactory().Matcher(Expressions);
   }
 }

@@ -42,8 +42,7 @@ public class Samples
     var ScopeSpace = MatchScopeSpaces.Null;
     var ExpressionFactory = ScopeSpace.Get().PatternFactory();
 
-    var Matcher = MatcherFactory.CreateFromPatterns(
-      ScopeSpace,
+    var Matcher = ExpressionFactory.Matcher(
       [
         (ExpressionFactory.Composite([
             ExpressionFactory.Constant("user \""),

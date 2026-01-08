@@ -26,6 +26,24 @@ namespace LineParser;
 
 public class PatternFactory<Scope>(MatchScopeSpace<Scope> ScopeSpace) where Scope : MatchScope<Scope>
 {
+  public Matcher<Scope, object> Matcher(
+    IEnumerable<Pattern<Scope>> Patterns)
+  {
+    return Matcher(Patterns.Select(P => (P, new object())));
+  }
+
+  public Matcher<Scope, Meaning> Matcher<Meaning>(
+    IEnumerable<(Pattern<Scope> Pattern, Meaning Meaning)> PatternsWithMeanings)
+  {
+    return Matcher(PatternsWithMeanings.Select(P => (ScopeSpace.Any, P.Pattern, P.Meaning)));
+  }
+
+  public Matcher<Scope, Meaning> Matcher<Meaning>(
+    IEnumerable<(Scope Scope, Pattern<Scope> Pattern, Meaning Meaning)> PatternsWithMeanings)
+  {
+    return MatcherFactory.CreateFromRegistry(ScopeSpace, PatternsWithMeanings);
+  }
+
   public Pattern<Scope> Anything()
   {
     return new AnythingPattern<Scope>();

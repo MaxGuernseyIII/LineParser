@@ -24,13 +24,6 @@ namespace LineParser;
 
 public static class MatcherFactory
 {
-  public static Matcher<Scope, object> CreateFromPatterns<Scope>(
-    MatchScopeSpace<Scope> ScopeSpace,
-     IEnumerable<Pattern<Scope>> Patterns) where Scope : MatchScope<Scope>
-  {
-    return CreateFromPatterns(ScopeSpace, Patterns.Select(P => (P, new object())));
-  }
-
   public static Matcher<Scope, Meaning> CreateFromPatterns<Scope, Meaning>(
     MatchScopeSpace<Scope> ScopeSpace,
     IEnumerable<(Pattern<Scope> Expression, Meaning Meaning)> Expressions) where Scope : MatchScope<Scope>
