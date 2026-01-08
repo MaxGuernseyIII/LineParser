@@ -32,10 +32,16 @@ class TestGraphQuery<TScope, T> : GraphQuery<TScope, T>
     Assert.Fail();
     return default!;
   }
+  static T Fail()
+  {
+    Assert.Fail();
+    return default!;
+  }
 
   public Func<IEnumerable<Pattern<TScope>>, T> OnQueryPatternAlternatives { get; set; } = Fail;
   public Func<string, T> OnQueryConstant { get; set; } = Fail;
-  public Func<Pattern<TScope>, T> OnQueryCapturing{ get; set; } = Fail;
+  public Func<Pattern<TScope>, T> OnQueryCapturing { get; set; } = Fail;
+  public Func<T> OnQueryAnything { get; set; } = Fail;
 
   public T QueryAlternativePatterns(IEnumerable<Pattern<TScope>> Alternatives)
   {
@@ -50,5 +56,10 @@ class TestGraphQuery<TScope, T> : GraphQuery<TScope, T>
   public T QueryCapturing(Pattern<TScope> Inner)
   {
     return OnQueryCapturing(Inner);
+  }
+
+  public T QueryAnything()
+  {
+    return OnQueryAnything();
   }
 }

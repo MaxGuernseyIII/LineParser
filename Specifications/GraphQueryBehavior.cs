@@ -96,4 +96,17 @@ public class GraphQueryBehavior
 
     Actual.ShouldBe(Inner);
   }
+
+  [TestMethod]
+  public void Anything()
+  {
+    var Node = Factory.Anything();
+
+    var Actual = Node.Query(new TestGraphQuery<NullScope, int>()
+    {
+      OnQueryAnything = () => 1
+    });
+
+    Actual.ShouldBe(1);
+  }
 }

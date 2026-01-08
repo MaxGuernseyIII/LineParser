@@ -26,4 +26,10 @@ public interface GraphQuery<in TScope, out TResult>
   /// <param name="Inner">The pattern whose output is captured.</param>
   /// <returns>The result of the query.</returns>
   TResult QueryCapturing(Pattern<TScope> Inner);
+
+  /// <summary>
+  /// Invoked when a node represents a catchall.
+  /// </summary>
+  /// <returns>The result of the query.</returns>
+  TResult QueryAnything();
 }

@@ -37,6 +37,6 @@ class AnythingPattern<ScopeImplementation> : Pattern<ScopeImplementation> where 
 
   public TResult Query<TResult>(GraphQuery<ScopeImplementation, TResult> Query)
   {
-    throw new NotImplementedException();
+    return Query.QueryAnything();
   }
 }
