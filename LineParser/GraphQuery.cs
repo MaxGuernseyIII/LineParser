@@ -1,4 +1,6 @@
-﻿namespace LineParser;
+﻿using System.Text.RegularExpressions;
+
+namespace LineParser;
 
 /// <summary>
 /// A query against a graph of patterns.
@@ -46,4 +48,11 @@ public interface GraphQuery<in TScope, out TResult>
   /// <param name="Demanded">The scope of the subpattern.</param>
   /// <returns>The result of the query.</returns>
   TResult QuerySubpattern(TScope Demanded);
+
+  /// <summary>
+  /// Invoked when a node represents a regex.
+  /// </summary>
+  /// <param name="Regex">The regex.</param>
+  /// <returns>The result of the query.</returns>
+  TResult QueryRegex(Regex Regex);
 }

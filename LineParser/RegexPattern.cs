@@ -50,6 +50,6 @@ sealed class RegexPattern<ScopeImplementation>(Regex Pattern) : Pattern<ScopeImp
 
   public TResult Query<TResult>(GraphQuery<ScopeImplementation, TResult> Query)
   {
-    throw new NotImplementedException();
+    return Query.QueryRegex(Pattern);
   }
 }

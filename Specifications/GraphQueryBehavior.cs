@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Text.RegularExpressions;
 using LineParser;
 using Shouldly;
 
@@ -142,5 +143,20 @@ public class GraphQueryBehavior
     });
 
     Actual.ShouldBe(Scope);
+  }
+
+  [TestMethod]
+  public void Regex()
+  {
+    var Regex = new Regex("^" + Any.String());
+    var Node = Factory.Regex(Regex);
+
+    var Actual = Node.Query(new TestGraphQuery<StringScope, Regex>()
+    {
+      OnQueryRegex = R => R
+    });
+
+    Actual.ToString().ShouldBe(Regex.ToString());
+    Actual.Options.ShouldBe(Regex.Options);
   }
 }

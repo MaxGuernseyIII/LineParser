@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Text.RegularExpressions;
 using LineParser;
 
 namespace Specifications;
@@ -44,6 +45,7 @@ class TestGraphQuery<TScope, T> : GraphQuery<TScope, T>
   public Func<T> OnQueryAnything { get; set; } = Fail;
   public Func<IEnumerable<Pattern<TScope>>, T> OnQuerySequence { get; set; } = Fail;
   public Func<TScope, T> OnQuerySubpattern { get; set; } = Fail;
+  public Func<Regex, T> OnQueryRegex { get; set; } = Fail;
 
   public T QueryAlternativePatterns(IEnumerable<Pattern<TScope>> Alternatives)
   {
@@ -73,5 +75,10 @@ class TestGraphQuery<TScope, T> : GraphQuery<TScope, T>
   public T QuerySubpattern(TScope Demanded)
   {
     return OnQuerySubpattern(Demanded);
+  }
+
+  public T QueryRegex(Regex Regex)
+  {
+    return OnQueryRegex(Regex);
   }
 }
