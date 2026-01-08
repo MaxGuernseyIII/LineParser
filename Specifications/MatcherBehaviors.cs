@@ -51,4 +51,23 @@ public class MatcherBehaviors
 
     Actual.Single().Meaning.ShouldBe(Meaning);
   }
+
+  [TestMethod]
+  public void ConstrainsPossibilitiesByScope()
+  {
+    var ToMatch = Any.String();
+    var TargetScope = Any.String();
+    var Meaning = new object();
+    var Matcher = MatcherFactory.CreateFromRegistry([
+      (StringScope.Supply(Any.String()), ExpressionFactory.CreateConstant(ToMatch), new()),
+      (StringScope.Supply(TargetScope), ExpressionFactory.CreateConstant(ToMatch), Meaning),
+      (StringScope.Supply(Any.String()), ExpressionFactory.CreateConstant(ToMatch), new())
+    ]);
+
+    var Actual = Matcher.Match(ToMatch, new(), StringScope.Demand(TargetScope)).Select(M => M.Meaning);
+
+    Actual.ShouldBe([
+      Meaning
+    ]);
+  }
 }

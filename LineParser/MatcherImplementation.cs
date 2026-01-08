@@ -30,7 +30,7 @@ class MatcherImplementation<Scope, Meaning>(ImmutableArray<(Scope Scope, Express
 {
   public IEnumerable<MatchWithMeaning<Meaning>> Match(string ToParse, MatchExecutionContext Context, Scope Scope)
   {
-    foreach (var Registered in Registry)
+    foreach (var Registered in Registry.Where(R => Scope.Includes(R.Scope)))
     foreach (var Match in Registered.Expression.GetMatchesAtBeginningOf(ToParse, this, Context))
       yield return new()
       {
