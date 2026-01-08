@@ -22,8 +22,19 @@
 
 namespace LineParser;
 
-public readonly record struct MatchWithMeaning<TMeaning>
+/// <summary>
+/// A <see cref="LineParser.Match"/> with additional details.
+/// </summary>
+/// <typeparam name="TMeaning">The type of object used to convey meaning.</typeparam>
+public readonly record struct AnnotatedMatch<TMeaning>
 {
+  /// <summary>
+  /// The annotated <see cref="Match"/>.
+  /// </summary>
   public required Match Match { get; init; }
-  public readonly TMeaning Meaning { get; init; }
+
+  /// <summary>
+  /// The associated meaning.
+  /// </summary>
+  public required TMeaning Meaning { get; init; }
 }

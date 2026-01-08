@@ -34,7 +34,7 @@ public static class MatcherExtensions
     /// </summary>
     /// <param name="ToParse">The string to match.</param>
     /// <returns>All partial and complete matches that start at index <c>0</c> of <see cref="ToParse"/>.</returns>
-    public IEnumerable<MatchWithMeaning<Meaning>> Match(string ToParse)
+    public IEnumerable<AnnotatedMatch<Meaning>> Match(string ToParse)
     {
       return This.Match(ToParse, This.ScopeSpace.Any);
     }
@@ -45,7 +45,7 @@ public static class MatcherExtensions
     /// <param name="ToParse">The string to match.</param>
     /// <param name="MatchScope">The <see cref="Scope{Implementation}"/> that selects the <see cref="Pattern{ScopeImplementation}"/>s which will be used to perform the match operation.</param>
     /// <returns>All partial and complete matches that start at index <c>0</c> of <see cref="ToParse"/>.</returns>
-    public IEnumerable<MatchWithMeaning<Meaning>> Match(string ToParse, Scope MatchScope)
+    public IEnumerable<AnnotatedMatch<Meaning>> Match(string ToParse, Scope MatchScope)
     {
       return This.Match(ToParse, new(), MatchScope);
     }
@@ -55,7 +55,7 @@ public static class MatcherExtensions
     /// </summary>
     /// <param name="ToParse">The string to match.</param>
     /// <returns>All partial and complete matches that start at index <c>0</c> of <see cref="ToParse"/>.</returns>
-    public IEnumerable<MatchWithMeaning<Meaning>> ExactMatch(string ToParse)
+    public IEnumerable<AnnotatedMatch<Meaning>> ExactMatch(string ToParse)
     {
       return This.ExactMatch(ToParse, This.ScopeSpace.Any);
     }
@@ -66,7 +66,7 @@ public static class MatcherExtensions
     /// <param name="ToParse">The string to match.</param>
     /// <param name="MatchScope">The <see cref="Scope{Implementation}"/> that selects the <see cref="Pattern{ScopeImplementation}"/>s which will be used to perform the match operation.</param>
     /// <returns>All partial and complete matches that start at index <c>0</c> of <see cref="ToParse"/>.</returns>
-    public IEnumerable<MatchWithMeaning<Meaning>> ExactMatch(string ToParse, Scope MatchScope)
+    public IEnumerable<AnnotatedMatch<Meaning>> ExactMatch(string ToParse, Scope MatchScope)
     {
       return This.Match(ToParse, MatchScope).Where(M => M.Match.Remainder == "");
     }

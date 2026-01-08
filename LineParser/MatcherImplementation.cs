@@ -32,7 +32,7 @@ class MatcherImplementation<Scope, Meaning>(
 {
   public ScopeSpace<Scope> ScopeSpace { get; } = ScopeSpace;
 
-  public IEnumerable<MatchWithMeaning<Meaning>> Match(string ToParse, MatchExecutionContext Context, Scope Scope)
+  public IEnumerable<AnnotatedMatch<Meaning>> Match(string ToParse, MatchExecutionContext Context, Scope Scope)
   {
     foreach (var Registered in Registry.Where(R => Scope.IsSatisfiedBy(R.Scope)))
     foreach (var Match in Registered.Pattern.GetMatchesAtBeginningOf(ToParse, MatchWithoutMeaning, Context))
