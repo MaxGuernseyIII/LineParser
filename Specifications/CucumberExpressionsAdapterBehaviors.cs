@@ -28,7 +28,6 @@ namespace Specifications;
 
 using StringScope = SupplyAndDemandScope<string>;
 
-[Ignore]
 [TestClass]
 public class CucumberExpressionsAdapterBehaviors
 {
