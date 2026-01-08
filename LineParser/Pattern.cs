@@ -30,7 +30,7 @@ public interface Pattern<out ScopeImplementation>
   where ScopeImplementation : Scope<ScopeImplementation>
 {
   /// <summary>
-  /// Finds all <see cref="Match"/>es that start at the beginning of <see cref="ToMatch"/>.
+  /// Finds all <see cref="Match"/>es that start at the beginning of <paramref name="ToMatch"/>.
   /// </summary>
   /// <param name="ToMatch">The string to match.</param>
   /// <param name="FindSubpattern">The operation that can be used to match a subpattern.</param>

@@ -40,7 +40,7 @@ public interface ScopeSpace<ScopeImplementation>
   public ScopeImplementation Unspecified { get; }
 
   /// <summary>
-  /// A <see cref="Scope{Implementation}"/> that represents the union of <see cref="L"/> and <see cref="R"/>.
+  /// A <see cref="Scope{Implementation}"/> that represents the union of <paramref name="L"/> and <paramref name="R"/>.
   /// </summary>
   /// <param name="L">A <see cref="Scope{Implementation}"/> to merge.</param>
   /// <param name="R">A <see cref="Scope{Implementation}"/> to merge.</param>
@@ -48,7 +48,7 @@ public interface ScopeSpace<ScopeImplementation>
   public ScopeImplementation Union(ScopeImplementation L, ScopeImplementation R);
 
   /// <summary>
-  /// A <see cref="Scope{Implementation}"/> that represents the intersection of <see cref="L"/> and <see cref="R"/>.
+  /// A <see cref="Scope{Implementation}"/> that represents the intersection of <paramref name="L"/> and <paramref name="R"/>.
   /// </summary>
   /// <param name="L">A <see cref="Scope{Implementation}"/> to merge.</param>
   /// <param name="R">A <see cref="Scope{Implementation}"/> to merge.</param>

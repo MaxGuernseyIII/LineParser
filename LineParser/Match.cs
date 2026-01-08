@@ -59,7 +59,7 @@ public readonly record struct Match
   }
 
   /// <summary>
-  /// Concatenates <see cref="Left"/> and <see cref="Right"/>.
+  /// Concatenates <paramref name="Left"/> and <paramref name="Right"/>.
   /// </summary>
   /// <param name="Left">The first match in the concatenation.</param>
   /// <param name="Right">The match to be appended.</param>

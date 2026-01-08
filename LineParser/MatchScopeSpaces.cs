@@ -32,7 +32,7 @@ public static class MatchScopeSpaces
     where Scope : Scope<Scope>
   {
     /// <summary>
-    /// Get the <see cref="Factory{ScopeImplementation}"/> associated with <see cref="This"/>.
+    /// Get the <see cref="Factory{ScopeImplementation}"/> associated with this object.
     /// </summary>
     /// <returns>The requested <see cref="Factory{ScopeImplementation}"/>.</returns>
     public Factory<Scope> GetFactory()

@@ -19,7 +19,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
 
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <!--<WarningsAsErrors>1591</WarningsAsErrors>-->
+    <WarningsAsErrors>1591;1574;1734</WarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>

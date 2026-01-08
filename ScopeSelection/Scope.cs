@@ -33,6 +33,6 @@ public interface Scope<in Implementation>
   /// Treats the current <see cref="Scope{Implementation}"/> as a requirement and checks the other scope to determine if it satisfies said requirement.
   /// </summary>
   /// <param name="Other">The scope that supplies satisfaction.</param>
-  /// <returns><c>true</c> of the requirement manifest in this <see cref="Scope{Implementation}"/> is met by <see cref="Other"/> and <c>false</c> if not.</returns>
+  /// <returns><c>true</c> of the requirement manifest in this <see cref="Scope{Implementation}"/> is met by <paramref name="Other"/> and <c>false</c> if not.</returns>
   public bool IsSatisfiedBy(Implementation Other);
 }
