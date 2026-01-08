@@ -35,6 +35,7 @@ class TestGraphQuery<TScope, T> : GraphQuery<TScope, T>
 
   public Func<IEnumerable<Pattern<TScope>>, T> OnQueryPatternAlternatives { get; set; } = Fail;
   public Func<string, T> OnQueryConstant { get; set; } = Fail;
+  public Func<Pattern<TScope>, T> OnQueryCapturing{ get; set; } = Fail;
 
   public T QueryAlternativePatterns(IEnumerable<Pattern<TScope>> Alternatives)
   {
@@ -44,5 +45,10 @@ class TestGraphQuery<TScope, T> : GraphQuery<TScope, T>
   public T QueryConstant(string Content)
   {
     return OnQueryConstant(Content);
+  }
+
+  public T QueryCapturing(Pattern<TScope> Inner)
+  {
+    return OnQueryCapturing(Inner);
   }
 }

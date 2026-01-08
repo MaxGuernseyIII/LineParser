@@ -19,4 +19,11 @@ public interface GraphQuery<in TScope, out TResult>
   /// <param name="Content">The constant string.</param>
   /// <returns>The result of the query.</returns>
   TResult QueryConstant(string Content);
+
+  /// <summary>
+  /// Invoked when a node represents a capture.
+  /// </summary>
+  /// <param name="Inner">The pattern whose output is captured.</param>
+  /// <returns>The result of the query.</returns>
+  TResult QueryCapturing(Pattern<TScope> Inner);
 }

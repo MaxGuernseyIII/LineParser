@@ -82,4 +82,18 @@ public class GraphQueryBehavior
 
     Actual.ShouldBe(Content);
   }
+
+  [TestMethod]
+  public void Capture()
+  {
+    var Inner = new MockPattern<NullScope>();
+    var Node = Factory.Capturing(Inner);
+
+    var Actual = Node.Query(new TestGraphQuery<NullScope, Pattern<NullScope>>()
+    {
+      OnQueryCapturing = I => I
+    });
+
+    Actual.ShouldBe(Inner);
+  }
 }
