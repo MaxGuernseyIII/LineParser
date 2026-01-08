@@ -43,6 +43,7 @@ class TestGraphQuery<TScope, T> : GraphQuery<TScope, T>
   public Func<Pattern<TScope>, T> OnQueryCapturing { get; set; } = Fail;
   public Func<T> OnQueryAnything { get; set; } = Fail;
   public Func<IEnumerable<Pattern<TScope>>, T> OnQuerySequence { get; set; } = Fail;
+  public Func<TScope, T> OnQuerySubpattern { get; set; } = Fail;
 
   public T QueryAlternativePatterns(IEnumerable<Pattern<TScope>> Alternatives)
   {
@@ -67,5 +68,10 @@ class TestGraphQuery<TScope, T> : GraphQuery<TScope, T>
   public T QuerySequence(IEnumerable<Pattern<TScope>> Steps)
   {
     return OnQuerySequence(Steps);
+  }
+
+  public T QuerySubpattern(TScope Demanded)
+  {
+    return OnQuerySubpattern(Demanded);
   }
 }

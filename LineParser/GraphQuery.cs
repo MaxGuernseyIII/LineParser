@@ -39,4 +39,11 @@ public interface GraphQuery<in TScope, out TResult>
   /// <param name="Steps">The steps.</param>
   /// <returns>The result of the query.</returns>
   TResult QuerySequence(IEnumerable<Pattern<TScope>> Steps);
+
+  /// <summary>
+  /// Invoked when a node represents a reference to a subpattern.
+  /// </summary>
+  /// <param name="Demanded">The scope of the subpattern.</param>
+  /// <returns>The result of the query.</returns>
+  TResult QuerySubpattern(TScope Demanded);
 }

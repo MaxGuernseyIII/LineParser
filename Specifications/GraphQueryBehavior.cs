@@ -25,25 +25,29 @@ using Shouldly;
 
 namespace Specifications;
 
+using StringScope = SupplyAndDemandScope<string>;
+
 [TestClass]
 public class GraphQueryBehavior
 {
-  Factory<NullScope> Factory = null!;
+  Factory<StringScope> Factory = null!;
+  StringScope.Space ScopeSpace = null!;
 
   [TestInitialize]
   public void Setup()
   {
-    Factory = ScopeSpaces.Null.GetFactory();
+    ScopeSpace = ScopeSpaces.SupplyAndDemand<string>();
+    Factory = ScopeSpace.GetFactory();
   }
 
   [TestMethod]
   public void MatcherTreatsPatternsAsAlternatives()
   {
     var Matcher = Factory.Matcher([
-      new MockPattern<NullScope>(), new MockPattern<NullScope>()
+      new MockPattern<StringScope>(), new MockPattern<StringScope>()
     ]);
 
-    var Actual = Matcher.Query(new TestGraphQuery<NullScope, IEnumerable<Pattern<NullScope>>>()
+    var Actual = Matcher.Query(new TestGraphQuery<StringScope, IEnumerable<Pattern<StringScope>>>()
     {
       OnQueryPatternAlternatives = P => P
     });
@@ -54,12 +58,12 @@ public class GraphQueryBehavior
   [TestMethod]
   public void ParallelTreatsPatternsAsAlternatives()
   {
-    IEnumerable<Pattern<NullScope>> Patterns = [
-      new MockPattern<NullScope>(), new MockPattern<NullScope>()
+    IEnumerable<Pattern<StringScope>> Patterns = [
+      new MockPattern<StringScope>(), new MockPattern<StringScope>()
     ];
     var Node = Factory.Parallel(Patterns);
 
-    var Actual = Node.Query(new TestGraphQuery<NullScope, IEnumerable<Pattern<NullScope>>>()
+    var Actual = Node.Query(new TestGraphQuery<StringScope, IEnumerable<Pattern<StringScope>>>()
     {
       OnQueryPatternAlternatives = P => P
     });
@@ -73,7 +77,7 @@ public class GraphQueryBehavior
     var Content = Any.String();
     var Node = Factory.Constant(Content);
 
-    var Actual = Node.Query(new TestGraphQuery<NullScope, string>()
+    var Actual = Node.Query(new TestGraphQuery<StringScope, string>()
     {
       OnQueryConstant = C => C
     });
@@ -84,10 +88,10 @@ public class GraphQueryBehavior
   [TestMethod]
   public void Capture()
   {
-    var Inner = new MockPattern<NullScope>();
+    var Inner = new MockPattern<StringScope>();
     var Node = Factory.Capturing(Inner);
 
-    var Actual = Node.Query(new TestGraphQuery<NullScope, Pattern<NullScope>>()
+    var Actual = Node.Query(new TestGraphQuery<StringScope, Pattern<StringScope>>()
     {
       OnQueryCapturing = I => I
     });
@@ -100,7 +104,7 @@ public class GraphQueryBehavior
   {
     var Node = Factory.Anything();
 
-    var Actual = Node.Query(new TestGraphQuery<NullScope, int>()
+    var Actual = Node.Query(new TestGraphQuery<StringScope, int>()
     {
       OnQueryAnything = () => 1
     });
@@ -111,18 +115,32 @@ public class GraphQueryBehavior
   [TestMethod]
   public void Sequence()
   {
-    IEnumerable<Pattern<NullScope>> Patterns =
+    IEnumerable<Pattern<StringScope>> Patterns =
     [
-      new MockPattern<NullScope>(), new MockPattern<NullScope>()
+      new MockPattern<StringScope>(), new MockPattern<StringScope>()
     ];
 
     var Node = Factory.Sequence(Patterns);
 
-    var Actual = Node.Query(new TestGraphQuery<NullScope, IEnumerable<Pattern<NullScope>>>()
+    var Actual = Node.Query(new TestGraphQuery<StringScope, IEnumerable<Pattern<StringScope>>>()
     {
       OnQuerySequence = P => P
     });
 
     Actual.ShouldBe(Patterns);
+  }
+
+  [TestMethod]
+  public void Subpattern()
+  {
+    var Scope = ScopeSpace.Demand(Any.String());
+    var Node = Factory.Subpattern(Scope);
+
+    var Actual = Node.Query(new TestGraphQuery<StringScope, StringScope>()
+    {
+      OnQuerySubpattern = S => S
+    });
+
+    Actual.ShouldBe(Scope);
   }
 }

@@ -33,6 +33,6 @@ sealed class Subpattern<ScopeImplementation>(ScopeImplementation Demand) : Patte
 
   public TResult Query<TResult>(GraphQuery<ScopeImplementation, TResult> Query)
   {
-    throw new NotImplementedException();
+    return Query.QuerySubpattern(Demand);
   }
 }
