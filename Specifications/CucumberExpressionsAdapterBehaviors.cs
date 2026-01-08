@@ -20,45 +20,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using LineParser;
-
 namespace Specifications;
 
-static class Any
+[Ignore]
+[TestClass]
+public class CucumberExpressionsAdapterBehaviors
 {
-  static readonly Random Source = new();
-
-  public static string String()
+  [TestMethod]
+  public void IntegrationTest1()
   {
-    return Guid.NewGuid().ToString("N");
-  }
-
-  public static Match Match()
-  {
-    return new()
-    {
-      Matched = String(),
-      Remainder = String(),
-      Captured = [..ArrayOf(Capture)]
-    };
-  }
-
-  public static Match.Capture Capture()
-  {
-    return new()
-    {
-      At = Source.Next(100),
-      Value = String()
-    };
-  }
-
-  public static T[] ArrayOf<T>(Func<T> Make)
-  {
-    return Enumerable.Range(0, Source.Next(4)).Select(_ => Make()).ToArray();
-  }
-
-  public static IEnumerable<Match> Matches()
-  {
-    return ArrayOf(Match);
+    var Parser = new CucumberExpressions.Parsing.CucumberExpressionParser();
+    var AST = Parser.Parse("something {Special} goes here and then {Here}");
   }
 }

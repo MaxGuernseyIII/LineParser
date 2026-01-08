@@ -21,44 +21,50 @@
 // SOFTWARE.
 
 using LineParser;
+using Shouldly;
 
 namespace Specifications;
 
-static class Any
+[TestClass]
+public class AlternativesExpressionBehaviors
 {
-  static readonly Random Source = new();
+  ExpressionFactory<NullScope, object> ExpressionFactory = null!;
 
-  public static string String()
+  [TestInitialize]
+  public void Setup()
   {
-    return Guid.NewGuid().ToString("N");
+    ExpressionFactory = new();
   }
 
-  public static Match Match()
+  [TestMethod]
+  public void ShowsAlternativesAsParallelOptions()
   {
-    return new()
-    {
-      Matched = String(),
-      Remainder = String(),
-      Captured = [..ArrayOf(Capture)]
-    };
-  }
+    var ToMatch = Any.String();
+    var Option1Matches = Any.Matches();
+    var Option2Matches = Any.Matches();
+    var Alternatives = ExpressionFactory.CreateAlternatives([
+      new MockExpression<NullScope, object>
+      {
+        Results =
+        {
+          {ToMatch, Option1Matches}
+        }
+      },
+      new MockExpression<NullScope, object>
+      {
+        Results =
+        {
+          {ToMatch, Option2Matches}
+        }
+      }
+    ]);
+    var Matcher = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Alternatives]);
 
-  public static Match.Capture Capture()
-  {
-    return new()
-    {
-      At = Source.Next(100),
-      Value = String()
-    };
-  }
+    var Actual = Matcher.Match(ToMatch).Select(M => M.Match);
 
-  public static T[] ArrayOf<T>(Func<T> Make)
-  {
-    return Enumerable.Range(0, Source.Next(4)).Select(_ => Make()).ToArray();
-  }
-
-  public static IEnumerable<Match> Matches()
-  {
-    return ArrayOf(Match);
+    Actual.ShouldBe([
+      ..Option1Matches,
+      ..Option2Matches
+    ], true);
   }
 }

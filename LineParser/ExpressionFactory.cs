@@ -20,7 +20,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 
 namespace LineParser;
@@ -51,5 +50,10 @@ public class ExpressionFactory<Scope, Meaning>
   public Expression<Scope, Meaning> CreateForRegex(Regex Pattern)
   {
     return new RegexExpression<Scope, Meaning>(Pattern);
+  }
+
+  public Expression<Scope, Meaning> CreateAlternatives(IEnumerable<Expression<Scope, Meaning>> Expressions)
+  {
+    return new Alternatives<Scope, Meaning>(Expressions);
   }
 }

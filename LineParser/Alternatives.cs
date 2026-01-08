@@ -20,45 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using LineParser;
+namespace LineParser;
 
-namespace Specifications;
-
-static class Any
+sealed class Alternatives<Scope, Meaning>(IEnumerable<Expression<Scope, Meaning>> Expressions) : Expression<Scope, Meaning> where Scope : MatchScope<Scope>
 {
-  static readonly Random Source = new();
-
-  public static string String()
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry, MatchExecutionContext Context)
   {
-    return Guid.NewGuid().ToString("N");
-  }
-
-  public static Match Match()
-  {
-    return new()
-    {
-      Matched = String(),
-      Remainder = String(),
-      Captured = [..ArrayOf(Capture)]
-    };
-  }
-
-  public static Match.Capture Capture()
-  {
-    return new()
-    {
-      At = Source.Next(100),
-      Value = String()
-    };
-  }
-
-  public static T[] ArrayOf<T>(Func<T> Make)
-  {
-    return Enumerable.Range(0, Source.Next(4)).Select(_ => Make()).ToArray();
-  }
-
-  public static IEnumerable<Match> Matches()
-  {
-    return ArrayOf(Match);
+    return Expressions.SelectMany(E => E.GetMatchesAtBeginningOf(ToMatch, Reentry, Context));
   }
 }

@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Cucumber.CucumberExpressions" Version="18.0.1" />
+  </ItemGroup>
+
 </Project>
