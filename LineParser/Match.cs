@@ -27,36 +27,42 @@ namespace LineParser;
 
 public readonly record struct Match
 {
-  public readonly record struct Capture
+  public Match()
   {
-    public required int At { get; init; }
-    public required string Value { get; init; }
   }
-
-  public Match() {}
 
   public required string Matched { get; init; }
   public required string Remainder { get; init; }
   public ImmutableArray<Capture> Captured { get; init; } = ImmutableArray<Capture>.Empty;
-
-  public static Match operator +(Match Left, Match Right) => new()
-  {
-    Matched = Left.Matched + Right.Matched,
-    Remainder = Right.Remainder, 
-    Captured = [
-      ..Left.Captured, 
-      ..Right.Captured.Select(C => C with { At = Left.Matched.Length + C.At })
-    ]
-  };
 
   public bool Equals(Match Other)
   {
     return Matched == Other.Matched && Remainder == Other.Remainder && Captured.SequenceEqual(Other.Captured);
   }
 
+  public static Match operator +(Match Left, Match Right)
+  {
+    return new()
+    {
+      Matched = Left.Matched + Right.Matched,
+      Remainder = Right.Remainder,
+      Captured =
+      [
+        ..Left.Captured,
+        ..Right.Captured.Select(C => C with {At = Left.Matched.Length + C.At})
+      ]
+    };
+  }
+
   public override int GetHashCode()
   {
-    return HashCode.Combine(Matched, Remainder, Captured);
+    unchecked
+    {
+      var Hash = 17;
+      Hash = Hash * 23 + (Matched?.GetHashCode() ?? 0);
+      Hash = Hash * 23 + Remainder.GetHashCode();
+      return Hash;
+    }
   }
 
   bool PrintMembers(StringBuilder Builder)
@@ -65,5 +71,11 @@ public readonly record struct Match
       $"Matched = \"{Matched}\", Remainder = \"{Remainder}\", Captured = [{string.Join(", ", Captured)}]");
 
     return true;
+  }
+
+  public readonly record struct Capture
+  {
+    public required int At { get; init; }
+    public required string Value { get; init; }
   }
 }

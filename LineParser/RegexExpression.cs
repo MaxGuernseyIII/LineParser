@@ -36,10 +36,10 @@ sealed class RegexExpression<Scope, Meaning>(Regex Pattern) : Expression<Scope, 
       yield return new()
       {
         Matched = M.Value,
-        Remainder = ToMatch[M.Value.Length..],
+        Remainder = ToMatch.Substring(M.Value.Length),
         Captured =
         [
-          ..M.Groups.Values.Skip(1).Select(C => new Match.Capture
+          ..M.Groups.Cast<Group>().Skip(1).Select(C => new Match.Capture
           {
             At = C.Index,
             Value = C.Value

@@ -22,14 +22,17 @@
 
 namespace LineParser;
 
-public interface MatchScope<T>
-  where T : MatchScope<T>
+public interface MatchScope<in Scope>
+  where Scope : MatchScope<Scope>
 {
-  public static abstract T Any { get; }
-  public static abstract T Unspecified { get; }
+  public bool Includes(Scope Other);
+}
 
-  public bool Includes(T Other);
-
-  public static abstract T operator |(T L, T R);
-  public static abstract T operator &(T L, T R);
+public interface MatchScopeSpace<Scope>
+  where Scope : MatchScope<Scope>
+{
+  public Scope Any { get; }
+  public Scope Unspecified { get; }
+  public Scope Or(Scope L, Scope R);
+  public Scope And(Scope L, Scope R);
 }

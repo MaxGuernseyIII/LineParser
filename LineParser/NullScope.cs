@@ -24,24 +24,30 @@ namespace LineParser;
 
 public class NullScope : MatchScope<NullScope>
 {
-  NullScope() {}
-
-  public static NullScope Any { get; } = new();
-
-  public static NullScope Unspecified => Any;
+  NullScope()
+  {
+  }
 
   public bool Includes(NullScope Other)
   {
     return true;
   }
 
-  public static NullScope operator |(NullScope L, NullScope R)
+  internal class Space : MatchScopeSpace<NullScope>
   {
-    return L;
-  }
+    public NullScope Any { get; } = new();
 
-  public static NullScope operator &(NullScope L, NullScope R)
-  {
-    return R;
+    public NullScope Unspecified => Any;
+
+
+    public NullScope Or(NullScope L, NullScope R)
+    {
+      return Any;
+    }
+
+    public NullScope And(NullScope L, NullScope R)
+    {
+      return Any;
+    }
   }
 }

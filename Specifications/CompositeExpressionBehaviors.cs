@@ -52,7 +52,8 @@ public sealed class CompositeExpressionBehaviors
 
     var FirstMatch0 = FirstMatches[0];
     var FirstMatch1 = FirstMatches[1];
-    IEnumerable<Expression<NullScope, object>> Expressions = [
+    IEnumerable<Expression<NullScope, object>> Expressions =
+    [
       new MockExpression<NullScope, object>
       {
         Results =
@@ -79,7 +80,8 @@ public sealed class CompositeExpressionBehaviors
 
     var Actual = Matcher.Match(OverallString).Select(M => M.Match);
 
-    var Expected = MatchesForRemainder0.SelectMany(Level2 => FinalMatches.Select(Level3 => FirstMatch0 + Level2 + Level3))
+    var Expected = MatchesForRemainder0
+      .SelectMany(Level2 => FinalMatches.Select(Level3 => FirstMatch0 + Level2 + Level3))
       .Concat(MatchesForRemainder1.SelectMany(Level2 => FinalMatches.Select(Level3 => FirstMatch1 + Level2 + Level3)));
 
     Actual.ShouldBe(Expected, true);

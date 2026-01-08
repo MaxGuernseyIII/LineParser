@@ -38,10 +38,12 @@ public class MatchBehaviors
 
     Actual.Matched.ShouldBe(Match1.Matched + Match2.Matched);
     Actual.Remainder.ShouldBe(Match2.Remainder);
-    Actual.Captured.ShouldBe([.. Match1.Captured, .. Match2.Captured.Select(C => C with
-    {
-      At = C.At + Match1.Matched.Length
-    })]);
+    Actual.Captured.ShouldBe([
+      .. Match1.Captured, .. Match2.Captured.Select(C => C with
+      {
+        At = C.At + Match1.Matched.Length
+      })
+    ]);
   }
 
   [TestMethod]

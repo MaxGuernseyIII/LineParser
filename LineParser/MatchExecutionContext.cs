@@ -38,7 +38,7 @@ public class MatchExecutionContext
 
     try
     {
-      foreach (var Item in ToDo()) 
+      foreach (var Item in ToDo())
         yield return Item;
     }
     finally

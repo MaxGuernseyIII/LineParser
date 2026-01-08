@@ -31,10 +31,12 @@ using StringScope = SupplyAndDemandScope<string>;
 public class RecursiveExpressionBehaviors
 {
   ExpressionFactory<StringScope, object> ExpressionFactory = null!;
+  StringScope.Space ScopeSpace = null!;
 
   [TestInitialize]
   public void Setup()
   {
+    ScopeSpace = MatchScopeSpaces.SupplyAndDemand<string>();
     ExpressionFactory = new();
   }
 
@@ -45,14 +47,14 @@ public class RecursiveExpressionBehaviors
     var OuterScope = Any.String();
     var MatchedStub = Any.String();
     var ToParse = MatchedStub + Any.String();
-    var Recursive = ExpressionFactory.CreateRecursive(StringScope.Demand(InnerScope));
+    var Recursive = ExpressionFactory.CreateRecursive(ScopeSpace.Demand(InnerScope));
     var Constant = ExpressionFactory.CreateConstant(MatchedStub);
     var Matcher = TestMatcherFactory.CreateFromRegistryWithoutMeaning([
-      (StringScope.Supply(InnerScope), Constant),
-      (StringScope.Supply(OuterScope),  Recursive)
+      (ScopeSpace.Supply(InnerScope), Constant),
+      (ScopeSpace.Supply(OuterScope), Recursive)
     ]);
 
-    var Actual = Matcher.Match(ToParse, new(), StringScope.Demand(OuterScope)).Select(M => M.Match);
+    var Actual = Matcher.Match(ToParse, new(), ScopeSpace.Demand(OuterScope)).Select(M => M.Match);
 
     Actual.ShouldBe(Constant.GetMatchesAtBeginningOf(ToParse, Matcher, new()));
   }
@@ -62,12 +64,12 @@ public class RecursiveExpressionBehaviors
   {
     var Scope = Any.String();
     var ToParse = Any.String();
-    var Recursive = ExpressionFactory.CreateRecursive(StringScope.Demand(Scope));
+    var Recursive = ExpressionFactory.CreateRecursive(ScopeSpace.Demand(Scope));
     var Matcher = TestMatcherFactory.CreateFromRegistryWithoutMeaning([
-      (StringScope.Supply(Scope),  Recursive)
+      (ScopeSpace.Supply(Scope), Recursive)
     ]);
 
-    var Actual = Matcher.Match(ToParse, new(), StringScope.Demand(Scope)).Select(M => M.Match);
+    var Actual = Matcher.Match(ToParse, new(), ScopeSpace.Demand(Scope)).Select(M => M.Match);
 
     Actual.ShouldBe([]);
   }

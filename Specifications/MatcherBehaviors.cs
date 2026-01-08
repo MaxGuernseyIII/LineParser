@@ -31,11 +31,13 @@ using StringScope = SupplyAndDemandScope<string>;
 public class MatcherBehaviors
 {
   ExpressionFactory<StringScope, object> ExpressionFactory = null!;
+  StringScope.Space ScopeSpace = null!;
 
   [TestInitialize]
   public void Setup()
   {
-    ExpressionFactory = new();
+    ScopeSpace = MatchScopeSpaces.SupplyAndDemand<string>();
+    ExpressionFactory = ScopeSpace.Get().PatternFactory<object>();
   }
 
   [TestMethod]
@@ -43,9 +45,11 @@ public class MatcherBehaviors
   {
     var ToMatch = Any.String();
     var Meaning = new object();
-    var Matcher = MatcherFactory.CreateFromExpressions([
-      (ExpressionFactory.CreateConstant(ToMatch), Meaning)
-    ]);
+    var Matcher = MatcherFactory.CreateFromExpressions(
+      ScopeSpace,
+      [
+        (ExpressionFactory.CreateConstant(ToMatch), Meaning)
+      ]);
 
     var Actual = Matcher.Match(ToMatch);
 
@@ -58,13 +62,15 @@ public class MatcherBehaviors
     var ToMatch = Any.String();
     var TargetScope = Any.String();
     var Meaning = new object();
-    var Matcher = MatcherFactory.CreateFromRegistry([
-      (StringScope.Supply(Any.String()), ExpressionFactory.CreateConstant(ToMatch), new()),
-      (StringScope.Supply(TargetScope), ExpressionFactory.CreateConstant(ToMatch), Meaning),
-      (StringScope.Supply(Any.String()), ExpressionFactory.CreateConstant(ToMatch), new())
-    ]);
+    var Matcher = MatcherFactory.CreateFromRegistry(
+      ScopeSpace,
+      [
+        (ScopeSpace.Supply(Any.String()), ExpressionFactory.CreateConstant(ToMatch), new()),
+        (ScopeSpace.Supply(TargetScope), ExpressionFactory.CreateConstant(ToMatch), Meaning),
+        (ScopeSpace.Supply(Any.String()), ExpressionFactory.CreateConstant(ToMatch), new())
+      ]);
 
-    var Actual = Matcher.Match(ToMatch, new(), StringScope.Demand(TargetScope)).Select(M => M.Meaning);
+    var Actual = Matcher.Match(ToMatch, new(), ScopeSpace.Demand(TargetScope)).Select(M => M.Meaning);
 
     Actual.ShouldBe([
       Meaning

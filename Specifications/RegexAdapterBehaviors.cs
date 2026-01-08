@@ -38,7 +38,8 @@ public class RegexAdapterBehaviors
     var Pattern = new Regex("there is (some|no) cheese in the (house|refrigerator) ", RegexOptions.Compiled);
     var Expression = new ExpressionFactory<NullScope, object>().CreateForRegex(Pattern);
 
-    var Matches = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]).Match(ToParse).Select(M => M.Match);
+    var Matches = TestMatcherFactory.CreateFromExpressionsWithoutMeaning([Expression]).Match(ToParse)
+      .Select(M => M.Match);
 
     Matches.ShouldBe([
       new()

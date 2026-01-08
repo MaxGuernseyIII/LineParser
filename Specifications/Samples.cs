@@ -31,17 +31,20 @@ public class Samples
   [TestMethod]
   public void MatchWithConditionals()
   {
-    var ExpressionFactory = new ExpressionFactory<NullScope, string>();
+    var ScopeSpace = MatchScopeSpaces.Null;
+    var ExpressionFactory = ScopeSpace.Get().PatternFactory<object>();
 
-    var Matcher = MatcherFactory.CreateFromExpressions([
-      (ExpressionFactory.CreateComposite([
-          ExpressionFactory.CreateConstant("user \""),
-          ExpressionFactory.CreateCapturing(
-            ExpressionFactory.CreateForRegex(new("(?:[^\"]|\"\")*"))),
-          ExpressionFactory.CreateConstant("\"")
-        ]),
-        "username")
-    ]);
+    var Matcher = MatcherFactory.CreateFromExpressions(
+      ScopeSpace,
+      [
+        (ExpressionFactory.CreateComposite([
+            ExpressionFactory.CreateConstant("user \""),
+            ExpressionFactory.CreateCapturing(
+              ExpressionFactory.CreateForRegex(new("(?:[^\"]|\"\")*"))),
+            ExpressionFactory.CreateConstant("\"")
+          ]),
+          "username")
+      ]);
 
     var Matches = Matcher.ExactMatch("user \"jumper9\"");
     Matches.ShouldBe([

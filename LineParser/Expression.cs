@@ -22,7 +22,7 @@
 
 namespace LineParser;
 
-public interface Expression<out Scope, Meaning>
+public interface Expression<Scope, Meaning>
   where Scope : MatchScope<Scope>
 {
   IEnumerable<Match> GetMatchesAtBeginningOf(

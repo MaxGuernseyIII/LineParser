@@ -24,24 +24,26 @@ namespace LineParser;
 
 public static class MatcherExtensions
 {
-  public static IEnumerable<MatchWithMeaning<Meaning>> Match<Scope, Meaning>(this Matcher<Scope, Meaning> This, string ToParse) where Scope : MatchScope<Scope>
+  extension<Scope, Meaning>(Matcher<Scope, Meaning> This) where Scope : MatchScope<Scope>
   {
-    return This.Match(ToParse, Scope.Any);
-  }
+    public IEnumerable<MatchWithMeaning<Meaning>> Match(string ToParse)
+    {
+      return This.Match(ToParse, This.ScopeSpace.Any);
+    }
 
-  public static IEnumerable<MatchWithMeaning<Meaning>> Match<Scope, Meaning>(this Matcher<Scope, Meaning> This, string ToParse, Scope MatchScope) where Scope : MatchScope<Scope>
-  {
-    return This.Match(ToParse, new(), MatchScope);
-  }
+    public IEnumerable<MatchWithMeaning<Meaning>> Match(string ToParse, Scope MatchScope)
+    {
+      return This.Match(ToParse, new(), MatchScope);
+    }
 
-  public static IEnumerable<MatchWithMeaning<Meaning>> ExactMatch<Scope, Meaning>(this Matcher<Scope, Meaning> This, string ToParse) where Scope : MatchScope<Scope>
-  {
-    return This.ExactMatch(ToParse, Scope.Any);
-  }
+    public IEnumerable<MatchWithMeaning<Meaning>> ExactMatch(string ToParse)
+    {
+      return This.ExactMatch(ToParse, This.ScopeSpace.Any);
+    }
 
-  public static IEnumerable<MatchWithMeaning<Meaning>> ExactMatch<Scope, Meaning>(this Matcher<Scope, Meaning> This, string ToParse, Scope MatchScope)
-    where Scope : MatchScope<Scope>
-  {
-    return This.Match(ToParse, MatchScope).Where(M => M.Match.Remainder == "");
+    public IEnumerable<MatchWithMeaning<Meaning>> ExactMatch(string ToParse, Scope MatchScope)
+    {
+      return This.Match(ToParse, MatchScope).Where(M => M.Match.Remainder == "");
+    }
   }
 }

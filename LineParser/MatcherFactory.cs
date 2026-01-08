@@ -25,14 +25,18 @@ namespace LineParser;
 public static class MatcherFactory
 {
   public static Matcher<Scope, Meaning> CreateFromExpressions<Scope, Meaning>(
+    MatchScopeSpace<Scope> ScopeSpace,
     IEnumerable<(Expression<Scope, Meaning> Expression, Meaning Meaning)> Expressions) where Scope : MatchScope<Scope>
   {
-    return CreateFromRegistry([..Expressions.Select(E => (Scope: Scope.Unspecified, E.Expression, E.Meaning))]);
+    return CreateFromRegistry(ScopeSpace,
+      [..Expressions.Select(E => (Scope: ScopeSpace.Unspecified, E.Expression, E.Meaning))]);
   }
 
-  public static Matcher<Scope, Meaning> CreateFromRegistry<Scope, Meaning>(IEnumerable<(Scope Scope, Expression<Scope, Meaning> Expression, Meaning Meaning)> Registry)
+  public static Matcher<Scope, Meaning> CreateFromRegistry<Scope, Meaning>(
+    MatchScopeSpace<Scope> ScopeSpace,
+    IEnumerable<(Scope Scope, Expression<Scope, Meaning> Expression, Meaning Meaning)> Registry)
     where Scope : MatchScope<Scope>
   {
-    return new MatcherImplementation<Scope, Meaning>([..Registry]);
+    return new MatcherImplementation<Scope, Meaning>(ScopeSpace, [..Registry]);
   }
 }

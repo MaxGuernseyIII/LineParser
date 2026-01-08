@@ -25,108 +25,114 @@ using Shouldly;
 
 namespace Specifications;
 
-using TestedScope = SupplyAndDemandScope<MockToken>;
-
 [TestClass]
 public class SupplyAndDemandScopeBehaviors
 {
+  SupplyAndDemandScope<MockToken>.Space ScopeSpace = null!;
+
+  [TestInitialize]
+  public void Setup()
+  {
+    ScopeSpace = MatchScopeSpaces.SupplyAndDemand<MockToken>();
+  }
+
   [TestMethod]
   public void AnyIncludesItself()
   {
-    TestedScope.Any.Includes(TestedScope.Any).ShouldBeTrue();
+    ScopeSpace.Any.Includes(ScopeSpace.Any).ShouldBeTrue();
   }
 
   [TestMethod]
   public void AnyIncludesToken()
   {
-    TestedScope.Any.Includes(TestedScope.For(new())).ShouldBeTrue();
+    ScopeSpace.Any.Includes(ScopeSpace.For(new())).ShouldBeTrue();
   }
 
   [TestMethod]
   public void AnyIncludesUnspecified()
   {
-    TestedScope.Any.Includes(TestedScope.Unspecified).ShouldBeTrue();
+    ScopeSpace.Any.Includes(ScopeSpace.Unspecified).ShouldBeTrue();
   }
 
   [TestMethod]
   public void RequireIncludesAny()
   {
-    TestedScope.Demand(new()).Includes(TestedScope.Any).ShouldBeTrue();
+    ScopeSpace.Demand(new()).Includes(ScopeSpace.Any).ShouldBeTrue();
   }
 
   [TestMethod]
   public void RequireIncludesToken()
   {
     var Token = new MockToken();
-    TestedScope.Demand(Token).Includes(TestedScope.For(Token)).ShouldBeTrue();
+    ScopeSpace.Demand(Token).Includes(ScopeSpace.For(Token)).ShouldBeTrue();
   }
 
   [TestMethod]
   public void RequireIncludesSameSupply()
   {
     var Token = new MockToken();
-    TestedScope.Demand(Token).Includes(TestedScope.Supply(Token)).ShouldBeTrue();
+    ScopeSpace.Demand(Token).Includes(ScopeSpace.Supply(Token)).ShouldBeTrue();
   }
 
   [TestMethod]
   public void RequireDoesNotIncludeOtherToken()
   {
-    TestedScope.Demand(new()).Includes(TestedScope.For(new())).ShouldBeFalse();
+    ScopeSpace.Demand(new()).Includes(ScopeSpace.For(new())).ShouldBeFalse();
   }
 
   [TestMethod]
   public void RequireDoesNotIncludeOtherSupply()
   {
-    TestedScope.Demand(new()).Includes(TestedScope.Supply(new())).ShouldBeFalse();
+    ScopeSpace.Demand(new()).Includes(ScopeSpace.Supply(new())).ShouldBeFalse();
   }
 
   [TestMethod]
   public void RequireDoesNotIncludeUnspecified()
   {
-    TestedScope.Demand(new()).Includes(TestedScope.Unspecified).ShouldBeFalse();
+    ScopeSpace.Demand(new()).Includes(ScopeSpace.Unspecified).ShouldBeFalse();
   }
 
   [TestMethod]
   public void UnspecifiedIncludesItself()
   {
-    TestedScope.Unspecified.Includes(TestedScope.Unspecified).ShouldBeTrue();
+    ScopeSpace.Unspecified.Includes(ScopeSpace.Unspecified).ShouldBeTrue();
   }
 
   [TestMethod]
   public void UnspecifiedIncludesToken()
   {
-    TestedScope.Unspecified.Includes(TestedScope.For(new())).ShouldBeTrue();
+    ScopeSpace.Unspecified.Includes(ScopeSpace.For(new())).ShouldBeTrue();
   }
 
   [TestMethod]
   public void UnspecifiedIncludesAny()
   {
-    TestedScope.Unspecified.Includes(TestedScope.Any).ShouldBeTrue();
+    ScopeSpace.Unspecified.Includes(ScopeSpace.Any).ShouldBeTrue();
   }
 
   [TestMethod]
   public void TokenIncludesAny()
   {
-    TestedScope.For(new()).Includes(TestedScope.Any).ShouldBeTrue();
+    ScopeSpace.For(new()).Includes(ScopeSpace.Any).ShouldBeTrue();
   }
 
   [TestMethod]
   public void TokenIncludesSameToken()
   {
     var Token = new MockToken();
-    TestedScope.For(Token).Includes(TestedScope.For(Token)).ShouldBeTrue();
+    ScopeSpace.For(Token).Includes(ScopeSpace.For(Token)).ShouldBeTrue();
   }
 
   [TestMethod]
   public void TokenDoesNotIncludeOtherToken()
   {
-    TestedScope.For(new()).Includes(TestedScope.For(new())).ShouldBeFalse();
+    ScopeSpace.For(new()).Includes(ScopeSpace.For(new())).ShouldBeFalse();
   }
 
   [TestMethod]
   public void TokenDoesNotIncludeUnspecified()
   {
-    TestedScope.For(new()).Includes(TestedScope.Unspecified).ShouldBeFalse();
+    ScopeSpace.For(new()).Includes(ScopeSpace.Unspecified).ShouldBeFalse();
   }
 
   [TestMethod]
@@ -135,8 +141,8 @@ public class SupplyAndDemandScopeBehaviors
     MockToken Token1 = new();
     MockToken Token2 = new();
 
-    (TestedScope.Demand(Token1) & TestedScope.Demand(Token2))
-      .Includes(TestedScope.Supply(Token1) | TestedScope.Supply(Token2)).ShouldBeTrue();
+    ScopeSpace.And(ScopeSpace.Demand(Token1), ScopeSpace.Demand(Token2))
+      .Includes(ScopeSpace.Or(ScopeSpace.Supply(Token1), ScopeSpace.Supply(Token2))).ShouldBeTrue();
   }
 
   [TestMethod]
@@ -145,8 +151,8 @@ public class SupplyAndDemandScopeBehaviors
     MockToken Token1 = new();
     MockToken Token2 = new();
 
-    (TestedScope.Demand(Token1) & TestedScope.Demand(Token2))
-      .Includes(TestedScope.Supply(Token1)).ShouldBeFalse();
+    ScopeSpace.And(ScopeSpace.Demand(Token1), ScopeSpace.Demand(Token2))
+      .Includes(ScopeSpace.Supply(Token1)).ShouldBeFalse();
   }
 
   [TestMethod]
@@ -155,8 +161,8 @@ public class SupplyAndDemandScopeBehaviors
     MockToken Token1 = new();
     MockToken Token2 = new();
 
-    (TestedScope.Demand(Token1) & TestedScope.Demand(Token2))
-      .Includes(TestedScope.Supply(Token2)).ShouldBeFalse();
+    ScopeSpace.And(ScopeSpace.Demand(Token1), ScopeSpace.Demand(Token2))
+      .Includes(ScopeSpace.Supply(Token2)).ShouldBeFalse();
   }
 
   [TestMethod]
@@ -165,18 +171,18 @@ public class SupplyAndDemandScopeBehaviors
     MockToken Token1 = new();
     MockToken Token2 = new();
 
-    (TestedScope.Demand(Token1) & TestedScope.Demand(Token2))
-      .Includes(TestedScope.Unspecified).ShouldBeFalse();
+    ScopeSpace.And(ScopeSpace.Demand(Token1), ScopeSpace.Demand(Token2))
+      .Includes(ScopeSpace.Unspecified).ShouldBeFalse();
   }
 
   [TestMethod]
   public void AndWhenSuppliesOverlap()
   {
-    var Scope1 = TestedScope.For(new());
-    var Scope2 = TestedScope.For(new());
-    var Scope3 = TestedScope.For(new());
+    var Scope1 = ScopeSpace.For(new());
+    var Scope2 = ScopeSpace.For(new());
+    var Scope3 = ScopeSpace.For(new());
 
-    var Intersection = (Scope1 | Scope2) & (Scope2 | Scope3);
+    var Intersection = ScopeSpace.And(ScopeSpace.Or(Scope1, Scope2), ScopeSpace.Or(Scope2, Scope3));
 
     Scope1.Includes(Intersection).ShouldBeFalse();
     Intersection.Includes(Scope1).ShouldBeFalse();
@@ -192,8 +198,8 @@ public class SupplyAndDemandScopeBehaviors
     MockToken Token1 = new();
     MockToken Token2 = new();
 
-    (TestedScope.Demand(Token1) | TestedScope.Demand(Token2))
-      .Includes(TestedScope.Supply(Token1) | TestedScope.Supply(Token2)).ShouldBeTrue();
+    ScopeSpace.Or(ScopeSpace.Demand(Token1), ScopeSpace.Demand(Token2))
+      .Includes(ScopeSpace.Or(ScopeSpace.Supply(Token1), ScopeSpace.Supply(Token2))).ShouldBeTrue();
   }
 
   [TestMethod]
@@ -202,8 +208,8 @@ public class SupplyAndDemandScopeBehaviors
     MockToken Token1 = new();
     MockToken Token2 = new();
 
-    (TestedScope.Demand(Token1) | TestedScope.Demand(Token2))
-      .Includes(TestedScope.Supply(Token1)).ShouldBeTrue();
+    ScopeSpace.Or(ScopeSpace.Demand(Token1), ScopeSpace.Demand(Token2))
+      .Includes(ScopeSpace.Supply(Token1)).ShouldBeTrue();
   }
 
   [TestMethod]
@@ -212,8 +218,8 @@ public class SupplyAndDemandScopeBehaviors
     MockToken Token1 = new();
     MockToken Token2 = new();
 
-    (TestedScope.Demand(Token1) | TestedScope.Demand(Token2))
-      .Includes(TestedScope.Supply(Token2)).ShouldBeTrue();
+    ScopeSpace.Or(ScopeSpace.Demand(Token1), ScopeSpace.Demand(Token2))
+      .Includes(ScopeSpace.Supply(Token2)).ShouldBeTrue();
   }
 
   [TestMethod]
@@ -222,7 +228,7 @@ public class SupplyAndDemandScopeBehaviors
     MockToken Token1 = new();
     MockToken Token2 = new();
 
-    (TestedScope.Demand(Token1) | TestedScope.Demand(Token2))
-      .Includes(TestedScope.Unspecified).ShouldBeFalse();
+    ScopeSpace.Or(ScopeSpace.Demand(Token1), ScopeSpace.Demand(Token2))
+      .Includes(ScopeSpace.Unspecified).ShouldBeFalse();
   }
 }

@@ -27,17 +27,20 @@ namespace Specifications;
 static class TestMatcherFactory
 {
   public static Matcher<SupplyAndDemandScope<string>, object> CreateFromRegistryWithoutMeaning(
-    IEnumerable<(SupplyAndDemandScope<string> Scope, Expression<SupplyAndDemandScope<string>, object> Expression)> Registry)
+    IEnumerable<(SupplyAndDemandScope<string> Scope, Expression<SupplyAndDemandScope<string>, object> Expression)>
+      Registry)
   {
-    return MatcherFactory.CreateFromRegistry([
-      ..Registry.Select(E => (E.Scope, E.Expression, new object()))
-    ]);
+    return MatcherFactory.CreateFromRegistry(
+      MatchScopeSpaces.SupplyAndDemand<string>(),
+      [
+        ..Registry.Select(E => (E.Scope, E.Expression, new object()))
+      ]);
   }
 
   public static Matcher<NullScope, object> CreateFromExpressionsWithoutMeaning(
     IEnumerable<Expression<NullScope, object>> Expressions
   )
   {
-    return MatcherFactory.CreateFromExpressions(Expressions.Select(E => (E, new object())));
+    return MatcherFactory.CreateFromExpressions(MatchScopeSpaces.Null, Expressions.Select(E => (E, new object())));
   }
 }

@@ -22,33 +22,72 @@
 
 namespace LineParser;
 
+public static class MatchScopeSpaces
+{
+  public static MatchScopeSpace<NullScope> Null { get; } = new NullScope.Space();
+
+  public static MatchScopeSpace<CompositeScope<TLeft, TRight>> Composite<TLeft, TRight>(MatchScopeSpace<TLeft> Left,
+    MatchScopeSpace<TRight> Right)
+    where TLeft : MatchScope<TLeft>
+    where TRight : MatchScope<TRight>
+  {
+    return new CompositeScope<TLeft, TRight>.Space(Left, Right);
+  }
+
+  public static SupplyAndDemandScope<Token>.Space SupplyAndDemand<Token>()
+  {
+    return new();
+  }
+
+  extension<Scope>(MatchScopeSpace<Scope> This)
+    where Scope : MatchScope<Scope>
+  {
+    public Related<Scope> Get()
+    {
+      return new(This);
+    }
+  }
+
+  public struct Related<Scope>(MatchScopeSpace<Scope> ScopeSpace) where Scope : MatchScope<Scope>
+  {
+    public ExpressionFactory<Scope, Meaning> PatternFactory<Meaning>()
+    {
+      return new();
+    }
+  }
+}
+
 public sealed class CompositeScope<TLeft, TRight>(TLeft Left, TRight Right) : MatchScope<CompositeScope<TLeft, TRight>>
   where TLeft : MatchScope<TLeft>
-  where TRight: MatchScope<TRight>
+  where TRight : MatchScope<TRight>
 {
   public TLeft Left { get; } = Left;
   public TRight Right { get; } = Right;
-
-  public static CompositeScope<TLeft, TRight> Any { get; } = new(TLeft.Any, TRight.Any);
-
-  public static CompositeScope<TLeft, TRight> Unspecified { get; } = new(TLeft.Unspecified, TRight.Unspecified);
 
   public bool Includes(CompositeScope<TLeft, TRight> Other)
   {
     return Left.Includes(Other.Left) && Right.Includes(Other.Right);
   }
 
-  public static CompositeScope<TLeft, TRight> operator |(
-    CompositeScope<TLeft, TRight> L,
-    CompositeScope<TLeft, TRight> R)
+  internal sealed class Space(MatchScopeSpace<TLeft> Left, MatchScopeSpace<TRight> Right)
+    : MatchScopeSpace<CompositeScope<TLeft, TRight>>
   {
-    return new(L.Left | R.Left, L.Right | R.Right);
-  }
+    public CompositeScope<TLeft, TRight> Any { get; } = new(Left.Any, Right.Any);
 
-  public static CompositeScope<TLeft, TRight> operator &(
-    CompositeScope<TLeft, TRight> L,
-    CompositeScope<TLeft, TRight> R)
-  {
-    return new(L.Left & R.Left, L.Right & R.Right);
+    public CompositeScope<TLeft, TRight> Unspecified { get; } = new(Left.Unspecified, Right.Unspecified);
+
+    public CompositeScope<TLeft, TRight> Or(
+      CompositeScope<TLeft, TRight> L,
+      CompositeScope<TLeft, TRight> R)
+    {
+      return new(Left.Or(L.Left, R.Left), Right.Or(L.Right, R.Right));
+    }
+
+    public CompositeScope<TLeft, TRight> And(
+      CompositeScope<TLeft, TRight> L,
+      CompositeScope<TLeft, TRight> R)
+    {
+      return new(Left.And(L.Left, R.Left), Right.And(L.Right, R.Right));
+    }
   }
 }

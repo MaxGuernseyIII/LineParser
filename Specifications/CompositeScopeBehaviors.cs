@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 using LineParser;
-using Microsoft.Testing.Platform.Extensions;
 using Shouldly;
 
 namespace Specifications;
@@ -29,18 +28,30 @@ namespace Specifications;
 [TestClass]
 public class CompositeScopeBehaviors
 {
+  MatchScopeSpace<CompositeScope<MockScope1, MockScope2>> Space = null!;
+  MockScope1.Space Space1;
+  MockScope2.Space Space2;
+
+  [TestInitialize]
+  public void Setup()
+  {
+    Space1 = new();
+    Space2 = new();
+    Space = MatchScopeSpaces.Composite(Space1, Space2);
+  }
+
   [TestMethod]
   public void AnyIsComposed()
   {
-    CompositeScope<MockScope1, MockScope2>.Any.ShouldBeEquivalentTo(
-      new CompositeScope<MockScope1, MockScope2>(MockScope1.Any, MockScope2.Any));
+    Space.Any.ShouldBeEquivalentTo(
+      new CompositeScope<MockScope1, MockScope2>(Space1.Any, Space2.Any));
   }
 
   [TestMethod]
   public void UnspecifiedIsComposed()
   {
-    CompositeScope<MockScope1, MockScope2>.Unspecified.ShouldBeEquivalentTo(
-      new CompositeScope<MockScope1, MockScope2>(MockScope1.Unspecified, MockScope2.Unspecified));
+    Space.Unspecified.ShouldBeEquivalentTo(
+      new CompositeScope<MockScope1, MockScope2>(Space1.Unspecified, Space2.Unspecified));
   }
 
   [TestMethod]
@@ -105,8 +116,8 @@ public class CompositeScopeBehaviors
     var LeftLeft = new MockScope1([], [(RightLeft, NewLeft)], []);
     var LeftRight = new MockScope2([], [(RightRight, NewRight)], []);
 
-    var Actual = new CompositeScope<MockScope1, MockScope2>(LeftLeft, LeftRight) |
-                 new CompositeScope<MockScope1, MockScope2>(RightLeft, RightRight);
+    var Actual = Space.Or(new(LeftLeft, LeftRight),
+      new(RightLeft, RightRight));
 
     Actual.ShouldBeEquivalentTo(new CompositeScope<MockScope1, MockScope2>(NewLeft, NewRight));
   }
@@ -121,8 +132,8 @@ public class CompositeScopeBehaviors
     var LeftLeft = new MockScope1([], [], [(RightLeft, NewLeft)]);
     var LeftRight = new MockScope2([], [], [(RightRight, NewRight)]);
 
-    var Actual = new CompositeScope<MockScope1, MockScope2>(LeftLeft, LeftRight) &
-                 new CompositeScope<MockScope1, MockScope2>(RightLeft, RightRight);
+    var Actual = Space.And(new(LeftLeft, LeftRight),
+      new(RightLeft, RightRight));
 
     Actual.ShouldBeEquivalentTo(new CompositeScope<MockScope1, MockScope2>(NewLeft, NewRight));
   }

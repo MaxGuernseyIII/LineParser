@@ -22,7 +22,8 @@
 
 namespace LineParser;
 
-sealed class CompositeExpression<Scope, Meaning>(IEnumerable<Expression<Scope, Meaning>> Expressions) : Expression<Scope, Meaning> where Scope : MatchScope<Scope>
+sealed class CompositeExpression<Scope, Meaning>(IEnumerable<Expression<Scope, Meaning>> Expressions)
+  : Expression<Scope, Meaning> where Scope : MatchScope<Scope>
 {
   public IEnumerable<Match> GetMatchesAtBeginningOf(
     string ToMatch, Matcher<Scope, Meaning> Reentry, MatchExecutionContext Context)

@@ -28,7 +28,8 @@ sealed class MockExpression<Scope, Meaning> : Expression<Scope, Meaning> where S
 {
   public Dictionary<string, IEnumerable<Match>> Results = [];
 
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry, MatchExecutionContext Context)
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry,
+    MatchExecutionContext Context)
   {
     return !Results.TryGetValue(ToMatch, out var Result) ? [] : Result;
   }

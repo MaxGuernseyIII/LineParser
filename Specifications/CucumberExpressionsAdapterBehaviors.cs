@@ -34,21 +34,25 @@ public class CucumberExpressionsAdapterBehaviors
   [TestMethod]
   public void TopLevelExpression()
   {
-    var Factory = new ExpressionFactory<StringScope, object>();
+    var ScopeSpace = MatchScopeSpaces.SupplyAndDemand<string>();
+    var Factory = ScopeSpace.Get().PatternFactory<object>();
+
     var Mapper = new CucumberExpressionToExpressionMapper<StringScope, object>();
     var StepMeaning = new object();
     var Expression = Mapper.Map(
       "this/these is/are my/our cucumber expression(s), which we use for {Purpose} and other things.",
-      Name => StringScope.Demand($"parameter:{Name}"));
+      Name => ScopeSpace.Demand($"parameter:{Name}"));
 
-    var Matcher = MatcherFactory.CreateFromRegistry([
-      (StringScope.Supply("type:step"), Expression, StepMeaning),
-      (StringScope.Supply("parameter:Purpose"), Factory.CreateConstant("testing"), null!),
-      (StringScope.Supply("parameter:Purpose"), Factory.CreateConstant("important work"), null!)
-    ]);
+    var Matcher = MatcherFactory.CreateFromRegistry(
+      ScopeSpace,
+      [
+        (ScopeSpace.Supply("type:step"), Expression, StepMeaning),
+        (ScopeSpace.Supply("parameter:Purpose"), Factory.CreateConstant("testing"), null!),
+        (ScopeSpace.Supply("parameter:Purpose"), Factory.CreateConstant("important work"), null!)
+      ]);
 
     var CucumberExpression = "this is my cucumber expression, which we use for testing and other things.";
-    var Actual = Matcher.ExactMatch(CucumberExpression, StringScope.Demand("type:step"));
+    var Actual = Matcher.ExactMatch(CucumberExpression, ScopeSpace.Demand("type:step"));
 
     Actual.ShouldBe([
       new()

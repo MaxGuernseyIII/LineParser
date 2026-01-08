@@ -31,23 +31,28 @@ class MockScope1(
 {
   readonly IReadOnlyList<(MockScope1 Other, MockScope1 Result)> Anded = Anded;
   readonly IReadOnlyList<(MockScope1 Other, MockScope1 Result)> Ored = Ored;
-  public static MockScope1 Any { get; } = new([], [], []);
-
-  public static MockScope1 Unspecified { get; } = new([], [], []);
 
   public bool Includes(MockScope1 Other)
   {
     return Included.Contains(Other);
   }
 
-  public static MockScope1 operator |(MockScope1 L, MockScope1 R)
+  public class Space : MatchScopeSpace<MockScope1>
   {
-    return L.Ored.Single(O => O.Other == R).Result;
-  }
+    public MockScope1 Any { get; } = new([], [], []);
 
-  public static MockScope1 operator &(MockScope1 L, MockScope1 R)
-  {
-    return L.Anded.Single(O => O.Other == R).Result;
+    public MockScope1 Unspecified { get; } = new([], [], []);
+
+
+    public MockScope1 Or(MockScope1 L, MockScope1 R)
+    {
+      return L.Ored.Single(O => O.Other == R).Result;
+    }
+
+    public MockScope1 And(MockScope1 L, MockScope1 R)
+    {
+      return L.Anded.Single(O => O.Other == R).Result;
+    }
   }
 }
 
@@ -75,5 +80,23 @@ class MockScope2(
   public static MockScope2 operator &(MockScope2 L, MockScope2 R)
   {
     return L.Anded.Single(O => O.Other == R).Result;
+  }
+
+  public class Space : MatchScopeSpace<MockScope2>
+  {
+    public MockScope2 Any { get; } = new([], [], []);
+
+    public MockScope2 Unspecified { get; } = new([], [], []);
+
+
+    public MockScope2 Or(MockScope2 L, MockScope2 R)
+    {
+      return L.Ored.Single(O => O.Other == R).Result;
+    }
+
+    public MockScope2 And(MockScope2 L, MockScope2 R)
+    {
+      return L.Anded.Single(O => O.Other == R).Result;
+    }
   }
 }

@@ -22,15 +22,17 @@
 
 namespace LineParser;
 
-sealed class ConstantExpression<Scope, Meaning>(string Value) : Expression<Scope, Meaning> where Scope : MatchScope<Scope>
+sealed class ConstantExpression<Scope, Meaning>(string Value)
+  : Expression<Scope, Meaning> where Scope : MatchScope<Scope>
 {
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry, MatchExecutionContext Context)
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry,
+    MatchExecutionContext Context)
   {
     if (ToMatch.StartsWith(Value))
       yield return new()
       {
         Matched = Value,
-        Remainder = ToMatch[Value.Length..]
+        Remainder = ToMatch.Substring(Value.Length)
       };
   }
 }
