@@ -24,7 +24,7 @@ using LineParser;
 
 namespace Specifications;
 
-sealed class MockPattern<Scope, Meaning> : Pattern<Scope> where Scope : MatchScope<Scope>
+sealed class MockPattern<Scope, Meaning> : Pattern<Scope> where Scope : Scope<Scope>
 {
   public Dictionary<string, IEnumerable<Match>> Results = [];
 

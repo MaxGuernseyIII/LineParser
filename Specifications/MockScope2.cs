@@ -25,7 +25,7 @@ namespace Specifications;
 class MockScope2(
   IReadOnlyList<MockScope2> Included,
   IReadOnlyList<(MockScope2 Other, MockScope2 Result)> Ored,
-  IReadOnlyList<(MockScope2 Other, MockScope2 Result)> Anded) : MatchScope<MockScope2>
+  IReadOnlyList<(MockScope2 Other, MockScope2 Result)> Anded) : Scope<MockScope2>
 {
   readonly IReadOnlyList<(MockScope2 Other, MockScope2 Result)> Anded = Anded;
   readonly IReadOnlyList<(MockScope2 Other, MockScope2 Result)> Ored = Ored;
@@ -48,7 +48,7 @@ class MockScope2(
     return L.Anded.Single(O => O.Other == R).Result;
   }
 
-  public class Space : MatchScopeSpace<MockScope2>
+  public class Space : ScopeSpace<MockScope2>
   {
     public MockScope2 Any { get; } = new([], [], []);
 

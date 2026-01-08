@@ -33,7 +33,7 @@ public class SupplyAndDemandScopeBehaviors
   [TestInitialize]
   public void Setup()
   {
-    ScopeSpace = MatchScopeSpaces.SupplyAndDemand<MockToken>();
+    ScopeSpace = ScopeSpaces.SupplyAndDemand<MockToken>();
   }
 
   [TestMethod]

@@ -22,11 +22,8 @@
 
 namespace ScopeSelection;
 
-public interface MatchScopeSpace<Scope>
-  where Scope : MatchScope<Scope>
+public interface Scope<in Implementation>
+  where Implementation : Scope<Implementation>
 {
-  public Scope Any { get; }
-  public Scope Unspecified { get; }
-  public Scope Or(Scope L, Scope R);
-  public Scope And(Scope L, Scope R);
+  public bool IsSatisfiedBy(Implementation Other);
 }

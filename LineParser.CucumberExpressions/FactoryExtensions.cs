@@ -26,7 +26,7 @@ namespace LineParser.CucumberExpressions;
 
 public static class FactoryExtensions
 {
-  extension<Scope>(Factory<Scope> This) where Scope : MatchScope<Scope>
+  extension<Scope>(Factory<Scope> This) where Scope : Scope<Scope>
   {
     public Pattern<Scope> CucumberExpression(string Template, Func<string, Scope> GetScopeForParameterName)
     {

@@ -23,7 +23,7 @@
 namespace LineParser;
 
 sealed class RecursivePattern<Scope>(Scope Demand) : Pattern<Scope>
-  where Scope : MatchScope<Scope>
+  where Scope : Scope<Scope>
 {
   public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubPatternMatcher<Scope> Reentry,
     MatchExecutionContext Context)

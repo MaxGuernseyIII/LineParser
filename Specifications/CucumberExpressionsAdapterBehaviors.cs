@@ -32,7 +32,7 @@ public class CucumberExpressionsAdapterBehaviors
   [TestMethod]
   public void TopLevelPattern()
   {
-    var ScopeSpace = MatchScopeSpaces.SupplyAndDemand<string>();
+    var ScopeSpace = ScopeSpaces.SupplyAndDemand<string>();
     var Factory = ScopeSpace.GetFactory();
     var Pattern = Factory.CucumberExpression(
       "this/these is/are my/our cucumber expression(s), which we use for {Purpose} and other things.",

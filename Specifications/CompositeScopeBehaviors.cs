@@ -28,7 +28,7 @@ namespace Specifications;
 [TestClass]
 public class CompositeScopeBehaviors
 {
-  MatchScopeSpace<CompositeScope<MockScope1, MockScope2>> Space = null!;
+  ScopeSpace<CompositeScope<MockScope1, MockScope2>> Space = null!;
   MockScope1.Space Space1 = null!;
   MockScope2.Space Space2 = null!;
 
@@ -37,7 +37,7 @@ public class CompositeScopeBehaviors
   {
     Space1 = new();
     Space2 = new();
-    Space = MatchScopeSpaces.Composite(Space1, Space2);
+    Space = ScopeSpaces.Composite(Space1, Space2);
   }
 
   [TestMethod]
@@ -141,9 +141,9 @@ public class CompositeScopeBehaviors
   [TestMethod]
   public void Example()
   {
-    var TypeDimension = MatchScopeSpaces.SupplyAndDemand<Type>();
-    var TagsDimension = MatchScopeSpaces.SupplyAndDemand<string>();
-    var CombinedScopeSpace = MatchScopeSpaces.Composite(TypeDimension, TagsDimension);
+    var TypeDimension = ScopeSpaces.SupplyAndDemand<Type>();
+    var TagsDimension = ScopeSpaces.SupplyAndDemand<string>();
+    var CombinedScopeSpace = ScopeSpaces.Composite(TypeDimension, TagsDimension);
     var Supplied = CombinedScopeSpace.Combine(
       TypeDimension.Supply(typeof(Statement)),
       TagsDimension.Supply(["@ui", "@account-management", "@login"]));

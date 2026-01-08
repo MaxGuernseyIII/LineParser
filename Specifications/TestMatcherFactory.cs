@@ -29,7 +29,7 @@ static class TestMatcherFactory
   public static Matcher<SupplyAndDemandScope<string>, object> CreateFromRegistryWithoutMeaning(
     IEnumerable<(SupplyAndDemandScope<string> Scope, Pattern<SupplyAndDemandScope<string>> Pattern)> Registry)
   {
-    return MatchScopeSpaces.SupplyAndDemand<string>().GetFactory().Matcher(
+    return ScopeSpaces.SupplyAndDemand<string>().GetFactory().Matcher(
     [
       ..Registry.Select(E => (E.Scope, E.Pattern, new object()))
     ]);
@@ -39,6 +39,6 @@ static class TestMatcherFactory
     IEnumerable<Pattern<NullScope>> Patterns
   )
   {
-    return MatchScopeSpaces.Null.GetFactory().Matcher(Patterns);
+    return ScopeSpaces.Null.GetFactory().Matcher(Patterns);
   }
 }

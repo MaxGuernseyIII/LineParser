@@ -22,8 +22,6 @@
 
 namespace ScopeSelection;
 
-public interface MatchScope<in Scope>
-  where Scope : MatchScope<Scope>
+public static class Scopes
 {
-  public bool IsSatisfiedBy(Scope Other);
 }

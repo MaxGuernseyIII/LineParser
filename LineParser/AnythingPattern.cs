@@ -22,7 +22,7 @@
 
 namespace LineParser;
 
-class AnythingPattern<Scope> : Pattern<Scope> where Scope : MatchScope<Scope>
+class AnythingPattern<Scope> : Pattern<Scope> where Scope : Scope<Scope>
 {
   public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubPatternMatcher<Scope> Reentry,
     MatchExecutionContext Context)

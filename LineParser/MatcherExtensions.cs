@@ -24,7 +24,7 @@ namespace LineParser;
 
 public static class MatcherExtensions
 {
-  extension<Scope, Meaning>(Matcher<Scope, Meaning> This) where Scope : MatchScope<Scope>
+  extension<Scope, Meaning>(Matcher<Scope, Meaning> This) where Scope : Scope<Scope>
   {
     public IEnumerable<MatchWithMeaning<Meaning>> Match(string ToParse)
     {

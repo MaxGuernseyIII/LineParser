@@ -23,7 +23,7 @@
 namespace LineParser;
 
 sealed class Alternatives<Scope>(IEnumerable<Pattern<Scope>> Patterns)
-  : Pattern<Scope> where Scope : MatchScope<Scope>
+  : Pattern<Scope> where Scope : Scope<Scope>
 {
   public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubPatternMatcher<Scope> Reentry,
     MatchExecutionContext Context)

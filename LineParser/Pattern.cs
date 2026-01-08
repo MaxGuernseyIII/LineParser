@@ -23,7 +23,7 @@
 namespace LineParser;
 
 public interface Pattern<out Scope>
-  where Scope : MatchScope<Scope>
+  where Scope : Scope<Scope>
 {
   IEnumerable<Match> GetMatchesAtBeginningOf(
     string ToMatch, SubPatternMatcher<Scope> FindSubPattern, MatchExecutionContext Context);

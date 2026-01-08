@@ -36,7 +36,7 @@ public class SubPatternBehaviors
   [TestInitialize]
   public void Setup()
   {
-    ScopeSpace = MatchScopeSpaces.SupplyAndDemand<string>();
+    ScopeSpace = ScopeSpaces.SupplyAndDemand<string>();
     Factory = ScopeSpace.GetFactory();
   }
 

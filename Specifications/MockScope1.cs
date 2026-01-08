@@ -25,7 +25,7 @@ namespace Specifications;
 class MockScope1(
   IReadOnlyList<MockScope1> Included,
   IReadOnlyList<(MockScope1 Other, MockScope1 Result)> Ored,
-  IReadOnlyList<(MockScope1 Other, MockScope1 Result)> Anded) : MatchScope<MockScope1>
+  IReadOnlyList<(MockScope1 Other, MockScope1 Result)> Anded) : Scope<MockScope1>
 {
   readonly IReadOnlyList<(MockScope1 Other, MockScope1 Result)> Anded = Anded;
   readonly IReadOnlyList<(MockScope1 Other, MockScope1 Result)> Ored = Ored;
@@ -35,7 +35,7 @@ class MockScope1(
     return Included.Contains(Other);
   }
 
-  public class Space : MatchScopeSpace<MockScope1>
+  public class Space : ScopeSpace<MockScope1>
   {
     public MockScope1 Any { get; } = new([], [], []);
 

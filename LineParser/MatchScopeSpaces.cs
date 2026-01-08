@@ -24,31 +24,13 @@ namespace LineParser;
 
 public static class MatchScopeSpaces
 {
-  public static MatchScopeSpace<NullScope> Null { get; } = new NullScope.Space();
 
-  public static CompositeScope<TLeft, TRight>.Space Composite<TLeft, TRight>(MatchScopeSpace<TLeft> Left,
-    MatchScopeSpace<TRight> Right)
-    where TLeft : MatchScope<TLeft>
-    where TRight : MatchScope<TRight>
-  {
-    return new(Left, Right);
-  }
-
-  public static SupplyAndDemandScope<Token>.Space SupplyAndDemand<Token>()
-  {
-    return new();
-  }
-
-  extension<Scope>(MatchScopeSpace<Scope> This)
-    where Scope : MatchScope<Scope>
+  extension<Scope>(ScopeSpace<Scope> This)
+    where Scope : Scope<Scope>
   {
     public Factory<Scope> GetFactory()
     {
       return new(This);
     }
   }
-}
-
-public static class MatchScopes
-{
 }

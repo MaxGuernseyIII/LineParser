@@ -27,7 +27,7 @@ using ScopeSelection;
 namespace LineParser.CucumberExpressions;
 
 class CucumberExpressionToExpressionMapper<Scope>(Factory<Scope> Factory)
-  where Scope : MatchScope<Scope>
+  where Scope : Scope<Scope>
 {
   readonly CucumberExpressionParser Parser = new();
 

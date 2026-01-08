@@ -31,7 +31,7 @@ public class Samples
   [TestMethod]
   public void FirstStep()
   {
-    var Factory = MatchScopeSpaces.Null.GetFactory();
+    var Factory = ScopeSpaces.Null.GetFactory();
     var MeatPattern = Factory.Constant("meat");
     var Matcher = Factory.Matcher([MeatPattern]);
 
@@ -42,7 +42,7 @@ public class Samples
   [TestMethod]
   public void AddingMeaning()
   {
-    var Factory = MatchScopeSpaces.Null.GetFactory();
+    var Factory = ScopeSpaces.Null.GetFactory();
     var MeatPattern = Factory.Constant("meat");
     var TheMeaningOfMeat = BinderFactory.ForMeat();
     var Matcher = Factory.Matcher([(MeatPattern, TheMeaningOfMeat)]);
@@ -53,7 +53,7 @@ public class Samples
   [TestMethod]
   public void AddingScope()
   {
-    var ScopeSpace = MatchScopeSpaces.SupplyAndDemand<string>();
+    var ScopeSpace = ScopeSpaces.SupplyAndDemand<string>();
     var Factory = ScopeSpace.GetFactory();
     var MeatPattern = Factory.Constant("meat");
     var TheMeaningOfMeat = BinderFactory.ForMeat();
@@ -66,7 +66,7 @@ public class Samples
   [TestMethod]
   public void MatchWithConditionals()
   {
-    var ExpressionFactory = MatchScopeSpaces.Null.GetFactory();
+    var ExpressionFactory = ScopeSpaces.Null.GetFactory();
     var Matcher = ExpressionFactory.Matcher(
     [
       (ExpressionFactory.Composite([

@@ -25,12 +25,12 @@ using System.Collections.Immutable;
 namespace LineParser;
 
 class MatcherImplementation<Scope, Meaning>(
-  MatchScopeSpace<Scope> ScopeSpace,
+  ScopeSpace<Scope> ScopeSpace,
   ImmutableArray<(Scope Scope, Pattern<Scope> Pattern, Meaning Meaning)> Registry)
   : Matcher<Scope, Meaning>
-  where Scope : MatchScope<Scope>
+  where Scope : Scope<Scope>
 {
-  public MatchScopeSpace<Scope> ScopeSpace { get; } = ScopeSpace;
+  public ScopeSpace<Scope> ScopeSpace { get; } = ScopeSpace;
 
   public IEnumerable<MatchWithMeaning<Meaning>> Match(string ToParse, MatchExecutionContext Context, Scope Scope)
   {

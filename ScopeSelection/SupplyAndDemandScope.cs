@@ -20,9 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-namespace LineParser;
+namespace ScopeSelection;
 
-public sealed record SupplyAndDemandScope<T> : MatchScope<SupplyAndDemandScope<T>>
+public sealed record SupplyAndDemandScope<T> : Scope<SupplyAndDemandScope<T>>
 {
   internal SupplyAndDemandScope()
   {
@@ -66,7 +66,7 @@ public sealed record SupplyAndDemandScope<T> : MatchScope<SupplyAndDemandScope<T
     return Supplied => Supplied(Required);
   }
 
-  public sealed class Space : MatchScopeSpace<SupplyAndDemandScope<T>>
+  public sealed class Space : ScopeSpace<SupplyAndDemandScope<T>>
   {
     public SupplyAndDemandScope<T> Any { get; } = new()
     {

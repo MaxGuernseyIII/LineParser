@@ -20,31 +20,48 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Text.RegularExpressions;
-
-namespace LineParser;
-
-sealed class RegexPattern<Scope>(Regex Pattern) : Pattern<Scope> where Scope : Scope<Scope>
+#if NETSTANDARD2_0
+namespace System.Runtime.CompilerServices
 {
-  readonly Regex Pattern = new("^" + Pattern.ToString().TrimStart('^'), Pattern.Options);
-
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubPatternMatcher<Scope> Reentry,
-    MatchExecutionContext Context)
+  // Needed for `init` setters
+  static class IsExternalInit
   {
-    var M = Pattern.Match(ToMatch);
-    if (M.Success)
-      yield return new()
-      {
-        Matched = M.Value,
-        Remainder = ToMatch.Substring(M.Value.Length),
-        Captured =
-        [
-          ..M.Groups.Cast<Group>().Skip(1).Select(C => new Match.Capture
-          {
-            At = C.Index,
-            Value = C.Value
-          })
-        ]
-      };
+  }
+
+  // Needed for `required` members (C# 11)
+  [AttributeUsage(AttributeTargets.All, AllowMultiple = true, Inherited = false)]
+  sealed class CompilerFeatureRequiredAttribute : Attribute
+  {
+    public CompilerFeatureRequiredAttribute(string featureName)
+    {
+    }
+  }
+
+  // Some toolchains expect this one in this namespace too
+  [AttributeUsage(AttributeTargets.All, Inherited = false)]
+  sealed class RequiredMemberAttribute : Attribute
+  {
   }
 }
+
+namespace System.Diagnostics.CodeAnalysis
+{
+  // Required-members metadata (commonly expected here)
+  [AttributeUsage(
+    AttributeTargets.Class |
+    AttributeTargets.Struct |
+    AttributeTargets.Field |
+    AttributeTargets.Property,
+    Inherited = false)]
+  sealed class RequiredMemberAttribute : Attribute
+  {
+  }
+
+  // Marks ctors that set all required members
+  [AttributeUsage(AttributeTargets.Constructor)]
+  sealed class SetsRequiredMembersAttribute : Attribute
+  {
+  }
+}
+
+#endif

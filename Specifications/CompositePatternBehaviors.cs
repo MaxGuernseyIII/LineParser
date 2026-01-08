@@ -33,7 +33,7 @@ public sealed class CompositePatternBehaviors
   [TestInitialize]
   public void Setup()
   {
-    Factory = MatchScopeSpaces.Null.GetFactory();
+    Factory = ScopeSpaces.Null.GetFactory();
   }
 
   [TestMethod]

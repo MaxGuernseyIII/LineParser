@@ -29,7 +29,7 @@ public class MatchExecutionContext
   public IEnumerable<Match> DoRecursive<Scope>(
     string ToMatch,
     Pattern<Scope> RecursivePattern,
-    Func<IEnumerable<Match>> ToDo) where Scope : MatchScope<Scope>
+    Func<IEnumerable<Match>> ToDo) where Scope : Scope<Scope>
   {
     var Key = (ToMatch, RecursiveExpression: RecursivePattern);
 

@@ -33,7 +33,7 @@ public sealed class ConstantPatternBehaviors
   [TestInitialize]
   public void SetUp()
   {
-    Factory = MatchScopeSpaces.Null.GetFactory();
+    Factory = ScopeSpaces.Null.GetFactory();
   }
 
   [TestMethod]

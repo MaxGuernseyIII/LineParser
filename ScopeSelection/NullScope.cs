@@ -20,9 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-namespace LineParser;
+namespace ScopeSelection;
 
-public class NullScope : MatchScope<NullScope>
+public class NullScope : Scope<NullScope>
 {
   NullScope()
   {
@@ -33,7 +33,7 @@ public class NullScope : MatchScope<NullScope>
     return true;
   }
 
-  internal class Space : MatchScopeSpace<NullScope>
+  internal class Space : ScopeSpace<NullScope>
   {
     public NullScope Any { get; } = new();
 

@@ -20,31 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Text.RegularExpressions;
+namespace ScopeSelection;
 
-namespace LineParser;
-
-sealed class RegexPattern<Scope>(Regex Pattern) : Pattern<Scope> where Scope : Scope<Scope>
+public interface ScopeSpace<ScopeImplementation>
+  where ScopeImplementation : Scope<ScopeImplementation>
 {
-  readonly Regex Pattern = new("^" + Pattern.ToString().TrimStart('^'), Pattern.Options);
-
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubPatternMatcher<Scope> Reentry,
-    MatchExecutionContext Context)
-  {
-    var M = Pattern.Match(ToMatch);
-    if (M.Success)
-      yield return new()
-      {
-        Matched = M.Value,
-        Remainder = ToMatch.Substring(M.Value.Length),
-        Captured =
-        [
-          ..M.Groups.Cast<Group>().Skip(1).Select(C => new Match.Capture
-          {
-            At = C.Index,
-            Value = C.Value
-          })
-        ]
-      };
-  }
+  public ScopeImplementation Any { get; }
+  public ScopeImplementation Unspecified { get; }
+  public ScopeImplementation Or(ScopeImplementation L, ScopeImplementation R);
+  public ScopeImplementation And(ScopeImplementation L, ScopeImplementation R);
 }
