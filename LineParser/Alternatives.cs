@@ -20,6 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using ScopeSelection;
+
 namespace LineParser;
 
 sealed class Alternatives<Scope>(IEnumerable<Pattern<Scope>> Patterns)

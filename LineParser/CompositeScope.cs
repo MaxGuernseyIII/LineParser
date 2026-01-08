@@ -20,10 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using ScopeSelection;
+using ScopeSelection;
+
 namespace LineParser;
 
 /// <summary>
-/// A <see cref="MatchScope{Scope}"/> that combines two other <see cref="MatchScope{Scope}"/>s into two isolated dimensions.
+/// A <see cref="ScopeSelection.MatchScope{Scope}"/> that combines two other <see cref="ScopeSelection.MatchScope{Scope}"/>s into two isolated dimensions.
 ///
 /// Inclusion in the resulting combined scope requires the independent inclusion on the left and right dimensions.
 /// </summary>

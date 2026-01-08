@@ -1,4 +1,6 @@
-﻿namespace LineParser.CucumberExpressions;
+﻿using ScopeSelection;
+
+namespace LineParser.CucumberExpressions;
 
 public static class FactoryExtensions
 {

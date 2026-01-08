@@ -20,19 +20,4 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-namespace LineParser;
-
-public interface MatchScope<in Scope>
-  where Scope : MatchScope<Scope>
-{
-  public bool IsSatisfiedBy(Scope Other);
-}
-
-public interface MatchScopeSpace<Scope>
-  where Scope : MatchScope<Scope>
-{
-  public Scope Any { get; }
-  public Scope Unspecified { get; }
-  public Scope Or(Scope L, Scope R);
-  public Scope And(Scope L, Scope R);
-}
+global using ScopeSelection;

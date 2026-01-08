@@ -22,6 +22,7 @@
 
 using CucumberExpressions.Ast;
 using CucumberExpressions.Parsing;
+using ScopeSelection;
 
 namespace LineParser.CucumberExpressions;
 

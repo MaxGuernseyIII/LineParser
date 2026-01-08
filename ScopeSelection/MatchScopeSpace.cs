@@ -20,27 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using ScopeSelection;
+namespace ScopeSelection;
 
-namespace LineParser;
-
-sealed class CapturingPattern<Scope>(Pattern<Scope> ToCapturePattern)
-  : Pattern<Scope> where Scope : MatchScope<Scope>
+public interface MatchScopeSpace<Scope>
+  where Scope : MatchScope<Scope>
 {
-  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, SubPatternMatcher<Scope> Reentry,
-    MatchExecutionContext Context)
-  {
-    return ToCapturePattern.GetMatchesAtBeginningOf(ToMatch, Reentry, Context)
-      .Select(M => M with
-      {
-        Captured =
-        [
-          new()
-          {
-            At = 0,
-            Value = M.Matched
-          }
-        ]
-      });
-  }
+  public Scope Any { get; }
+  public Scope Unspecified { get; }
+  public Scope Or(Scope L, Scope R);
+  public Scope And(Scope L, Scope R);
 }

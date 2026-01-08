@@ -9,7 +9,7 @@
     <Authors>Max Guernsey</Authors>
     <Company>Hexagon Software LLC</Company>
 
-    <Description>A parser for small blocks of text that supports recursive, extensible patterns.</Description>
+    <Description>A simple, extensible system for identifying and selecting scopes within sets.</Description>
 
     <PackageTags>text;parsing;recursion</PackageTags>
     <PackageProjectUrl>https://github.com/MaxGuernseyIII/LineParser</PackageProjectUrl>
@@ -21,13 +21,5 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <!--<WarningsAsErrors>1591</WarningsAsErrors>-->
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.Collections.Immutable" Version="10.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\ScopeSelection\ScopeSelection.csproj" />
-  </ItemGroup>
 
 </Project>
