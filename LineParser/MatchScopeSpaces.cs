@@ -22,37 +22,37 @@
 
 namespace LineParser;
 
-public sealed class CompositeScope<TLeft, TRight>(TLeft Left, TRight Right) : MatchScope<CompositeScope<TLeft, TRight>>
-  where TLeft : MatchScope<TLeft>
-  where TRight : MatchScope<TRight>
+public static class MatchScopeSpaces
 {
-  public TLeft Left { get; } = Left;
-  public TRight Right { get; } = Right;
+  public static MatchScopeSpace<NullScope> Null { get; } = new NullScope.Space();
 
-  public bool Includes(CompositeScope<TLeft, TRight> Other)
+  public static MatchScopeSpace<CompositeScope<TLeft, TRight>> Composite<TLeft, TRight>(MatchScopeSpace<TLeft> Left,
+    MatchScopeSpace<TRight> Right)
+    where TLeft : MatchScope<TLeft>
+    where TRight : MatchScope<TRight>
   {
-    return Left.Includes(Other.Left) && Right.Includes(Other.Right);
+    return new CompositeScope<TLeft, TRight>.Space(Left, Right);
   }
 
-  internal sealed class Space(MatchScopeSpace<TLeft> Left, MatchScopeSpace<TRight> Right)
-    : MatchScopeSpace<CompositeScope<TLeft, TRight>>
+  public static SupplyAndDemandScope<Token>.Space SupplyAndDemand<Token>()
   {
-    public CompositeScope<TLeft, TRight> Any { get; } = new(Left.Any, Right.Any);
+    return new();
+  }
 
-    public CompositeScope<TLeft, TRight> Unspecified { get; } = new(Left.Unspecified, Right.Unspecified);
-
-    public CompositeScope<TLeft, TRight> Or(
-      CompositeScope<TLeft, TRight> L,
-      CompositeScope<TLeft, TRight> R)
+  extension<Scope>(MatchScopeSpace<Scope> This)
+    where Scope : MatchScope<Scope>
+  {
+    public Related<Scope> Get()
     {
-      return new(Left.Or(L.Left, R.Left), Right.Or(L.Right, R.Right));
+      return new(This);
     }
+  }
 
-    public CompositeScope<TLeft, TRight> And(
-      CompositeScope<TLeft, TRight> L,
-      CompositeScope<TLeft, TRight> R)
+  public readonly ref struct Related<Scope>(MatchScopeSpace<Scope> ScopeSpace) where Scope : MatchScope<Scope>
+  {
+    public PatternFactory<Scope> PatternFactory()
     {
-      return new(Left.And(L.Left, R.Left), Right.And(L.Right, R.Right));
+      return new(ScopeSpace);
     }
   }
 }
