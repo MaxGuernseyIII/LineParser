@@ -20,45 +20,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Text.RegularExpressions;
-
 namespace LineParser;
 
-public class ExpressionFactory<Scope, Meaning>
-  where Scope : MatchScope<Scope>
+public class AnythingExpression<Scope, Meaning> : Expression<Scope, Meaning> where Scope : MatchScope<Scope>
 {
-  public Expression<Scope, Meaning> CreateRecursive(Scope Demand)
+  public IEnumerable<Match> GetMatchesAtBeginningOf(string ToMatch, Matcher<Scope, Meaning> Reentry, MatchExecutionContext Context)
   {
-    return new RecursiveExpression<Scope, Meaning>(Demand);
-  }
-
-  public Expression<Scope, Meaning> CreateCapturing(Expression<Scope, Meaning> ToCaptureExpression)
-  {
-    return new CapturingExpression<Scope, Meaning>(ToCaptureExpression);
-  }
-
-  public Expression<Scope, Meaning> CreateComposite(IEnumerable<Expression<Scope, Meaning>> Expressions)
-  {
-    return new CompositeExpression<Scope, Meaning>(Expressions);
-  }
-
-  public Expression<Scope, Meaning> CreateConstant(string Value)
-  {
-    return new ConstantExpression<Scope, Meaning>(Value);
-  }
-
-  public Expression<Scope, Meaning> CreateForRegex(Regex Pattern)
-  {
-    return new RegexExpression<Scope, Meaning>(Pattern);
-  }
-
-  public Expression<Scope, Meaning> CreateAlternatives(IEnumerable<Expression<Scope, Meaning>> Expressions)
-  {
-    return new Alternatives<Scope, Meaning>(Expressions);
-  }
-
-  public Expression<Scope, Meaning> CreateMatchAnything()
-  {
-    return new AnythingExpression<Scope, Meaning>();
+    return Enumerable.Range(0, ToMatch.Length + 1).Reverse().Select(Split => new Match
+    {
+      Matched = ToMatch[..Split],
+      Remainder = ToMatch[Split..],
+      Captured = []
+    });
   }
 }
