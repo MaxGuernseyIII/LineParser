@@ -22,12 +22,19 @@
 
 namespace LineParser;
 
+/// <summary>
+/// Extensions for <see cref="ScopeSpace{ScopeImplementation}"/>.
+/// </summary>
 public static class MatchScopeSpaces
 {
 
   extension<Scope>(ScopeSpace<Scope> This)
     where Scope : Scope<Scope>
   {
+    /// <summary>
+    /// Get the <see cref="Factory{ScopeImplementation}"/> associated with <see cref="This"/>.
+    /// </summary>
+    /// <returns>The requested <see cref="Factory{ScopeImplementation}"/>.</returns>
     public Factory<Scope> GetFactory()
     {
       return new(This);
