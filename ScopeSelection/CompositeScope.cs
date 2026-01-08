@@ -28,44 +28,84 @@ namespace ScopeSelection;
 ///   Inclusion in the resulting combined scope requires the independent inclusion on the left and right dimensions.
 /// </summary>
 /// <example>
+/// var TypeDimension = ScopeSpaces.SupplyAndDemand&lt;Type&gt;();
+/// var TagsDimension = ScopeSpaces.SupplyAndDemand&lt;string&gt;();
+/// var CombinedScopeSpace = ScopeSpaces.Composite(TypeDimension, TagsDimension);
+/// var Supplied = CombinedScopeSpace.Combine(
+///   TypeDimension.Supply(typeof(Statement)),
+///   TagsDimension.Supply(["@ui", "@account-management", "@login"]));
+/// var Demanded = CombinedScopeSpace.Combine(
+///   TypeDimension.Any,
+///   TagsDimension.Demand(["@ui", "@login"])
+/// );
+/// 
+/// Demanded.IsSatisfiedBy(Supplied).ShouldBe(true);
 /// </example>
-/// <param name="Left"></param>
-/// <param name="Right"></param>
-/// <typeparam name="TLeft"></typeparam>
-/// <typeparam name="TRight"></typeparam>
+/// <param name="Left">The first dimension in the tuple.</param>
+/// <param name="Right">The second dimension in the tuple.</param>
+/// <typeparam name="TLeft">The type of the first dimension in the tuple.</typeparam>
+/// <typeparam name="TRight">The ype of the second dimension in the tuple.</typeparam>
 public sealed class CompositeScope<TLeft, TRight>(TLeft Left, TRight Right) : Scope<CompositeScope<TLeft, TRight>>
   where TLeft : Scope<TLeft>
   where TRight : Scope<TRight>
 {
+  /// <summary>
+  /// The value of the first dimension in the tuple.
+  /// </summary>
   public TLeft Left { get; } = Left;
+
+
+  /// <summary>
+  /// The value of the second dimension in the tuple.
+  /// </summary>
   public TRight Right { get; } = Right;
 
+  /// <summary>
+  /// Check if this scope is satisfied by another scope.
+  /// </summary>
+  /// <param name="Other">The scope that must satisfy the requirements of this scope.</param>
+  /// <returns><c>true</c> if the other scope is acceptable, <c>false</c> if not</returns>
   public bool IsSatisfiedBy(CompositeScope<TLeft, TRight> Other)
   {
     return Left.IsSatisfiedBy(Other.Left) && Right.IsSatisfiedBy(Other.Right);
   }
 
-  public sealed class Space(ScopeSpace<TLeft> Left, ScopeSpace<TRight> Right)
+  /// <summary>
+  /// The definition of the 2-dimensional pace in which <see cref="CompositeScope{TLeft,TRight}"/> lives.
+  /// </summary>
+  /// <param name="LeftDimension">The definition of the first dimension.</param>
+  /// <param name="RightDimension">The definition of the second dimension.</param>
+  public sealed class Space(ScopeSpace<TLeft> LeftDimension, ScopeSpace<TRight> RightDimension)
     : ScopeSpace<CompositeScope<TLeft, TRight>>
   {
-    public CompositeScope<TLeft, TRight> Any { get; } = new(Left.Any, Right.Any);
+    /// <inheritdoc />
+    public CompositeScope<TLeft, TRight> Any { get; } = new(LeftDimension.Any, RightDimension.Any);
 
-    public CompositeScope<TLeft, TRight> Unspecified { get; } = new(Left.Unspecified, Right.Unspecified);
+    /// <inheritdoc />
+    public CompositeScope<TLeft, TRight> Unspecified { get; } = new(LeftDimension.Unspecified, RightDimension.Unspecified);
 
+    /// <inheritdoc />
     public CompositeScope<TLeft, TRight> Or(
       CompositeScope<TLeft, TRight> L,
       CompositeScope<TLeft, TRight> R)
     {
-      return new(Left.Or(L.Left, R.Left), Right.Or(L.Right, R.Right));
+      return new(LeftDimension.Or(L.Left, R.Left), RightDimension.Or(L.Right, R.Right));
     }
 
+    /// <inheritdoc />
     public CompositeScope<TLeft, TRight> And(
       CompositeScope<TLeft, TRight> L,
       CompositeScope<TLeft, TRight> R)
     {
-      return new(Left.And(L.Left, R.Left), Right.And(L.Right, R.Right));
+      return new(LeftDimension.And(L.Left, R.Left), RightDimension.And(L.Right, R.Right));
     }
 
+    /// <summary>
+    /// Combine two scopes into a tuple.
+    /// </summary>
+    /// <param name="Left">The first dimension scope.</param>
+    /// <param name="Right">The second dimension scope.</param>
+    /// <returns>The combined multi-dimensional scope.</returns>
     public CompositeScope<TLeft, TRight> Combine(TLeft Left, TRight Right)
     {
       return new(Left, Right);
