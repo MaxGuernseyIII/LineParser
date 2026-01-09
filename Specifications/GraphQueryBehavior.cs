@@ -160,18 +160,23 @@ public class GraphQueryBehavior
     Actual.Options.ShouldBe(Regex.Options);
   }
 
-  //[TestMethod]
-  //public void ToSimplifiedRegex()
-  //{
-  //  var Matcher = Factory.Sequence([
-  //    Factory.Constant("a"),
-  //    Factory.Anything(),
-  //    Factory.Capturing(Factory.Constant("b")),
-  //    Factory.Parallel([
-  //      Factory.Constant("c"),
-  //      Factory.Constant("d"),
-  //    ]),
-  //    Factory.Regex(new Regex("^$"))
-  //  ]);
-  //}
+  [TestMethod]
+  public void ToSimplifiedRegex()
+  {
+    var Pattern = Factory.Sequence([
+      Factory.Constant("a"),
+      Factory.Anything(),
+      Factory.Capturing(Factory.Constant("b")),
+      Factory.Parallel([
+        Factory.Constant("c"),
+        Factory.Constant("d"),
+      ]),
+      Factory.Regex(new("^e|f$")),
+      Factory.Subpattern(ScopeSpace.For(Any.String()))
+    ]);
+
+    var Regex = Pattern.ToSimplifiedRegexString();
+
+    Regex.ShouldBe("a.*(b)(?:c|d)(?:e|f).*");
+  }
 }
