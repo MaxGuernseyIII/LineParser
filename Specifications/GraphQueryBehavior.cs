@@ -23,7 +23,6 @@
 using System.Text.RegularExpressions;
 using LineParser;
 using Shouldly;
-using Match = LineParser.Match;
 
 namespace Specifications;
 
