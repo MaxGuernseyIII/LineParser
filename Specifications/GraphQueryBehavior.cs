@@ -161,6 +161,19 @@ public class GraphQueryBehavior
   }
 
   [TestMethod]
+  public void Other()
+  {
+    var Node = new MockPattern<StringScope>();
+
+    var Actual = Node.Query(new TestGraphQuery<StringScope, Pattern<StringScope>>()
+    {
+      OnQueryOther = O => O
+    });
+
+    Actual.ShouldBe(Node);
+  }
+
+  [TestMethod]
   public void ToSimplifiedRegex()
   {
     var Pattern = Factory.Sequence([

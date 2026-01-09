@@ -36,6 +36,6 @@ sealed class MockPattern<ScopeImplementation> : Pattern<ScopeImplementation> whe
 
   public TResult Query<TResult>(GraphQuery<ScopeImplementation, TResult> Query)
   {
-    throw new NotImplementedException();
+    return Query.QueryOther(this);
   }
 }

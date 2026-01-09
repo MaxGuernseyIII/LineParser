@@ -66,6 +66,11 @@ public static class PatternExtensions
     {
       return $"(?:{Regex.ToString().TrimEnd('$').TrimStart('^')})";
     }
+
+    public string QueryOther(Pattern<TScope> Other)
+    {
+      return "";
+    }
   }
 
   extension<ScopeImplementation>(Pattern<ScopeImplementation> This) where ScopeImplementation : Scope<ScopeImplementation>

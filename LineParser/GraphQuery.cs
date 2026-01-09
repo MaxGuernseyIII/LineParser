@@ -55,4 +55,11 @@ public interface GraphQuery<in TScope, out TResult>
   /// <param name="Regex">The regex.</param>
   /// <returns>The result of the query.</returns>
   TResult QueryRegex(Regex Regex);
+
+  /// <summary>
+  /// Invoked when a node represents something other than one of the standard nodes.
+  /// </summary>
+  /// <param name="Other">The nonstandard node.</param>
+  /// <returns>The result of the query.</returns>
+  TResult QueryOther(Pattern<TScope> Other);
 }
