@@ -39,7 +39,7 @@ public static class PatternExtensions
 
     public string QueryConstant(string Content)
     {
-      return Content;
+      return Regex.Escape(Content);
     }
 
     public string QueryCapturing(Pattern<TScope> Inner)

@@ -172,11 +172,12 @@ public class GraphQueryBehavior
         Factory.Constant("d"),
       ]),
       Factory.Regex(new("^e|f$")),
-      Factory.Subpattern(ScopeSpace.For(Any.String()))
+      Factory.Subpattern(ScopeSpace.For(Any.String())),
+      Factory.Constant("; I like this (really, I do)")
     ]);
 
     var Regex = Pattern.ToSimplifiedRegexString();
 
-    Regex.ShouldBe("a.*(b)(?:c|d)(?:e|f).*");
+    Regex.ShouldBe(@"a.*(b)(?:c|d)(?:e|f).*;\ I\ like\ this\ \(really,\ I\ do\)");
   }
 }
