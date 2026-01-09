@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace LineParser;
@@ -174,5 +175,17 @@ public class Factory<ScopeImplementation>(ScopeSpace<ScopeImplementation> ScopeS
   public Pattern<ScopeImplementation> Regex(Regex Pattern)
   {
     return new RegexPattern<ScopeImplementation>(Pattern);
+  }
+
+  /// <summary>
+  /// Converts a memento back into a <see cref="Pattern{ScopeImplementation}"/>.
+  /// </summary>
+  /// <param name="Memento">The memento.</param>
+  /// <returns>The <see cref="Pattern{ScopeImplementation}"/> described by the memento.</returns>
+  public Pattern<ScopeImplementation> FromMemento(string Memento)
+  {
+    var MementoObject = JsonSerializer.Deserialize<PatternMemento>(Memento);
+
+    return Sequence([]);
   }
 }

@@ -23,6 +23,7 @@
 using System.Text.RegularExpressions;
 using LineParser;
 using Shouldly;
+using Match = LineParser.Match;
 
 namespace Specifications;
 
@@ -194,4 +195,28 @@ public class GraphQueryBehavior
 
     Regex.ShouldBe(@"a.*(b)(?:c|d)(?:e|f).*;\ I\ like\ this\ \(really,\ I\ do\).*");
   }
+
+  //[TestMethod]
+  //public void MementoRoundTrip()
+  //{
+  //  var Pattern = Factory.Sequence([
+  //    Factory.Constant("a"),
+  //    Factory.Anything(),
+  //    Factory.Capturing(Factory.Constant("b")),
+  //    Factory.Parallel([
+  //      Factory.Constant("c"),
+  //      Factory.Constant("d"),
+  //    ]),
+  //    Factory.Regex(new("^e|f$")),
+  //    Factory.Subpattern(ScopeSpace.For(Any.String())),
+  //  ]);
+  //  var Memento = Pattern.GetMemento();
+
+  //  var Reconstituted = Factory.Matcher([Factory.FromMemento(Memento)]);
+
+  //  Reconstituted.ExactMatch("abde").Count().ShouldBe(1);
+  //  Reconstituted.ExactMatch("ablablablabde").Count().ShouldBe(1);
+  //  Reconstituted.ExactMatch("afoovbdfblablabla").Count().ShouldBe(1);
+  //  Reconstituted.ExactMatch("abdf").Single().Match.Captured.Single().ShouldBe(new() {At = 1, Value = "b"});
+  //}
 }

@@ -20,6 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Runtime.Serialization.Json;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace LineParser;
@@ -73,6 +75,68 @@ public static class PatternExtensions
     }
   }
 
+  class MementoScraper<TScope> : GraphQuery<TScope, PatternMemento>
+    where TScope : Scope<TScope>
+  {
+    public PatternMemento QueryAlternativePatterns(IEnumerable<Pattern<TScope>> Alternatives)
+    {
+      return new()
+      {
+        Alternatives = [..Alternatives.Select(A => A.Query(this))]
+      };
+    }
+
+    public PatternMemento QueryConstant(string Content)
+    {
+      return new()
+      {
+        Constant = Content
+      };
+    }
+
+    public PatternMemento QueryCapturing(Pattern<TScope> Inner)
+    {
+      return new()
+      {
+        Capturing = Inner.Query(this)
+      };
+    }
+
+    public PatternMemento QueryAnything()
+    {
+      return new()
+      {
+        IsAnything = true
+      };
+    }
+
+    public PatternMemento QuerySequence(IEnumerable<Pattern<TScope>> Steps)
+    {
+      return new()
+      {
+        Sequence = [.. Steps.Select(A => A.Query(this))]
+      };
+    }
+
+    public PatternMemento QuerySubpattern(TScope Demanded)
+    {
+      return new()
+      {
+
+      };
+    }
+
+    public PatternMemento QueryRegex(Regex Regex)
+    {
+      return new();
+    }
+
+    public PatternMemento QueryOther(Pattern<TScope> Other)
+    {
+      return new();
+    }
+  }
+
   extension<ScopeImplementation>(Pattern<ScopeImplementation> This) where ScopeImplementation : Scope<ScopeImplementation>
   {
     /// <summary>
@@ -84,6 +148,16 @@ public static class PatternExtensions
     public string ToSimplifiedRegexString()
     {
       return This.Query(new SimplifiedRegexQuery<ScopeImplementation>());
+    }
+
+    /// <summary>
+    /// Get a memento that can be used to reconstitute a <see cref="Pattern{ScopeImplementation}"/> elsewhere.
+    /// </summary>
+    /// <returns>The memento.</returns>
+    public string GetMemento()
+    {
+      var MementoObject = This.Query(new MementoScraper<ScopeImplementation>());
+      return JsonSerializer.Serialize(MementoObject);
     }
   }
 }
