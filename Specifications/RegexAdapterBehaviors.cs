@@ -94,10 +94,11 @@ public class RegexAdapterBehaviors
         Matched = "there is ",
         Remainder = "some cheese in the house " + Extra
         },
-      new () {
+      new ()
+      {
         Matched = "there is some cheese in the house ",
         Remainder = Extra
-        }
+      }
     ], true);
   }
 }
