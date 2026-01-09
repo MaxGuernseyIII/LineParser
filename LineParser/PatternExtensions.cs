@@ -59,7 +59,7 @@ public static class PatternExtensions
 
     public string QuerySubpattern(TScope Demanded)
     {
-      return ".*";
+      return QueryAnything();
     }
 
     public string QueryRegex(Regex Regex)
@@ -69,7 +69,7 @@ public static class PatternExtensions
 
     public string QueryOther(Pattern<TScope> Other)
     {
-      return "";
+      return QueryAnything();
     }
   }
 
