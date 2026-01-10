@@ -168,7 +168,7 @@ public class Factory<ScopeImplementation>(ScopeSpace<ScopeImplementation> ScopeS
   }
 
   /// <summary>
-  /// Reapply the containing <see cref="Matcher"/> with a given scope to find a subpattern.
+  /// Reapply the containing <see cref="Matcher{ScopeImplementation,Meaning}"/> with a given scope to find a subpattern.
   ///
   /// There is no peer to this concept in <see cref="System.Text.RegularExpressions.Regex"/>. You can find something similar in PCRE-compatible regex libraries, though.
   /// </summary>
