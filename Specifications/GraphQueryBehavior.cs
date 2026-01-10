@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using LineParser;
 using Shouldly;
@@ -201,6 +202,14 @@ public class GraphQueryBehavior
   {
     var StatementScope = ScopeSpace.For(Any.String());
     var ExpressionScope = ScopeSpace.For(Any.String());
+    var CustomPattern = new MockPattern<StringScope>
+    {
+      Results =
+      {
+        {"", [new() {Matched = "", Remainder = "", Captured = []}]},
+        {"W", [new() {Matched = "X", Remainder = "", Captured = [new() {At = 43, Value = "cheddar"}]}]}
+      }
+    };
     var Pattern = Factory.Sequence([
       Factory.Constant("a"),
       Factory.Anything(),
@@ -210,18 +219,25 @@ public class GraphQueryBehavior
         Factory.Constant("d")
       ]),
       Factory.Regex(new("^e|f$")),
-      Factory.Subpattern(ExpressionScope)
+      Factory.Subpattern(ExpressionScope),
+      CustomPattern
     ]);
-    var Memento = Pattern.GetMemento();
+    var Serializer = new CustomPatternSerializer<StringScope>()
+    {
+      SerializePattern = P => P == CustomPattern ? JsonSerializer.SerializeToDocument("t").RootElement : throw new InvalidOperationException(),
+      DeserializePattern = E => JsonSerializer.Deserialize<string>(E.GetRawText()) == "t" ? CustomPattern : throw new InvalidOperationException()
+    };
+    var Memento = Pattern.GetMemento(Serializer);
     var Original = MakeMatcher(Pattern);
 
-    var Reconstituted = MakeMatcher(Factory.MatcherFromMemento(Memento));
+    var Reconstituted = MakeMatcher(Factory.MatcherFromMemento(Memento, Serializer));
 
     RequireParity("abde");
     RequireParity("ablablablabde");
     RequireParity("afoovbdfblablabla");
     RequireParity("abdf");
     RequireParity("abdfz");
+    RequireParity("abdfzX");
 
     void RequireParity(string ToMatch)
     {

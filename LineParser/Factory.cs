@@ -193,25 +193,29 @@ public class Factory<ScopeImplementation>(ScopeSpace<ScopeImplementation> ScopeS
   /// Converts a memento back into a <see cref="Pattern{ScopeImplementation}"/>.
   /// </summary>
   /// <param name="Memento">The memento.</param>
+  /// <param name="Serializer"></param>
   /// <returns>The <see cref="Pattern{ScopeImplementation}"/> described by the memento.</returns>
-  public Pattern<ScopeImplementation> MatcherFromMemento(string Memento)
+  public Pattern<ScopeImplementation> MatcherFromMemento(string Memento,
+    CustomPatternSerializer<ScopeImplementation>? Serializer = null)
   {
     var MementoObject = JsonSerializer.Deserialize<PatternMemento>(Memento)!;
 
-    return FromMementoObject(MementoObject);
+    return FromMementoObject(MementoObject, Serializer ?? CustomPatternSerializer<ScopeImplementation>.NotSupported);
   }
 
-  Pattern<ScopeImplementation> FromMementoObject(PatternMemento MementoObject)
+  Pattern<ScopeImplementation> FromMementoObject(PatternMemento MementoObject,
+    CustomPatternSerializer<ScopeImplementation> Serializer)
   {
     return MementoObject switch
     {
       {IsAnything:true} => Anything(),
-      {Alternatives:{} A} => Parallel(A.Select(FromMementoObject)),
-      {Sequence:{} S} => Sequence(S.Select(FromMementoObject)),
+      {Alternatives:{} A} => Parallel(A.Select(O => FromMementoObject(O, Serializer))),
+      {Sequence:{} S} => Sequence(S.Select(O => FromMementoObject(O, Serializer))),
       {Constant: {} C} => Constant(C),
-      {Capturing: {} P} => Capturing(FromMementoObject(P)),
+      {Capturing: {} P} => Capturing(FromMementoObject(P, Serializer)),
       {Regex: { } R} => Regex(new(R.Expression, R.Options)),
-      {Subpattern: {}M} => Subpattern(ScopeSpace.FromMemento(M))
+      {Subpattern: {}M} => Subpattern(ScopeSpace.FromMemento(M)),
+      {Custom: {} E} => Serializer.DeserializePattern(E)
     };
   }
 }
@@ -225,6 +229,7 @@ class PatternMemento
   public PatternMemento[]? Sequence { get; set; }
   public JsonElement? Subpattern { get; set; }
   public RegexPatternMemento? Regex { get; set; }
+  public JsonElement? Custom { get; set; }
 
   internal class RegexPatternMemento
   {

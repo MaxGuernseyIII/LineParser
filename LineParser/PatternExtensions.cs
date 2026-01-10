@@ -75,9 +75,11 @@ public static class PatternExtensions
     }
   }
 
-  class MementoScraper<TScope> : GraphQuery<TScope, PatternMemento>
+  class MementoScraper<TScope>(CustomPatternSerializer<TScope>? Serializer) : GraphQuery<TScope, PatternMemento>
     where TScope : Scope<TScope>
   {
+    readonly CustomPatternSerializer<TScope> Serializer = Serializer ?? CustomPatternSerializer<TScope>.NotSupported;
+
     public PatternMemento QueryAlternativePatterns(IEnumerable<Pattern<TScope>> Alternatives)
     {
       return new()
@@ -140,7 +142,10 @@ public static class PatternExtensions
 
     public PatternMemento QueryOther(Pattern<TScope> Other)
     {
-      throw new NotSupportedException();
+      return new()
+      {
+        Custom = Serializer.SerializePattern(Other)
+      };
     }
   }
 
@@ -161,9 +166,9 @@ public static class PatternExtensions
     /// Get a memento that can be used to reconstitute a <see cref="Pattern{ScopeImplementation}"/> elsewhere.
     /// </summary>
     /// <returns>The memento.</returns>
-    public string GetMemento()
+    public string GetMemento(CustomPatternSerializer<ScopeImplementation>? Serializer = null)
     {
-      var MementoObject = This.Query(new MementoScraper<ScopeImplementation>());
+      var MementoObject = This.Query(new MementoScraper<ScopeImplementation>(Serializer));
       return JsonSerializer.Serialize(MementoObject);
     }
   }
