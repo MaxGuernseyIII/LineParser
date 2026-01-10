@@ -122,18 +122,25 @@ public static class PatternExtensions
     {
       return new()
       {
-
+        Subpattern = Demanded.GetMemento()
       };
     }
 
     public PatternMemento QueryRegex(Regex Regex)
     {
-      return new();
+      return new()
+      {
+        Regex = new()
+        {
+          Expression = Regex.ToString(),
+          Options = Regex.Options
+        }
+      };
     }
 
     public PatternMemento QueryOther(Pattern<TScope> Other)
     {
-      return new();
+      throw new NotSupportedException();
     }
   }
 

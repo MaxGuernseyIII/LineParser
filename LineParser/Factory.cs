@@ -61,6 +61,18 @@ public class Factory<ScopeImplementation>(ScopeSpace<ScopeImplementation> ScopeS
   }
 
   /// <summary>
+  /// Creates a <see cref="Matcher{ScopeImplementation, Meaning}"/> with constraining <see cref="Scope{Implementation}"/>s assigned to each pattern but no meanings.
+  /// </summary>
+  /// <param name="PatternsWithMeanings">The set of <see cref="Pattern{ScopeImplementation}"/>s to match with associated meanings and constraining scopes.</param>
+  /// <typeparam name="Meaning">The type of object that represents the meaning of a <see cref="Pattern{ScopeImplementation}"/>.</typeparam>
+  /// <returns>The requested <see cref="Matcher{ScopeImplementation,Meaning}"/>.</returns>
+  public Matcher<ScopeImplementation, object> Matcher(
+    IEnumerable<(ScopeImplementation Scope, Pattern<ScopeImplementation> Pattern)> PatternsWithMeanings)
+  {
+    return Matcher(PatternsWithMeanings.Select(P => (ScopeSpace.Any, P.Pattern, new object())));
+  }
+
+  /// <summary>
   /// Creates a <see cref="Matcher{ScopeImplementation, Meaning}"/> with meanings and constraining <see cref="Scope{Implementation}"/>s assigned to each pattern.
   /// </summary>
   /// <param name="PatternsWithMeanings">The set of <see cref="Pattern{ScopeImplementation}"/>s to match with associated meanings and constraining scopes.</param>
@@ -182,10 +194,41 @@ public class Factory<ScopeImplementation>(ScopeSpace<ScopeImplementation> ScopeS
   /// </summary>
   /// <param name="Memento">The memento.</param>
   /// <returns>The <see cref="Pattern{ScopeImplementation}"/> described by the memento.</returns>
-  public Pattern<ScopeImplementation> FromMemento(string Memento)
+  public Pattern<ScopeImplementation> MatcherFromMemento(string Memento)
   {
-    var MementoObject = JsonSerializer.Deserialize<PatternMemento>(Memento);
+    var MementoObject = JsonSerializer.Deserialize<PatternMemento>(Memento)!;
 
-    return Sequence([]);
+    return FromMementoObject(MementoObject);
+  }
+
+  Pattern<ScopeImplementation> FromMementoObject(PatternMemento MementoObject)
+  {
+    return MementoObject switch
+    {
+      {IsAnything:true} => Anything(),
+      {Alternatives:{} A} => Parallel(A.Select(FromMementoObject)),
+      {Sequence:{} S} => Sequence(S.Select(FromMementoObject)),
+      {Constant: {} C} => Constant(C),
+      {Capturing: {} P} => Capturing(FromMementoObject(P)),
+      {Regex: { } R} => Regex(new(R.Expression, R.Options)),
+      {Subpattern: {}M} => Subpattern(ScopeSpace.FromMemento(M))
+    };
+  }
+}
+
+class PatternMemento
+{
+  public bool IsAnything { get; set; }
+  public string? Constant { get; set; }
+  public PatternMemento? Capturing { get; set; }
+  public PatternMemento[]? Alternatives { get; set; }
+  public PatternMemento[]? Sequence { get; set; }
+  public JsonElement? Subpattern { get; set; }
+  public RegexPatternMemento? Regex { get; set; }
+
+  internal class RegexPatternMemento
+  {
+    public required string Expression { get; set; }
+    public required RegexOptions Options { get; set; }
   }
 }

@@ -48,7 +48,7 @@ public class GraphQueryBehavior
       new MockPattern<StringScope>(), new MockPattern<StringScope>()
     ]);
 
-    var Actual = Matcher.Query(new TestGraphQuery<StringScope, IEnumerable<Pattern<StringScope>>>()
+    var Actual = Matcher.Query(new TestGraphQuery<StringScope, IEnumerable<Pattern<StringScope>>>
     {
       OnQueryPatternAlternatives = P => P
     });
@@ -59,12 +59,13 @@ public class GraphQueryBehavior
   [TestMethod]
   public void ParallelTreatsPatternsAsAlternatives()
   {
-    IEnumerable<Pattern<StringScope>> Patterns = [
+    IEnumerable<Pattern<StringScope>> Patterns =
+    [
       new MockPattern<StringScope>(), new MockPattern<StringScope>()
     ];
     var Node = Factory.Parallel(Patterns);
 
-    var Actual = Node.Query(new TestGraphQuery<StringScope, IEnumerable<Pattern<StringScope>>>()
+    var Actual = Node.Query(new TestGraphQuery<StringScope, IEnumerable<Pattern<StringScope>>>
     {
       OnQueryPatternAlternatives = P => P
     });
@@ -78,7 +79,7 @@ public class GraphQueryBehavior
     var Content = Any.String();
     var Node = Factory.Constant(Content);
 
-    var Actual = Node.Query(new TestGraphQuery<StringScope, string>()
+    var Actual = Node.Query(new TestGraphQuery<StringScope, string>
     {
       OnQueryConstant = C => C
     });
@@ -92,7 +93,7 @@ public class GraphQueryBehavior
     var Inner = new MockPattern<StringScope>();
     var Node = Factory.Capturing(Inner);
 
-    var Actual = Node.Query(new TestGraphQuery<StringScope, Pattern<StringScope>>()
+    var Actual = Node.Query(new TestGraphQuery<StringScope, Pattern<StringScope>>
     {
       OnQueryCapturing = I => I
     });
@@ -105,7 +106,7 @@ public class GraphQueryBehavior
   {
     var Node = Factory.Anything();
 
-    var Actual = Node.Query(new TestGraphQuery<StringScope, int>()
+    var Actual = Node.Query(new TestGraphQuery<StringScope, int>
     {
       OnQueryAnything = () => 1
     });
@@ -123,7 +124,7 @@ public class GraphQueryBehavior
 
     var Node = Factory.Sequence(Patterns);
 
-    var Actual = Node.Query(new TestGraphQuery<StringScope, IEnumerable<Pattern<StringScope>>>()
+    var Actual = Node.Query(new TestGraphQuery<StringScope, IEnumerable<Pattern<StringScope>>>
     {
       OnQuerySequence = P => P
     });
@@ -137,7 +138,7 @@ public class GraphQueryBehavior
     var Scope = ScopeSpace.Demand(Any.String());
     var Node = Factory.Subpattern(Scope);
 
-    var Actual = Node.Query(new TestGraphQuery<StringScope, StringScope>()
+    var Actual = Node.Query(new TestGraphQuery<StringScope, StringScope>
     {
       OnQuerySubpattern = S => S
     });
@@ -151,7 +152,7 @@ public class GraphQueryBehavior
     var Regex = new Regex("^" + Any.String() + "$");
     var Node = Factory.Regex(Regex);
 
-    var Actual = Node.Query(new TestGraphQuery<StringScope, Regex>()
+    var Actual = Node.Query(new TestGraphQuery<StringScope, Regex>
     {
       OnQueryRegex = R => R
     });
@@ -165,7 +166,7 @@ public class GraphQueryBehavior
   {
     var Node = new MockPattern<StringScope>();
 
-    var Actual = Node.Query(new TestGraphQuery<StringScope, Pattern<StringScope>>()
+    var Actual = Node.Query(new TestGraphQuery<StringScope, Pattern<StringScope>>
     {
       OnQueryOther = O => O
     });
@@ -182,7 +183,7 @@ public class GraphQueryBehavior
       Factory.Capturing(Factory.Constant("b")),
       Factory.Parallel([
         Factory.Constant("c"),
-        Factory.Constant("d"),
+        Factory.Constant("d")
       ]),
       Factory.Regex(new("^e|f$")),
       Factory.Subpattern(ScopeSpace.For(Any.String())),
@@ -195,27 +196,46 @@ public class GraphQueryBehavior
     Regex.ShouldBe(@"a.*(b)(?:c|d)(?:e|f).*;\ I\ like\ this\ \(really,\ I\ do\).*");
   }
 
-  //[TestMethod]
-  //public void MementoRoundTrip()
-  //{
-  //  var Pattern = Factory.Sequence([
-  //    Factory.Constant("a"),
-  //    Factory.Anything(),
-  //    Factory.Capturing(Factory.Constant("b")),
-  //    Factory.Parallel([
-  //      Factory.Constant("c"),
-  //      Factory.Constant("d"),
-  //    ]),
-  //    Factory.Regex(new("^e|f$")),
-  //    Factory.Subpattern(ScopeSpace.For(Any.String())),
-  //  ]);
-  //  var Memento = Pattern.GetMemento();
+  [TestMethod]
+  public void MementoRoundTrip()
+  {
+    var StatementScope = ScopeSpace.For(Any.String());
+    var ExpressionScope = ScopeSpace.For(Any.String());
+    var Pattern = Factory.Sequence([
+      Factory.Constant("a"),
+      Factory.Anything(),
+      Factory.Capturing(Factory.Constant("b")),
+      Factory.Parallel([
+        Factory.Constant("c"),
+        Factory.Constant("d")
+      ]),
+      Factory.Regex(new("^e|f$")),
+      Factory.Subpattern(ExpressionScope)
+    ]);
+    var Memento = Pattern.GetMemento();
+    var Original = MakeMatcher(Pattern);
 
-  //  var Reconstituted = Factory.Matcher([Factory.FromMemento(Memento)]);
+    var Reconstituted = MakeMatcher(Factory.MatcherFromMemento(Memento));
 
-  //  Reconstituted.ExactMatch("abde").Count().ShouldBe(1);
-  //  Reconstituted.ExactMatch("ablablablabde").Count().ShouldBe(1);
-  //  Reconstituted.ExactMatch("afoovbdfblablabla").Count().ShouldBe(1);
-  //  Reconstituted.ExactMatch("abdf").Single().Match.Captured.Single().ShouldBe(new() {At = 1, Value = "b"});
-  //}
+    RequireParity("abde");
+    RequireParity("ablablablabde");
+    RequireParity("afoovbdfblablabla");
+    RequireParity("abdf");
+    RequireParity("abdfz");
+
+    void RequireParity(string ToMatch)
+    {
+      Reconstituted.Match(ToMatch).Select(M => M.Match).ShouldBe(Original.Match(ToMatch).Select(M => M.Match));
+    }
+
+    Matcher<StringScope, object> MakeMatcher(Pattern<StringScope> MatcherFromMemento)
+    {
+      return Factory.Matcher(
+      [
+        (StatementScope, MatcherFromMemento),
+        (ExpressionScope, Factory.Constant("")),
+        (ExpressionScope, Factory.Constant("z"))
+      ]);
+    }
+  }
 }

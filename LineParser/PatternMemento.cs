@@ -22,11 +22,3 @@
 
 namespace LineParser;
 
-class PatternMemento
-{
-  public bool IsAnything { get; set; }
-  public string? Constant { get; set; }
-  public PatternMemento? Capturing { get; set; }
-  public PatternMemento[]? Alternatives { get; set; }
-  public PatternMemento[]? Sequence { get; set; }
-}
